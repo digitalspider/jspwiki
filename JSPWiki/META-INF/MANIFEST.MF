@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Implementation-Title: Apache JSPWiki Main War
+Implementation-Version: 2.10.1
+Specification-Vendor: The Apache Software Foundation
+Built-By: Juan Pablo
+Created-By: Apache Maven 3.0.4
+Implementation-Vendor: The Apache Software Foundation
+Implementation-Vendor-Id: org.apache.jspwiki
+Build-Jdk: 1.6.0_19
+Specification-Title: Apache JSPWiki Main War
+Specification-Version: 2.10.1
+Extension-Name: jspwiki-war
+Archiver-Version: Plexus Archiver
+

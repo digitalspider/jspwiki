@@ -1,0 +1,3 @@
+    <filter>
+      <class>org.apache.wiki.filters.ProfanityFilter</class>
+    </filter>
