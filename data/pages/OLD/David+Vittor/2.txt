@@ -1,0 +1,73 @@
+This is the page of David Vittor, the originator of Digital Spider.
+
+Hi All,
+
+I'm a senior Java developer, located in Sydney, Australia, and am intersted in getting involved in this project. I have a pretty good background with Confluence (my 2nd brain).
+
+Not quite sure how I can help just yet, or how much time I can devote, but I am looking forward to see how I can volunteer to make this project better.
+
+I've just managed to get the source code to compile, put it in eclispe, deployed it to Tomcat, and built the TreePlugin.
+
+Whoohoo now I have my own JSPWiki running on localhost!
+
+To set this up on __OpenShift__ See [JSPWikiPublications]. Now I just need to migrate my current mediawiki to jspwiki.
+
+!Plugins
+Some plugins that need converting/upgrading are here:
+* [http://www.ecyrd.com/JSPWiki/wiki/JSPWikiPlugins]
+
+Some plugins I'm thinking of writing are:
+* [HitCountPlugin]
+* [GoComicPlugin]
+* PluginsListPlugin - filers, plugins, pages
+* AttachmentsPlugin
+* ImageGalleryPlugin
+* CreatePagePlugin
+* VLCMeditPlayerPlugin
+* PrintPlugin
+* JDBCPlugin
+* JFreeChartPlugin - [http://www.jfree.org/jfreechart/]
+* YouTubePlugin
+* VimeoPlugin
+* RSSFeedPlugin
+* DocViewerPlugin - ViewerJS [http://viewerjs.org/]
+* MailBlastPlugin - provide html source, and list of data (email,field1,field2)
+* JIRAPlugin - [https://developer.atlassian.com/display/JIRADEV/JIRA+REST+APIs]
+* TwitterPlugin - [https://dev.twitter.com/docs]
+* BitcoinWidgetPlugin - [http://www.coindesk.com/price/bitcoin-price-ticker-widget/]
+* QueryPlugin - [https://issues.apache.org/jira/browse/JSPWIKI-624]
+* TwitterRecentChanges - [https://issues.apache.org/jira/browse/JSPWIKI-522]
+* JSPWikiMarkupParser - [https://issues.apache.org/jira/browse/JSPWIKI-852]
+
+!Filters
+* AutoHtmlLinkFilter - automatically convert http: links
+* VideoEmbedFilter - automatically embed https://www.youtube.com/watch?v=_ndfyn0y9B0 or http://vimeo.com/30998268
+* MarkdownFilter
+* ConfluenceMarkupFilter
+
+!PageProviders
+* FileSystemProviderPlus - persist page attributes as page properties - [https://issues.apache.org/jira/browse/JSPWIKI-856]
+* JDBCProvider - persist content to a database - Hibernate ORM
+* JackRabbitProvider - persist to a JCR
+* MemcacheProvider - Interesting idea
+* EncryptedPageProvider
+
+!Advanced
+Some of the other things I would love to see in this wiki are:
+* UI for Administration pages - a way to edit the jspwiki.properties through a form
+* OSGi for plugins - [Apache Felix iPOJO|http://felix.apache.org/documentation/subprojects/apache-felix-ipojo.html]
+* UI for ACL controls - Edit/View controls for users / groups
+* CKEditor as a WYSIWIG editor
+* Hibernate / Jackrabbit / Database storage
+* Spaces
+* Macro/Plugin browser
+* Theme/Skin management
+* Mobile UI
+
+!Other JIRA issues
+* logo and favicon - [https://issues.apache.org/jira/browse/JSPWIKI-363]
+* login improve - [https://issues.apache.org/jira/browse/JSPWIKI-257]
+* support for niceedit - [https://issues.apache.org/jira/browse/JSPWIKI-362]
+* jQuery - [https://issues.apache.org/jira/browse/JSPWIKI-811]
+* Wiki on a Stick - [https://issues.apache.org/jira/browse/JSPWIKI-828]
+

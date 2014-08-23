@@ -1,0 +1,13 @@
+!!Processes
+* [HowToWriteAPlugin] - [https://jspwiki-wiki.apache.org/Wiki.jsp?page=HowToWriteAPlugin]
+
+!!Our Plugins
+Here is a list of custom plugins we have developed:
+* [MyPlugin]
+* [HitCountPlugin] 
+* [GoComicsPlugin]
+* [ImageGalleryPlugin]
+
+!!Others Plugins
+Plugins developed by others that are available through our site:
+* [TreePlugin]

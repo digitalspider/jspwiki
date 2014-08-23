@@ -1,0 +1,8 @@
+!!Our Plugins
+Here is a list of custom plugins we have developed:
+* [MyPlugin]
+* [GoComicsPlugin]
+* [ImageGalleryPlugin]
+
+!!Others Plugins
+Here are some other plugins developed by others that are available through our site
