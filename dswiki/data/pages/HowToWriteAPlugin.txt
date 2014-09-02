@@ -1,7 +1,7 @@
 [{TableOfContents}]
 \\
 How to write a JSPWiki Plugin. 
-See [ContributedPlugins].
+See [Plugins].
 
 !!Download
 !Source
@@ -17,24 +17,14 @@ This documentation is using Windows, with Java already installed.
 !Install Tomcat
 * [http://tomcat.apache.org/]
 !Install Maven
-* [http://maven.apache.org/]
-!Maven Repository requirement
-A plugin requires the jar file with the core JSPWiki code. 
-This is not simple to get, so we will manually add this to the Maven repository.
-* Download the following file:
-** [jspwiki-war-2.10.2-SNAPSHOT-classes.jar]
-** Note: this was originally taken from the source at: jspwiki\jspwiki-war\target\JSPWiki-classes.jar
-* Run the following maven script:
-** [http://maven.apache.org/guides/mini/guide-3rd-party-jars-local.html]
-{{{
-mvn install:install-file -Dfile=./jspwiki-war-2.10.2-SNAPSHOT-classes.jar -DgroupId=org.apache.jspwiki -DartifactId=jspwiki-war -Dversion=2.10.2-SNAPSHOT -Dpackaging=jar
-}}}
+* [http://maven.apache.org/] - [Maven]
 
 !!Process
 !Create new maven project
 e.g. /plugins/MyPlugin/pom.xml
 %%information
-The scope of the dependancy is __provided__ as this will be available in the core war file.
+A plugin requires the jar file with the core JSPWiki classes.
+The scope of the dependency is __provided__ as this will be available in the application container.
 %%
 {{{
 <?xml version="1.0" encoding="UTF-8"?>
@@ -57,7 +47,8 @@ The scope of the dependancy is __provided__ as this will be available in the cor
     <dependency>
       <groupId>org.apache.jspwiki</groupId>
       <artifactId>jspwiki-war</artifactId>
-      <version>2.10.2-SNAPSHOT</version>
+      <version>2.10.1</version>
+      <classifier>classes</classifier>
       <scope>provided</scope>
     </dependency>
   </dependencies>
@@ -120,11 +111,9 @@ public class MyPlugin implements WikiPlugin {
 
 * Create the /src/main/resources/__log4j.properties__ configuration file:
 {{{
-# Root logger option
-log4j.rootLogger=WARN, stdout
 
-log4j.logger.com.jspwiki.plugin=INFO, stdout
-log4j.additivity.com.jspwiki.plugin=false
+log4j.logger.com.jspwiki.plugin.MyPlugin=INFO, stdout
+log4j.additivity.com.jspwiki.plugin.MyPlugin=false
 
 # Direct log messages to stdout
 log4j.appender.stdout=org.apache.log4j.ConsoleAppender

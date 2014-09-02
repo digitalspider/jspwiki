@@ -9,20 +9,22 @@ This plugin uses [http://www.jssor.com/] to create a sliding image gallery in yo
 || Date | 23-Aug-2014
 || Plugin Version | 0.1
 || Wiki Versions | 2.10.1+
+|| Demo | [ImageGalleryPluginDemo]
 || Source | [https://github.com/digitalspider/jspwiki-plugins/tree/master/ImageGalleryPlugin]
-|| Plugin | [jssor.zip] and [ImageGalleryPlugin-0.1.jar]
-|| Dependencies | None
+|| Issues | [https://github.com/digitalspider/jspwiki-plugins/issues]
+|| Plugin | [ImageGalleryPlugin-0.1.jar]
+|| Dependencies | [jssor-templates.zip]
 
 !!Usage
-* Download the *jssor.zip* file, and extract into your <tomcat>/webapps/JSPWiki/ directory
-* Place the *jar* file into your <tomcatDir>/webapps/JSPWiki/WEB-INF/lib/ directory
+* Download the __jssor.zip__ file, and extract into your <tomcat>/webapps/JSPWiki/ directory
+* Place the __jar__ file into your <tomcatDir>/webapps/JSPWiki/WEB-INF/lib/ directory
 * Restart your tomcat
 * Add the following to your page:
 {{{
 !Attachments
 [{ImageGallery items=3 width=900 steps=3 autoplay=2000 speed=200 arrows=true nav=true sortby=name sortdesc=true}]
 !SMH
-[{ImageGallery url=smh items=3 width=900 steps=3 autoplay=2000 speed=200 arrows=true nav=true sortby=name sortdesc=true}]
+[{ImageGallery url='http://www.smh.com.au/' items=3 width=900 steps=3 autoplay=2000 speed=200 arrows=true nav=true sortby=name sortdesc=true}]
 }}}
 * This generates:
 {{{
@@ -85,11 +87,11 @@ This plugin uses [http://www.jssor.com/] to create a sliding image gallery in yo
 
 !!Parameters
 || Param || Description || Default
+|| url | if this not set it will get the page attachments, otherwise it will download images from the url here. Note value needs to be in single quotes. url='http://mysite.com' | null
 || width | set the width of the gallery | 1000
 || height | set the height of the gallery | 200
 || steps | set the timeout (in seconds) how long to wait for the URL connection to load | 10
 || speed | set the timeout (in seconds) how long to wait for the URL connection to load | 10
-|| url | if this not set it will get the page attachments, otherwise it will download images from the url specified by jspwiki property *imagegallery.url.<value>* e.g. url=sitekey, means use property imagegallery.url.sitekey=http://mysite.com | null
 || timeout | set the timeout (in seconds) how long to wait for the URL connection to load | 10
 || class | set the class of the div around the image gallery. Used for css styles | image-gallery
 || autoplay | set the autoplay speed. If 0 will not autoplay | 0
@@ -104,7 +106,4 @@ This plugin uses [http://www.jssor.com/] to create a sliding image gallery in yo
 
 !!Properties
 || Property || Description || Default
-|| imagegallery.url.<value> | url location of a website to pull image from | -
-
-!!Examples
-See [ImageGalleryDemo]
+|| |  | 

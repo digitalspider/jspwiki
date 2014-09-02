@@ -1,0 +1,324 @@
+!!Overview
+
+TokuDB is a retlational database that can be used with MySQL. As a result we can use this to merge the data with our existing Lasoo Database. Potentially this will be a separate schema, with it's own tables, and using the TokuDB database engine, as oppose to the InnoDB used by Lasoo.
+* [http://www.tokutek.com/resources/tokudb-vs-innodb/]
+
+Manuals are also here:
+* QuickStartGuide-6.6.7.pdf
+* mysql-5.5.28-tokudb-6.6.7-users-guide.pdf
+
+Need to design a sophisticated way to merge Analytic DB data with Lasoo DB - preferably using replication from both the Lasoo DB and the LasooAnalytics DB to a common readonly DB server.
+!!Database Usage
+
+I've actually installed a TokuDB server on the following server dmysql01-ultimo.lasoo.net. This is available in /opt/mysql-tokudb
+|| Connection Parameters || Value
+| Host | dmysql10-ultimo.lasoo.net
+| Port | 3306
+| Username | lasooanalyst
+| Password | lasooanalyst
+| Schema | lasooanalytics
+
+To run this server use:
+{{{
+cd /opt/mysql-tokudb/mysql
+bin/mysqld &
+}}}
+# First run create the default tables
+{{{
+scripts/mysql_install_db user=mysql
+bin/mysql_upgrade
+}}}
+# To use
+{{{
+bin/mysql
+}}}
+# Check status
+{{{
+bin/mysqladmin status
+}}}
+# To stop
+{{{
+bin/mysqladmin shutdown
+}}}
+!!Database Setup
+
+To install the TokuDB MySQL database follow the instructions in the QuickStartGuide-6.6.7.pdf
+
+This section is how this was set up on the dmysql03-ultimo.lasoo.net server:
+
+All these should be done as the user root
+* Download the main distribution file (mysql-5.5.28-tokudb-6.6.7-54570-linux-x86_64.tar.gz) and place it in the /opt/downloads directory
+* Make the /opt/mysql-tokudb directory
+{{{
+    mkdir /opt/mysql-tokudb
+    chown -R mysql:mysql /opt/mysql-tokudb
+}}}
+* Stop the existing server by running:
+{{{
+    mysqladmin shutdown
+    service mysqld stop
+}}}
+* Run the following commands
+{{{
+    cd /opt/mysql-tokudb
+    tar xvzf /opt/downloads/mysql-5.5.28-tokudb-6.6.7-54570-linux-x86_64.tar.gz
+    chown -R mysql:mysql /opt/mysql-tokudb
+    ln -sv mysql-5.5.28-tokudb-6.6.7-54570-linux-x86_64/ mysql
+    ln -sv /opt/mysql-tokudb/mysql/support-files/mysql.server /etc/init.d/mysql
+    mv /etc/init.d/mysqld /etc/init.d/mysqld.original
+    ln -sv /opt/mysql-tokudb/mysql/support-files/mysql.server /etc/init.d/mysqld
+    touch /var/log/mysqlg.log
+    chown mysql:mysql /var/log/mysqlg.log
+    touch /var/log/log-slow-queries.log
+    chown mysql:mysql /var/log/log-slow-queries.log
+}}}
+* Note:
+** The above moves the service mysqld to point to our mysql.server file which executes the TokuDB version of mysql. You can test this using the below command:
+** Note: If the original mysqld version of the database was running, the below would be pointing to /usr/libexec/mysqld
+{{{
+        ps -ef | grep mysql
+
+        root     31461     1  0 Apr16 ?        00:00:00 /bin/sh /opt/mysql-tokudb/mysql/bin/mysqld_safe --datadir=/mnt/data/mysql --pid-file=/mnt/data/mysql/dmysql10-ultimo.lasoo.net.pid
+        mysql    32250 31461  0 Apr16 ?        04:48:14 /opt/mysql-tokudb/mysql/bin/mysqld --basedir=/opt/mysql-tokudb/mysql --datadir=/mnt/data/mysql --plugin-dir=/opt/mysql-tokudb/mysql/lib/plugin --user=mysql --log-error=/var/log/mysqld.log --pid-file=/mnt/data/mysql/dmysql10-ultimo.lasoo.net.pid --socket=/tmp/mysql.sock
+}}}
+* Edit the following files:
+{{{
+        vi /etc/init.d/mysql
+
+        vi /etc/my.cnf
+
+        basedir=/opt/mysql-tokudb/mysql
+        datadir=/mnt/data/mysql
+        socket=/tmp/mysql.sock
+        #socket=/var/lib/mysql/mysql.sock
+}}}
+* The socket variable needs to point to /tmp/mysql.sock. Not sure why but it gives the following error if it doesn't.
+{{{
+        ERROR 2002 (HY000): Can't connect to local MySQL server through socket '/tmp/mysql.sock' (2)
+}}}
+* Also the datadir does not need to change - this will conserve all the data in the current mysql instance.
+* Change the file in your users home directory "~/.bashrc" and add the following lines:
+{{{
+    export TOKUDB=/opt/mysql-tokudb/mysql
+    export PATH=$TOKUDB/bin:$PATH
+}}}
+* Run the following command to instantiate this:
+{{{
+    . ~/.bashrc
+}}}
+* Start the new mysql server
+{{{
+    service mysqld start
+}}}
+* If you get the following error:
+{{{
+    Starting MySQL....The server quit without updating PID file (/mnt/data/mysql/dmysql10-ultimo.lasoo.net.pid).                                                          [FAILED]
+}}}
+* Then there is a problem with your /etc/my.cnf file. Check the section "#########changes made by safeem##################", as adding this correctly for me worked.
+{{{
+#########changes made by safeem##################
+binlog-do-db=elite
+innodb_table_locks=0
+key_buffer = 1G
+max_allowed_packet = 2G
+open-files=32000
+sort_buffer_size = 200M
+sort_buffer_size =200M
+read_buffer_size = 200M
+read_rnd_buffer_size = 200M
+
+thread_cache_size = 20
+join_buffer_size=300M
+max_heap_table_size=300M
+wait_timeout=128800
+
+#log-bin
+#log-bin-index
+#long_query_time=4
+#slow_query_log=1
+#slow_query_log_file=/var/log/log-slow-queries.log
+#general_log=0
+#general_log_file=/var/log/mysqlg.log
+#log-warnings=1
+
+
+key_buffer = 1G
+max_allowed_packet = 1G
+open-files=32000
+
+
+sort_buffer_size = 200M
+thread_cache = 8
+innodb_table_locks=0
+innodb_lock_wait_timeout=300
+query_cache_size = 500M
+default-storage-engine = innodb
+innodb_file_per_table
+
+tmp_table_size = 1000M
+table_cache = 1024
+
+
+innodb_max_dirty_pages_pct = 90
+innodb_thread_concurrency =32
+
+sort_buffer_size =200M
+read_buffer_size = 200M
+read_rnd_buffer_size = 200M
+
+thread_cache_size = 20
+join_buffer_size=300M
+max_heap_table_size=300M
+tmpdir = /var/tmp
+
+
+################################################
+[mysqld_safe]
+log-error=/var/log/mysqld.log
+pid-file=/var/run/mysqld/mysqld.pid
+}}}
+* Run the upgrade script
+{{{
+    /opt/mysql-tokudb/mysql/bin/mysql_upgrade -u msafeem -p
+}}}
+* Connect to the database and install the TokuDB files
+* Run the following commands after starting mysql
+{{{
+mysql -u msafeem -p
+Enter password:
+
+mysql> install plugin tokudb soname 'ha_tokudb.so';
+mysql> install plugin tokudb_user_data soname 'ha_tokudb.so';
+mysql> install plugin tokudb_user_data_exact soname 'ha_tokudb.so';
+mysql> install plugin tokudb_file_map soname 'ha_tokudb.so';
+mysql> install plugin tokudb_fractal_tree_info soname 'ha_tokudb.so';
+mysql> install plugin tokudb_fractal_tree_block_map soname 'ha_tokudb.so';
+}}}
+
+* The main file is the plugin called __ha_tokudb.so__
+* This command will copy it into the mysql directory:
+{{{
+cp /opt/mysql-tokudb/mysql/lib/plugin/ha_tokudb.so /usr/lib64/mysql/plugin
+}}}
+
+If you can see the TokuDB plugins, but not the TokuDB engine, then you may be using the wrong plugin_dir. The default one (in file /opt/mysql-tokudb/mysql/bin/mysqld_safe) is:
+{{{
+plugin_dir = /usr/local/mysql/lib/plugin
+}}}
+The TokuDB one is __/usr/lib64/mysql/plugin/__
+
+Make sure the plugin installed is the same: ha_tokudb.so
+
+Otherwise you might have to enable HugePages on your Centos kernal. See the following docs (Not sure about this):
+{{{
+echo never > /sys/kernel/mm/redhat_transparent_hugepage/enabled
+}}}
+* [https://groups.google.com/forum/#!msg/tokudb-user/d3CujW353_4/NlDMARmA2q4J]
+* [http://www.cyberciti.biz/tips/linux-hugetlbfs-and-mysql-performance.html]
+* [http://www.pythian.com/blog/performance-tuning-hugepages-in-linux/]
+
+Verify the results using the following commands - search for TokuDB
+{{{
+show engines;
+show plugins;
+}}}
+
+!Database Scripts
+[http://source01-nsyd/svn/Lasoo2/lasoo-analytics/etc/db/mysql/db_create_lasooanalytics.sql]
+
+{{{
+CREATE DATABASE lasooanalytics CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+CREATE USER 'lasooanalyst'@'%' IDENTIFIED BY 'lasooanalyst';
+
+GRANT ALL PRIVILEGES on lasooanalytics.* to 'lasooanalyst'@'%' identified by 'lasooanalyst';
+FLUSH PRIVILEGES;
+
+GRANT SELECT on lasooanalytics.* to 'elite_db'@'localhost';
+GRANT SELECT on lasooanalytics.* to 'elite_db'@'%';
+GRANT SELECT on elite.* to 'lasooanalyst'@'%';
+
+use lasooanalytics;
+
+/** Note Foreign Keys do not work on TokuDB data storage engines */
+
+-- DROP TABLE track_visitor;
+CREATE TABLE IF NOT EXISTS track_visitor (
+ id VARCHAR(255) NOT NULL,
+ userid BIGINT NULL,
+ timestamp DATETIME NOT NULL,
+ PRIMARY KEY (id)
+) ENGINE=TokuDB;
+
+-- DROP TABLE track_session;
+CREATE TABLE IF NOT EXISTS track_session (
+ id VARCHAR(255) NOT NULL,
+ userid BIGINT NULL,
+ visitorid VARCHAR(255) NULL,
+ browser VARCHAR(255) NULL,
+ engine VARCHAR(255) NULL,
+ os VARCHAR(255) NULL,
+ device VARCHAR(255) NULL,
+ appid BIGINT NULL,
+ timestamp DATETIME NOT NULL,
+ location VARCHAR(32) NULL,
+ locationpostcode VARCHAR(4) NULL,
+ geolocation VARCHAR(32) NULL,
+ geolocationpostcode VARCHAR(4) NULL,
+ cookie VARCHAR(255) NULL,
+ PRIMARY KEY (id),
+ CONSTRAINT fk_visitorid FOREIGN KEY (`visitorid`) REFERENCES `track_visitor` (`id`)
+) ENGINE=TokuDB;
+
+-- DROP TABLE track_activity;
+CREATE TABLE IF NOT EXISTS track_activity (
+ id BIGINT NOT NULL AUTO_INCREMENT,
+ activity TINYINT UNSIGNED NOT NULL,
+ event TINYINT UNSIGNED NULL,
+ sessionid VARCHAR(255) NULL,
+ timestamp DATETIME NOT NULL,
+ placement TINYINT UNSIGNED NULL,
+ interaction TINYINT UNSIGNED NULL,
+ view TINYINT UNSIGNED NULL,
+ url VARCHAR(255) NULL,
+ refurl VARCHAR(255) NULL,
+ pageno TINYINT UNSIGNED NULL,
+ searchterm VARCHAR(255) NULL,
+ searchresultcount INT UNSIGNED NULL,
+ refinement TINYINT UNSIGNED NULL,
+ refinementvalue VARCHAR(255) NULL,
+ object TINYINT UNSIGNED NULL,
+ objectid BIGINT NULL,
+ objectvalue VARCHAR(1024) NULL,
+ PRIMARY KEY (id),
+ CONSTRAINT fk_sessionid FOREIGN KEY (`sessionid`) REFERENCES `track_session` (`id`),
+ CONSTRAINT fk_activity FOREIGN KEY (`activity`) REFERENCES `type_activity` (`id`),
+ CONSTRAINT fk_event FOREIGN KEY (`event`) REFERENCES `type_event` (`id`),
+ CONSTRAINT fk_placement FOREIGN KEY (`placement`) REFERENCES `type_placement` (`id`),
+ CONSTRAINT fk_interaction FOREIGN KEY (`interaction`) REFERENCES `type_interaction` (`id`),
+ CONSTRAINT fk_view FOREIGN KEY (`view`) REFERENCES `type_view` (`id`),
+ CONSTRAINT fk_refinement FOREIGN KEY (`refinement`) REFERENCES `type_refinement` (`id`),
+ CONSTRAINT fk_object FOREIGN KEY (`object`) REFERENCES `type_object` (`id`)
+) ENGINE=TokuDB;
+
+
+-- DROP TABLE type_activity;
+CREATE TABLE IF NOT EXISTS type_activity (
+ id TINYINT UNSIGNED NOT NULL PRIMARY KEY,
+ name varchar(255) NOT NULL
+) ENGINE=InnoDB;
+
+-- DROP TABLE type_event;
+CREATE TABLE IF NOT EXISTS type_event (
+ id TINYINT UNSIGNED NOT NULL PRIMARY KEY,
+ name varchar(255) NOT NULL
+) ENGINE=InnoDB;
+}}}
+
+!!In Conclusion
+
+A query to retrieve objects from both databases elite and lasooanalytics:
+{{{
+select o.id, a.objectid from elite.offer o, lasooanalytics.track_activity a where a.objectid = o.id;
+}}}
+

@@ -10,7 +10,9 @@ A plugin that pulls in a comic strip from [GoComic|http://www.gocomics.com/explo
 || Date | 20-Aug-2014
 || Plugin Version | 0.1
 || Wiki Versions | 2.10.1+
+|| Demo | [GoComicsPluginDemo]
 || Source | [https://github.com/digitalspider/jspwiki-plugins/tree/master/GoComicsPlugin]
+|| Issues | [https://github.com/digitalspider/jspwiki-plugins/issues]
 || Plugin | [GoComicsPlugin-0.1.jar]
 || Dependencies | None
 
@@ -19,7 +21,7 @@ A plugin that pulls in a comic strip from [GoComic|http://www.gocomics.com/explo
 * Restart your tomcat
 * Add the following to your page:
 {{{
-[{GoComicPlugin comic=bc width=900 height=250 class=mycomic timeout=1}]
+[{GoComicsPlugin comic=bc width=900 height=250 class=mycomic timeout=1}]
 }}}
 * This generates:
 {{{
@@ -39,6 +41,3 @@ A plugin that pulls in a comic strip from [GoComic|http://www.gocomics.com/explo
 || Property || Description || Default
 || gocomicplugin.baseurl | the base url of where to pull images from | http://www.gocomics.com/
 || gocomicplugin.srcpath | the CDN source path of the images to find | http://assets.amuniversal.com
-
-!!Example
-[{GoComicPlugin comic=bc width=900 height=250 class=mycomic timeout=1}]
