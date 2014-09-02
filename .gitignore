@@ -1,3 +1,5 @@
 dswiki/data/lucene/**
 dswiki/data/pages/OLD/**
 
+/dswiki/WEB-INF/jspwiki-custom.properties
+/dswiki/custom/WEB-INF/classes/jspwiki-custom.properties
