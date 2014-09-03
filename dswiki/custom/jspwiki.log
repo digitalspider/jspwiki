@@ -1,0 +1,84 @@
+2014-09-03 20:35:55,949 [localhost-startStop-1] INFO org.apache.wiki.WikiEngine  - *******************************************
+2014-09-03 20:35:55,951 [localhost-startStop-1] INFO org.apache.wiki.WikiEngine  - JSPWiki 2.10.1 starting. Whee!
+2014-09-03 20:35:55,954 [localhost-startStop-1] INFO org.apache.wiki.WikiEngine  - Servlet container: Apache Tomcat/8.0.9
+2014-09-03 20:35:55,965 [localhost-startStop-1] INFO org.apache.wiki.WikiEngine  - JSPWiki working directory is '/opt/digitalspider/jspwiki/dswiki/data/'
+2014-09-03 20:35:56,450 [localhost-startStop-1] INFO org.apache.wiki.providers.CachingProvider  - cache with name Dswiki.jspwiki.pageCache not found in ehcache.xml, creating it with defaults.
+2014-09-03 20:35:56,451 [localhost-startStop-1] INFO org.apache.wiki.providers.CachingProvider  - cache with name Dswiki.jspwiki.pageTextCache not found in ehcache.xml, creating it with defaults.
+2014-09-03 20:35:56,451 [localhost-startStop-1] INFO org.apache.wiki.providers.CachingProvider  - cache with name Dswiki.jspwiki.pageHistoryCache not found in ehcache.xml, creating it with defaults.
+2014-09-03 20:35:56,456 [localhost-startStop-1] INFO org.apache.wiki.providers.AbstractFileProvider  - Wikipages are read from '/opt/digitalspider/jspwiki/dswiki/data/pages'
+2014-09-03 20:35:56,457 [localhost-startStop-1] INFO org.apache.wiki.providers.VersioningFileProvider  - Using directory /opt/digitalspider/jspwiki/dswiki/data/pages/OLD for storing old versions of pages
+2014-09-03 20:35:56,461 [localhost-startStop-1] INFO org.apache.wiki.plugin.DefaultPluginManager  - Registering plugins
+2014-09-03 20:35:56,476 [localhost-startStop-1] INFO org.apache.wiki.util.ClassUtil  - setting up classloaders for external (plugin) jars
+2014-09-03 20:35:56,476 [localhost-startStop-1] INFO org.apache.wiki.util.ClassUtil  - no external jars configured, using standard classloading
+2014-09-03 20:35:56,494 [localhost-startStop-1] INFO org.apache.wiki.diff.DifferenceManager  - Using difference provider: TraditionalDiffProvider
+2014-09-03 20:35:56,496 [localhost-startStop-1] INFO org.apache.wiki.attachment.AttachmentManager  - cache with name Dswiki.jspwiki.dynamicAttachmentCache not found in ehcache.xml, creating it with defaults.
+2014-09-03 20:35:56,498 [localhost-startStop-1] INFO org.apache.wiki.providers.CachingAttachmentProvider  - Initing CachingAttachmentProvider
+2014-09-03 20:35:56,522 [localhost-startStop-1] INFO org.apache.wiki.search.LuceneSearchProvider  - Lucene enabled, cache will be in: /opt/digitalspider/jspwiki/dswiki/data/lucene
+2014-09-03 20:35:56,557 [JSPWiki Lucene Indexer] WARN org.apache.wiki.WikiBackgroundThread  - Starting up background thread: JSPWiki Lucene Indexer.
+2014-09-03 20:35:56,581 [JSPWiki Lucene Indexer] INFO org.apache.wiki.search.LuceneSearchProvider  - Files found in Lucene directory, not reindexing.
+2014-09-03 20:35:56,587 [localhost-startStop-1] INFO org.apache.wiki.ui.EditorManager  - Registering editor modules
+2014-09-03 20:35:56,589 [WatchDog for 'Dswiki'] WARN org.apache.wiki.WikiBackgroundThread  - Starting up background thread: WatchDog for 'Dswiki'.
+2014-09-03 20:35:56,597 [localhost-startStop-1] INFO org.apache.wiki.auth.authorize.WebContainerAuthorizer  - Examining file:/opt/tomcat/apache-tomcat-8.0.9/webapps/JSPWiki/WEB-INF/web.xml
+2014-09-03 20:35:56,628 [localhost-startStop-1] INFO org.apache.wiki.auth.authorize.WebContainerAuthorizer  - JSPWiki is using custom authentication.
+2014-09-03 20:35:56,628 [localhost-startStop-1] INFO org.apache.wiki.auth.authorize.WebContainerAuthorizer  - Authorizer WebContainerAuthorizer initialized successfully.
+2014-09-03 20:35:56,628 [localhost-startStop-1] INFO org.apache.wiki.auth.AuthenticationManager  - looking for jspwiki.policy inside WEB-INF 
+2014-09-03 20:35:56,628 [localhost-startStop-1] INFO org.apache.wiki.auth.AuthorizationManager  - We found security policy URL: file:/opt/tomcat/apache-tomcat-8.0.9/webapps/JSPWiki/WEB-INF/jspwiki.policy and transformed it to file /opt/tomcat/apache-tomcat-8.0.9/webapps/JSPWiki/WEB-INF/jspwiki.policy
+2014-09-03 20:35:56,654 [localhost-startStop-1] INFO org.apache.wiki.auth.AuthorizationManager  - Initialized default security policy: /opt/tomcat/apache-tomcat-8.0.9/webapps/JSPWiki/WEB-INF/jspwiki.policy
+2014-09-03 20:35:56,654 [localhost-startStop-1] INFO org.apache.wiki.auth.authorize.GroupManager  - Attempting to load group database class org.apache.wiki.auth.authorize.XMLGroupDatabase
+2014-09-03 20:35:56,657 [localhost-startStop-1] INFO org.apache.wiki.auth.authorize.XMLGroupDatabase  - XML group database at /opt/digitalspider/jspwiki/dswiki/data/groupdatabase.xml
+2014-09-03 20:35:56,714 [localhost-startStop-1] INFO org.apache.wiki.auth.authorize.GroupManager  - Group database initialized.
+2014-09-03 20:35:56,717 [localhost-startStop-1] INFO org.apache.wiki.auth.authorize.GroupManager  - Authorizer GroupManager initialized successfully; loaded 0 group(s).
+2014-09-03 20:35:56,725 [localhost-startStop-1] INFO org.apache.wiki.ui.admin.DefaultAdminBeanManager  - Using JDK 1.5 Platform MBeanServer
+2014-09-03 20:35:56,726 [localhost-startStop-1] INFO org.apache.wiki.ui.admin.DefaultAdminBeanManager  - com.sun.jmx.mbeanserver.JmxMBeanServer
+2014-09-03 20:35:56,726 [localhost-startStop-1] INFO org.apache.wiki.ui.admin.DefaultAdminBeanManager  - DefaultDomain
+2014-09-03 20:35:56,729 [localhost-startStop-1] INFO org.apache.wiki.ui.admin.DefaultAdminBeanManager  - Registered new admin bean Core bean
+2014-09-03 20:35:56,730 [localhost-startStop-1] INFO org.apache.wiki.ui.admin.DefaultAdminBeanManager  - Registered new admin bean User administration
+2014-09-03 20:35:56,732 [localhost-startStop-1] INFO org.apache.wiki.ui.admin.DefaultAdminBeanManager  - Registered new admin bean Search manager
+2014-09-03 20:35:56,738 [localhost-startStop-1] INFO org.apache.wiki.ui.admin.DefaultAdminBeanManager  - Registered new admin bean Plugins
+2014-09-03 20:35:56,739 [localhost-startStop-1] INFO org.apache.wiki.ui.admin.DefaultAdminBeanManager  - Registered new admin bean Plain editor
+2014-09-03 20:35:56,742 [localhost-startStop-1] INFO org.apache.wiki.filters.DefaultFilterManager  - Registering filters
+2014-09-03 20:35:56,749 [localhost-startStop-1] INFO org.apache.wiki.filters.DefaultFilterManager  - Added page filter org.apache.wiki.filters.ProfanityFilter with priority 0
+2014-09-03 20:35:56,749 [localhost-startStop-1] INFO org.apache.wiki.render.RenderingManager  - cache with name Dswiki.jspwiki.renderingCache not found in ehcache.xml, creating it with defaults.
+2014-09-03 20:35:56,750 [localhost-startStop-1] INFO org.apache.wiki.render.RenderingManager  - Rendering content with org.apache.wiki.render.XHTMLRenderer.
+2014-09-03 20:35:57,466 [localhost-startStop-1] INFO org.apache.wiki.ReferenceManager  - Starting cross reference scan of WikiPages
+2014-09-03 20:35:57,549 [localhost-startStop-1] INFO org.apache.wiki.auth.UserManager  - Attempting to load user database class org.apache.wiki.auth.user.XMLUserDatabase
+2014-09-03 20:35:57,552 [localhost-startStop-1] INFO org.apache.wiki.auth.user.AbstractUserDatabase  - XML user database at /opt/digitalspider/jspwiki/dswiki/data/userdatabase.xml
+2014-09-03 20:35:57,571 [localhost-startStop-1] INFO org.apache.wiki.auth.UserManager  - UserDatabase initialized.
+2014-09-03 20:35:57,617 [localhost-startStop-1] INFO org.apache.wiki.parser.JSPWikiMarkupParser  - Failed to insert plugin: Could not find plugin GoComicsPlugin
+2014-09-03 20:35:57,658 [localhost-startStop-1] INFO org.apache.wiki.parser.JSPWikiMarkupParser  - Failed to insert plugin: Could not find plugin MyPlugin
+2014-09-03 20:35:57,705 [localhost-startStop-1] INFO org.apache.wiki.plugin.PageViewPlugin  - initializing PageViewPlugin
+2014-09-03 20:35:57,708 [localhost-startStop-1] INFO org.apache.wiki.plugin.PageViewPlugin  - initializing PageView Manager
+2014-09-03 20:35:57,708 [localhost-startStop-1] INFO org.apache.wiki.plugin.PageViewPlugin  - Loading counters.
+2014-09-03 20:35:57,708 [localhost-startStop-1] INFO org.apache.wiki.plugin.PageViewPlugin  - Loaded 0 counter values.
+2014-09-03 20:35:57,709 [Thread-9] WARN org.apache.wiki.WikiBackgroundThread  - Starting up background thread: Thread-9.
+2014-09-03 20:35:57,740 [localhost-startStop-1] INFO org.apache.wiki.parser.JSPWikiMarkupParser  - Failed to insert plugin: Could not find plugin Video
+2014-09-03 20:35:57,813 [localhost-startStop-1] INFO org.apache.wiki.parser.JSPWikiMarkupParser  - Failed to insert plugin: Could not find plugin Jira
+2014-09-03 20:35:57,848 [localhost-startStop-1] INFO org.apache.wiki.parser.JSPWikiMarkupParser  - Failed to insert plugin: Could not find plugin ImageGallery
+2014-09-03 20:35:57,850 [localhost-startStop-1] INFO org.apache.wiki.parser.JSPWikiMarkupParser  - Failed to insert plugin: Could not find plugin ImageGallery
+2014-09-03 20:35:57,851 [localhost-startStop-1] INFO org.apache.wiki.parser.JSPWikiMarkupParser  - Failed to insert plugin: Could not find plugin ImageGallery
+2014-09-03 20:35:57,953 [localhost-startStop-1] INFO org.apache.wiki.ReferenceManager  - Cross reference scan done in 0:00:00.487
+2014-09-03 20:35:57,955 [localhost-startStop-1] INFO org.apache.wiki.WikiEngine  - WikiEngine configured.
+2014-09-03 20:35:57,955 [localhost-startStop-1] INFO org.apache.wiki.WikiEngine  - Root path for this Wiki is: '/opt/tomcat/apache-tomcat-8.0.9/webapps/JSPWiki'
+2014-09-03 20:35:57,957 [localhost-startStop-1] INFO org.apache.wiki.util.UtilJ2eeCompat  - serverInfo: Apache Tomcat/8.0.9
+2014-09-03 20:35:57,957 [localhost-startStop-1] INFO org.apache.wiki.util.UtilJ2eeCompat  - Apache Tomcat detected
+2014-09-03 20:35:57,964 [localhost-startStop-1] INFO org.apache.wiki.WikiServlet  - WikiServlet initialized.
+2014-09-03 20:36:00,807 [http-nio-8880-exec-1] INFO org.apache.wiki.util.PropertyReader Dswiki:/JSPWiki/ Dswiki:http://localhost:8880/JSPWiki/ - No jspwiki.custom.config defined for this context, looking for custom properties file with default name of: /jspwiki-custom.properties
+2014-09-03 20:36:12,700 [http-nio-8880-exec-4] INFO SecurityLog Dswiki:/JSPWiki/Login.jsp Dswiki:http://localhost:8880/JSPWiki/Login.jsp - WikiSecurityEvent.LOGIN_AUTHENTICATED [source=org.apache.wiki.auth.AuthenticationManager@6bb8a3, princpal=org.apache.wiki.auth.WikiPrincipal dvittor, target=org.apache.wiki.WikiSession@430b07]
+2014-09-03 20:36:12,701 [http-nio-8880-exec-4] INFO JSPWiki Dswiki:/JSPWiki/Login.jsp Dswiki:http://localhost:8880/JSPWiki/Login.jsp - Successfully authenticated user dvittor (custom auth)
+2014-09-03 20:36:12,705 [http-nio-8880-exec-4] INFO JSPWiki Dswiki:/JSPWiki/Login.jsp Dswiki:http://localhost:8880/JSPWiki/Login.jsp - Redirecting user to http://localhost:8080/JSPWiki/Wiki.jsp?page=Home
+2014-09-03 20:37:40,110 [localhost-startStop-2] INFO org.apache.wiki.WikiServlet  - WikiServlet shutdown.
+2014-09-03 20:37:40,118 [localhost-startStop-2] WARN org.apache.wiki.WikiBackgroundThread  - Detected wiki engine shutdown: killing JSPWiki Lucene Indexer.
+2014-09-03 20:37:40,118 [localhost-startStop-2] WARN org.apache.wiki.WikiBackgroundThread  - Detected wiki engine shutdown: killing WatchDog for 'Dswiki'.
+2014-09-03 20:37:40,119 [localhost-startStop-2] INFO org.apache.wiki.ui.admin.DefaultAdminBeanManager  - Unregistered AdminBean Core bean
+2014-09-03 20:37:40,119 [localhost-startStop-2] INFO org.apache.wiki.ui.admin.DefaultAdminBeanManager  - Unregistered AdminBean User administration
+2014-09-03 20:37:40,119 [localhost-startStop-2] INFO org.apache.wiki.ui.admin.DefaultAdminBeanManager  - Unregistered AdminBean Search manager
+2014-09-03 20:37:40,119 [localhost-startStop-2] INFO org.apache.wiki.ui.admin.DefaultAdminBeanManager  - Unregistered AdminBean Plugins
+2014-09-03 20:37:40,119 [localhost-startStop-2] INFO org.apache.wiki.ui.admin.DefaultAdminBeanManager  - Unregistered AdminBean Plain editor
+2014-09-03 20:37:40,119 [localhost-startStop-2] INFO org.apache.wiki.plugin.PageViewPlugin  - Detected wiki engine shutdown
+2014-09-03 20:37:40,119 [localhost-startStop-2] INFO org.apache.wiki.plugin.PageViewPlugin  - handleShutdown: The counter store thread was shut down.
+2014-09-03 20:37:40,119 [localhost-startStop-2] INFO org.apache.wiki.plugin.PageViewPlugin  - cleaning up PageView Manager
+2014-09-03 20:37:40,119 [localhost-startStop-2] INFO org.apache.wiki.plugin.PageViewPlugin  - Storing 0 counter values.
+2014-09-03 20:37:40,120 [localhost-startStop-2] WARN org.apache.wiki.WikiBackgroundThread  - Detected wiki engine shutdown: killing Thread-9.
+2014-09-03 20:37:40,594 [JSPWiki Lucene Indexer] WARN org.apache.wiki.WikiBackgroundThread  - Interrupted background thread: JSPWiki Lucene Indexer.
+2014-09-03 20:37:40,609 [WatchDog for 'Dswiki'] WARN org.apache.wiki.WikiBackgroundThread  - Interrupted background thread: WatchDog for 'Dswiki'.
+2014-09-03 20:37:40,719 [Thread-9] WARN org.apache.wiki.WikiBackgroundThread  - Interrupted background thread: Thread-9.
