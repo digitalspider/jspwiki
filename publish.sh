@@ -16,6 +16,6 @@ cp -f $BASEDIR/mywiki/data/jspwiki-custom.policy $MYWIKIDIR/WEB-INF/classes/jspw
 cp -f $BASEDIR/testwiki/data/jspwiki-custom.policy $TESTWIKIDIR/WEB-INF/classes/jspwiki-custom.policy
 
 # Setup jspwiki-filters.xml
-#cp -f $BASEDIR/dswiki/data/jspwiki-filters.xml $JSPWIKIDIR/WEB-INF/classes/jspwiki-filters.xml
-#cp -f $BASEDIR/mywiki/data/jspwiki-filters.xml $MYWIKIDIR/WEB-INF/classes/jspwiki-filters.xml
-#cp -f $BASEDIR/testwiki/data/jspwiki-filters.xml $TESTWIKIDIR/WEB-INF/classes/jspwiki-filters.xml
+#cp -f $BASEDIR/dswiki/data/jspwiki-filters.xml $JSPWIKIDIR/WEB-INF/classes/filters.xml
+#cp -f $BASEDIR/mywiki/data/jspwiki-filters.xml $MYWIKIDIR/WEB-INF/classes/filters.xml
+#cp -f $BASEDIR/testwiki/data/jspwiki-filters.xml $TESTWIKIDIR/WEB-INF/classes/filters.xml

@@ -13,6 +13,11 @@ xcopy %BASEDIR%\mywiki\conf\jspwiki-custom-windows.properties %MYWIKIDIR%\WEB-IN
 xcopy %BASEDIR%\testwiki\conf\jspwiki-custom-windows.properties %TESTWIKIDIR%\WEB-INF\classes\jspwiki-custom.properties /Y /Q
 
 REM Setup jspwiki-custom.policy
-REM xcopy %BASEDIR%\dswiki\data\jspwiki-custom.policy %JSPWIKIDIR%\WEB-INF\classes\jspwiki-custom.policy /Y /Q
-REM xcopy %BASEDIR%\mywiki\data\jspwiki-custom.policy %MYWIKIDIR%\WEB-INF\classes\jspwiki-custom.policy /Y /Q
-REM xcopy %BASEDIR%\testwiki\data\jspwiki-custom.policy %TESTWIKIDIR%\WEB-INF\classes\jspwiki-custom.policy /Y /Q
+xcopy %BASEDIR%\dswiki\data\jspwiki-custom.policy %JSPWIKIDIR%\WEB-INF\classes\jspwiki-custom.policy /Y /Q
+xcopy %BASEDIR%\mywiki\data\jspwiki-custom.policy %MYWIKIDIR%\WEB-INF\classes\jspwiki-custom.policy /Y /Q
+xcopy %BASEDIR%\testwiki\data\jspwiki-custom.policy %TESTWIKIDIR%\WEB-INF\classes\jspwiki-custom.policy /Y /Q
+
+REM Setup jspwiki-filters.xml
+xcopy %BASEDIR%\dswiki\data\jspwiki-filters.xml %JSPWIKIDIR%\WEB-INF\classes\filters.xml /Y /Q
+xcopy %BASEDIR%\mywiki\data\jspwiki-filters.xml %MYWIKIDIR%\WEB-INF\classes\filters.xml /Y /Q
+xcopy %BASEDIR%\testwiki\data\jspwiki-filters.xml %TESTWIKIDIR%\WEB-INF\classes\filters.xml /Y /Q
