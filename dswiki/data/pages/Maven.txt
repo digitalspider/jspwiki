@@ -21,7 +21,7 @@ __settings.xml__
         <activeByDefault>true</activeByDefault>
       </activation>
       <properties>
-        <tomcat-home>C:/opt/apache-tomcat-7.0.5</tomcat-home>
+        <tomcat-home>${env.CATALINA_HOME}</tomcat-home>
       </properties>
       <repositories>
         <repository>

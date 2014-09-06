@@ -6,6 +6,12 @@ CATALINA_PID=$CATALINA_BASE/catalina.pid
 }}}
 bin/shutdown.sh --force
 
+!!JVisualVM
+Run:
+{{{
+jvisualvm &
+}}}
+
 !!Debug Tomcat
 {{{
 :doStart

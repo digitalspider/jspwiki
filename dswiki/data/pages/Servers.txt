@@ -1,0 +1,21 @@
+!!CMDB
+* FreshService
+** See [http://freshservice.com]
+** and [http://digitalspider.freshservice.com]
+* And try CMDBuild - [http://www.cmdbuild.org/en]
+
+!!Hosting
+|| Source || URL || 0.5GB || 1GB || 2GB
+| Openshift ? | [https://www.openshift.com/] | Free 3 + $14.6/m | $36.5/m | $73.0/m + $20/m
+| VPSBlocks MEL | [http://vpsblocks.com.au] | $12.95/m | $24.95/m | $49.95/m
+| Crucial SYD | [http://crucial.com.au] | x | $30/m | $60/m
+| RackServer ? | [http://www.rackservers.com.au/web_hosting/java_hosting] | x | x | $53.70/m
+| Amazon EC2/AWS USA | [http://aws.amazon.com/ec2/pricing/] | x | $14.6/m | $29.2/m and 4GB @ $58.4/m
+| Oxxus NZ | [http://www.oxxus.net/virtual-private-servers] | x | USD$19/m | USD$40/m
+| My Hosting CA | [http://myhosting.com/virtual-server-hosting/custom-vps.aspx] | $13.72/m | $15.72/m | $20.72/m
+
+!!Others
+* Metawerx - [http://www.metawerx.net/] - SVN Hosting $7/m
+* JavaWebHosting - [http://www.javawebhosting.com.au/web-hosting/plans/Hosting-Plans.html] - $99/m
+
+

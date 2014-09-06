@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+  <pagefilters>
+
+    <filter>
+      <class>org.apache.wiki.filters.ProfanityFilter</class>
+    </filter>
+
+  </pagefilters>

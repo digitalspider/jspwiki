@@ -1,5 +1,9 @@
 I've been interested recently in IT System Standards, such as:
 
+* ISO in PDF - [http://ietfreport.isoc.org/rfc/PDF/]
+* ISO 8601 - Date format:
+** [http://en.wikipedia.org/wiki/ISO_8601]
+** [http://www.cl.cam.ac.uk/~mgk25/iso-time.html] 
 * ITIL
 ** [http://en.wikipedia.org/wiki/Information_Technology_Infrastructure_Library]
 ** [http://www.itil-officialsite.com/]
@@ -7,6 +11,7 @@ I've been interested recently in IT System Standards, such as:
 ** [http://www.itgovernance.co.uk/iso20000.aspx#.VAZmz2Oyq2o]
 ** [http://www.iso.org/iso/catalogue_detail?csnumber=51986]
 ** [http://en.it-processmaps.com/itil/iso-20000.html]
+* ISO 55000 - Asset Management
 * IEFT OAuth 2 - [http://tools.ietf.org/html/rfc6749]
 * IEFT XMPP - [http://www.ietf.org/rfc/rfc3920.txt] - [http://www.ietf.org/rfc/rfc3921.txt]
 
