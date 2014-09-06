@@ -10,3 +10,7 @@ cp -f $BASEDIR/dswiki/conf/jspwiki-custom-linux.properties $JSPWIKIDIR/WEB-INF/c
 cp -f $BASEDIR/mywiki/conf/jspwiki-custom-linux.properties $MYWIKIDIR/WEB-INF/classes/jspwiki-custom.properties
 cp -f $BASEDIR/testwiki/conf/jspwiki-custom-linux.properties $TESTWIKIDIR/WEB-INF/classes/jspwiki-custom.properties
 
+# Setup jspwiki-custom.policy
+cp -f $BASEDIR/dswiki/data/jspwiki-custom.policy $JSPWIKIDIR/WEB-INF/classes/jspwiki-custom.policy
+cp -f $BASEDIR/mywiki/data/jspwiki-custom.policy $MYWIKIDIR/WEB-INF/classes/jspwiki-custom.policy
+cp -f $BASEDIR/testwiki/data/jspwiki-custom.policy $TESTWIKIDIR/WEB-INF/classes/jspwiki-custom.policy
