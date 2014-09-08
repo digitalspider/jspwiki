@@ -1,19 +1,15 @@
-[{ALLOW view Authenticated}]
-[{ALLOW edit Authenticated}]
-
-[LeftMenu]:
-* [Home]
+[Home]
 * [Links]
-* Custom Modules
-** [Plugins]
-** [Filters]
-** [PageProviders]
-** [Templates]
-* Admin
-** [Page Index]
-** [Recent Changes]
-** [SystemInfo]
-* Other
-** [Sandbox]
-** [Documentation]
-** [TODO]
+* [Plugins]
+* [Filters]
+* [PageProviders]
+* [Templates]
+Other
+* [Documentation]
+* [Sandbox]
+* [TODO]
+Admin
+* [Page Index]
+* [Recent Changes]
+* [SystemInfo]
+[LeftMenu]

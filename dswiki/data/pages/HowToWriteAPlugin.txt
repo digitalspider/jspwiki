@@ -137,3 +137,6 @@ I'm assuming you have [Tomcat|http://tomcat.apache.org/] installed, and the [2.1
 [{MyPlugin}]
 }}}
 [MyPlugin.png]
+
+----
+[HowToPage]

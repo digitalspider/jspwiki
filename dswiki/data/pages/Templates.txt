@@ -1,5 +1,5 @@
 !!Templates
-* [HowToWriteATemplate] - [https://jspwiki-wiki.apache.org/Wiki.jsp?page=HADDOCK%20Template]
+* [HowToWriteATemplate]
 
 !!Our Templates
 Here is a list of custom templates we have developed:
@@ -7,4 +7,4 @@ Here is a list of custom templates we have developed:
 
 !!Others Templates
 Templates developed by others that are available through our site:
-* None
+* Haddock - [https://jspwiki-wiki.apache.org/Wiki.jsp?page=HADDOCK%20Template]

@@ -1,0 +1,14 @@
+You can get a list of pages that link to a page, using the following plugin:
+{{{
+[{ReferringPagesPlugin max=1000}]
+}}}
+See: [HowToPage]\\
+See: [https://jspwiki-wiki.apache.org/Wiki.jsp?page=JSPWikiCorePlugins]
+
+Then you add links on the bottom of any page, such as:
+{{{
+----
+[Documentation] | [HowToPage]
+}}}
+----
+[HowToPage]

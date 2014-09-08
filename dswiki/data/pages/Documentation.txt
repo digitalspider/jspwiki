@@ -1,7 +1,12 @@
-[{ALLOW view Authenticated}]
-[{ALLOW edit Authenticated}]
+Here is some documentation that we use to develop JSPWikis
 
-This page is the core link to our Documentation:
+* [HowToPage]
+* [HowToWriteAPlugin]
+* [HowToWriteAFilter]
+* [HowToWriteAPageProvider]
+* [HowToWriteATemplate]
+* [HowToCreateAWikiFarm]
+* [HowToSecureAPage]
+* [HowToCreatePageLists]
 
-* [TechDocs]
-* [BusinessDocs]
+

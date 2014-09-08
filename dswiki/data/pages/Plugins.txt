@@ -9,6 +9,7 @@ Here is a list of custom plugins we have developed:
 * [ImageGalleryPlugin] - [ImageGalleryPluginDemo]
 * [VideoPlugin] - [VideoPluginDemo]
 * [JiraPlugin] - [JiraPluginDemo]
+* [PluginListPlugin] - [PluginListPluginDemo]
 
 !!Others Plugins
 Plugins developed by others that are available through our site:

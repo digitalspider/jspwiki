@@ -1,1 +1,5 @@
 This is a series of pages where I experiment with things.
+
+[http://google.com]
+
+[{DB sql='select * from jiraissue' src=jira header=0}]

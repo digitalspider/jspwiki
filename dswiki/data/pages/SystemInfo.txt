@@ -40,6 +40,11 @@ Here is what I know about you currently:
 
 [{ListLocksPlugin}]
 
+----
+!List of plugins installed:
+
+[{PluginList}]
+
 
 ----
 

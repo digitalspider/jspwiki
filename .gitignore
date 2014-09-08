@@ -1,5 +1,7 @@
 **/data/lucene/**
 **/data/pages/OLD/**
+**/data/PageCount.txt
+**/data/refmgr.ser
 **/mywiki/data/**
 **/testwiki/data/**
 

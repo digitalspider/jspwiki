@@ -4,5 +4,8 @@
     <filter>
       <class>org.apache.wiki.filters.ProfanityFilter</class>
     </filter>
+    <filter>
+      <class>com.digitalspider.jspwiki.filter.AutoLinkHtmlFilter</class>
+    </filter>
 
   </pagefilters>
