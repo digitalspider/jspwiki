@@ -10,7 +10,13 @@ Here is a list of custom plugins we have developed:
 * [VideoPlugin] - [VideoPluginDemo]
 * [JiraPlugin] - [JiraPluginDemo]
 * [PluginListPlugin] - [PluginListPluginDemo]
+* [JDBCPlugin] - [JDBCPluginDemo]
+* [PasswordPlugin] - [PasswordPluginDemo]
+* [LikePlugin] - [LikePluginDemo]
+* [VotePlugin] - [VotePluginDemo]
+* [AttachmentPlugin] - [AttachmentPluginDemo]
+* [PanelPlugin] - [PanelPluginDemo]
 
-!!Others Plugins
+!! Others Plugins
 Plugins developed by others that are available through our site:
 * [TreePlugin]

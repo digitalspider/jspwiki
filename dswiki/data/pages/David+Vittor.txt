@@ -50,10 +50,10 @@ Some plugins I'm thinking of writing are:
 * [JSPWikiMarkupParser] - [https://issues.apache.org/jira/browse/JSPWIKI-852]
 
 !Filters
-* [AutoHtmlLinkFilter] - automatically convert http: links
-* [VideoEmbedFilter] - automatically embed https://www.youtube.com/watch?v=_ndfyn0y9B0 or http://vimeo.com/30998268
+* [AutoLinkHtmlFilter] - automatically convert http: links
+* [VideoEmbedFilter] - automatically embed [https://www.youtube.com/watch?v=_ndfyn0y9B0] or [http://vimeo.com/30998268]
 * [MarkdownFilter] - [http://daringfireball.net/projects/markdown/] - [http://en.wikipedia.org/wiki/Markdown]
-* [ConfluenceMarkupFilter] - [https://confluence.atlassian.com/display/DOC/Confluence+Wiki+Markup]
+* [ExtraMarkupFilter] - [https://confluence.atlassian.com/display/DOC/Confluence+Wiki+Markup]
 
 !PageProviders
 * [EnhancedFileSystemProvider] - persist any other properties (other than just author, changenote and last modified)

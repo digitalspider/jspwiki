@@ -4,7 +4,7 @@
 !!Our Page Providers
 Here is a list of custom page providers we have developed:
 * JDBCPageProvider
-* EncryptedPageProvider
+* [Base64PageProvider]
 
 !!Others Page Providers
 Page Providers developed by others that are available through our site:
