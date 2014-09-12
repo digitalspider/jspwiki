@@ -9,9 +9,6 @@ grant principal org.apache.wiki.auth.authorize.Role "Anonymous" {
 
 grant principal org.apache.wiki.auth.authorize.Role "Asserted" {
     permission org.apache.wiki.auth.permissions.GroupPermission "*:*", "view";
-    permission org.apache.wiki.auth.permissions.PagePermission "*:*", "modify";
-    permission org.apache.wiki.auth.permissions.WikiPermission "*", "editPreferences";
-    permission org.apache.wiki.auth.permissions.WikiPermission "*", "editProfile";
 };
 
 grant principal org.apache.wiki.auth.authorize.Role "Authenticated" {
