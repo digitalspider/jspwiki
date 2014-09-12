@@ -1,0 +1,33 @@
+%%error
+This is an idea in progress
+%%
+
+Develop a panel like this:
+{{{
+[{Panel id='abc' name='xyz' cssid='123' header='Header Text' body='
+...other wiki content...
+'}]
+}}}
+
+This would output the following:
+{{{
+<link rel="stylesheet" type="text/css" href="panel/css/base.css">
+<link rel="stylesheet" type="text/css" href="panel/css/123.css">
+<div id="abc" name="xyz" class="wikipanel wikipanel-123">
+  <div id="wikipanel-header-abc" class="wikipanel-header">Header Text</div>
+  <div id="wikipanel-logo-abc" class="wikipanel-logo"/>
+  <div id="wikipanel-content-abc" id="wikipanel-content">
+     ...other wiki content...
+  </div>
+  <div id="wikipanel-footer-abc" id="wikipanel-footer">
+</div>
+}}}
+* __base.css__ would define styles for wikipanel, wikipanel-header, wikipanel-logo, wikipanel_body & wikipanel_footer
+* __123.css__ would define styles for wikipanel-123 and all subcomponents (e.g. "wikipanel-123 wikipanel-content")
+
+The content of the css files would control:
+* width/height (ideally responsive)
+* colours (text color, background color, etc)
+* margins and padding
+* fonts
+* layouts (float, valign, etc)

@@ -12,6 +12,7 @@ This is a public wiki where we showcase our JSPWiki __Plugins__, and users can a
 See the following:
 * [Links]
 * [Plugins]
+* [Filters]
 
 
 

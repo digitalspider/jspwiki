@@ -1,5 +1,6 @@
 Here is some documentation that we use to develop JSPWikis
 
+* [ReservedPages]
 * [HowToPage]
 * [HowToWriteAPlugin]
 * [HowToWriteAFilter]
@@ -7,10 +8,12 @@ Here is some documentation that we use to develop JSPWikis
 * [HowToWriteATemplate]
 * [HowToCreateAWikiFarm]
 * [HowToSecureAPage]
+* [HowToAddGoogleAnalytics]
 * [HowToCreatePageLists]
 * [HowToUseJSONRCP]
 * [HowToCreateMoreMenu]
 * [HowToBlog]
+* [HowToCreateAForm]
 * [HowToSetupEmail]
 * [HowToAddComments]
 * [HowToI18NText]

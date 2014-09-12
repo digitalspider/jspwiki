@@ -1,0 +1,3 @@
+[{ALLOW view Authenticated}]
+[{ALLOW edit Authenticated}]
+[https://jspwiki-wiki.apache.org/Wiki.jsp?page=SearchPageHelp]

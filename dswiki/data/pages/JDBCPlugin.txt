@@ -2,6 +2,12 @@
 \\
 See [Plugins]
 
+%%error
+This work is still in progress
+* Add JNDI
+* Add Oracle support
+%%
+
 !!Overview
 Run a SELECT SQL query on database values and display the results as a table.
 
@@ -13,7 +19,7 @@ Run a SELECT SQL query on database values and display the results as a table.
 || Source | [https://github.com/digitalspider/jspwiki-plugins/tree/master/JDBCPlugin]
 || Issues | [https://github.com/digitalspider/jspwiki-plugins/issues]
 || Plugin | [JDBCPlugin-0.1.jar]
-|| Dependencies | None
+|| Dependencies | __Database drivers__
 
 !!Usage
 * Place the __jar__ file into your <tomcatDir>/webapps/JSPWiki/WEB-INF/lib/ directory

@@ -2,4 +2,7 @@ This is a series of pages where I experiment with things.
 
 [http://google.com]
 
-[{DB sql='select * from jiraissue' src=jira header=0}]
+[{DB sql='select * from jiraissue limit 5' src=jira header=0 debug=true
+
+This is my body
+}]
