@@ -8,3 +8,4 @@
 **/wikis/**/WEB-INF/classes/jspwiki-custom.properties
 **/wikis/**/WEB-INF/jspwiki-custom.policy
 **/wikis/**/WEB-INF/lib/*.jar
+**/*.~
