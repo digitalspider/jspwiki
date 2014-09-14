@@ -6,3 +6,4 @@
 **/data/testwiki/**
 **/wikis/**/WEB-INF/classes/jspwiki-custom.properties
 **/wikis/**/WEB-INF/classes/jspwiki-custom.policy
+**/wikis/**/WEB-INF/lib/*.jar
