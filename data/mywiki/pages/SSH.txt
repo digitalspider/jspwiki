@@ -1,0 +1,74 @@
+!!Overview
+
+__Secure SHell (SSH)__ - is a way of calling shell scripts from one server on another.
+
+To do this, authentication between the two servers has to be established, using private / public key cryptography.
+
+We currently connect the application servers, together within their groups, and also to the Subversion SVN server, which runs TeamCity : Continuous build process, using SSH.
+
+Applications groups are:
+{{{
+    Lasoo - web01 (10.103.34.101) to web 17 (10.103.34.117)
+    Elite PREVIEW - meli01 (10.103.34.171) to meli02 (10.103.34.172)
+    Elite LIVE - eli01 (10.103.34.161) to eli02 (10.103.34.162)
+    Learner (Analytics) - learn01 (10.103.34.31) to learn03 (10.103.34.33)
+    SVN / TeamCity - 10.103.34.202
+}}}
+
+To connect these groups we establish security between them using ssh keys for the user root
+
+On a server log in as the root user, and go to the .ssh directory:
+{{{
+sudo su -  # Login as root
+cd ~/.ssh  # go to the default directory, and then .ssh
+ls -la     # list all the files
+
+total 16
+-rw-r--r-- 1 root root 1838 May 27 13:13 authorized_keys2
+-rw------- 1 root root  672 Jul 24  2012 id_dsa
+-rw-r--r-- 1 root root  621 Jul 24  2012 id_dsa.pub
+-rw-r--r-- 1 root root 2009 May 29 21:43 known_hosts
+}}}
+
+Here we can see 4 files:
+|| Filename || Purpose	
+| authorized_keys2 | These are the public keys of other servers that are allowed to talk to me (this server)	
+| id_dsa | This is my personal private key (never give this to anyone)	
+| id_dsa.pub | This is my public key which I can give to other server so they can call commands on me	
+| known_hosts | This is a list of hosts that i have connected to and know about. (Informational only)	
+
+!!Generating keys
+
+To generate the id_dsa and id_dsa.pub keys you need to use the keytool:
+
+* [http://www.puddingonline.com/~dave/publications/SSH-with-Keys-HOWTO/document/html/SSH-with-Keys-HOWTO-4.html]
+{{{
+    ssh-keygen -t dsa
+}}}
+!!Giving others access
+
+To allow server meli01 to talk to source01, we do the following steps:
+
+* generate the keys on source01
+{{{
+        ssh-keygen -t dsa
+}}}
+* copy the public key from source01 to meli01
+{{{
+        scp ~/.ssh/id_dsa.pub tomcat@meli01:/tmp/id_dsa.pub  # copy to meli01 into temp directory
+}}}
+* install the public on source01 (add it to authorized_keys2)
+{{{
+        ssh tomcat@meli01                                    # log into meli01 as tomcat this will ask for a password
+        sudo su -                                            # change to root on meli01
+        cat /tmp/id_dsa.pub >> ~/.ssh/authorised_keys2       # output the public key, and append the results to the authorized_keys2 file
+        CONTROL-D  (twice)                                   # exit root, exit meli01
+}}}
+* test the connection from meil01
+{{{
+        sudo su -      # change to root user
+        ssh source01   # Login to source01 as root, which is uses the public key to authenticate, and does not ask you for a password
+        CONTROL-D      # exit from source01 - everything worked.
+}}}
+----
+[Linux] [OS] [TechDocs]

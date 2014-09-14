@@ -1,0 +1,50 @@
+[{TableOfContents}]
+\\
+See [Filters]
+
+!!Overview
+%%error
+Work in progess
+%%
+
+This filter automatically add extra markup as follows:
+{{{
+{noformat}a{noformat} <=> { { {a} } }
+*test* <=> __test__
+_test_ <=> ''test''
+h1. title <=> !!!title
+h2. title <=> !!title
+h3. title <=> !title
+}}}
+
+|| Written by | [David Vittor]
+|| Date | 09-Sep-2014
+|| Plugin Version | 0.1
+|| Wiki Versions | 2.10.1+
+|| Demo | N/A
+|| Source | [https://github.com/digitalspider/jspwiki-plugins/tree/master/ExtraMarkupFilter]
+|| Issues | [https://github.com/digitalspider/jspwiki-plugins/issues]
+|| Plugin | [ExtraMarkupFilter-0.1.jar]
+|| Dependencies | None
+
+!!Usage
+* Place the __jar__ file into your <tomcatDir>/webapps/JSPWiki/WEB-INF/lib/ directory
+* Add the following to your <tomcatDir>/webapps/JSPWiki/WEB-INF/classes/__filter.xml__ file:
+{{{
+<?xml version="1.0"?>
+<pagefilters>
+  ... Any other filters ...
+  <filter>
+    <class>com.digitalspider.jspwiki.filter.ExtraMarkupFilter</class>
+  </filter>
+</pagefilters>
+}}}
+* Restart your tomcat
+
+!!Parameters
+|| Param || Description || Default
+|| | |
+
+!!Properties
+|| Property || Description || Default
+|| | |

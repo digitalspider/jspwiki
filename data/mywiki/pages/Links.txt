@@ -1,0 +1,19 @@
+!!Website
+* [http://digitalspider.com.au/]
+!!Our Wikis
+* [http://digitalspider.com.au/JSPWiki] - Public
+* [http://digitalspider.com.au/mywiki] - Private
+* [http://digitalspider.com.au/testwiki] - Testing on Haddock
+
+!!JSPWiki
+!API
+* [http://jspwiki.apache.org/apidocs/2.10.1/index.html]
+!SVN
+* [http://svn.apache.org/viewvc/jspwiki/]
+!Wiki
+* [https://jspwiki-wiki.apache.org/]
+!JIRA
+* [https://issues.apache.org/jira/browse/JSPWIKI]
+
+!!GitHub
+* [https://github.com/digitalspider]

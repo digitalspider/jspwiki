@@ -1,3 +1,0 @@
-This is list of pages that link to __HowToPage__
-
-[{ReferringPagesPlugin max=1000}]

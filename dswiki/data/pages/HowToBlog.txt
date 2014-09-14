@@ -1,7 +1,0 @@
-Need to understand the following plugins:
-
-* [https://jspwiki-wiki.apache.org/Wiki.jsp?page=WeblogPlugin]
-* [https://jspwiki-wiki.apache.org/Wiki.jsp?page=WeblogEntryPlugin]
-
-----
-[HowToPage]

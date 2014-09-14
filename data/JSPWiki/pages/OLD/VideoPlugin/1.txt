@@ -1,0 +1,41 @@
+[{TableOfContents}]
+\\
+See [Plugins]
+
+!!Overview
+This plugin can place embedded videos into your JSPWiki. Currently it supports videos from:
+* [YouTube|http://youtube.com]
+* __Coming SOON__ [Vimeo}http://vimeo.com]
+
+|| Written by | [David Vittor]
+|| Date | 27-Aug-2014
+|| Plugin Version | 0.1
+|| Wiki Versions | 2.10.1+
+|| Source | [https://github.com/digitalspider/jspwiki-plugins/tree/master/VideoPlugin]
+|| Plugin | [VideoPlugin-0.1.jar]
+|| Dependencies | None
+
+!!Usage
+* Place the __jar__ file into your <tomcatDir>/webapps/JSPWiki/WEB-INF/lib/ directory
+* Restart your tomcat
+* Add the following to your page:
+{{{
+[{Video url='https://www.youtube.com/watch?v=rYEDA3JcQqw' width=560 height=315}]
+}}}
+* This generates:
+{{{
+<iframe width='500' height='315' src='http://youtube.com/embed/rYEDA3JcQqw?rel=0' frameborder='0' allowfullscreen></iframe>
+}}}
+
+!!Parameters
+|| Param || Description || Default
+|| url | The url of the video. Note value needs to be in single quotes. url='https://www.youtube.com/watch?v=rYEDA3JcQqw' | null
+|| width | set the width of the gallery | 560
+|| height | set the height of the gallery | 315
+
+!!Properties
+|| Property || Description || Default
+|| |  | 
+
+!!Examples
+See [VideoPluginDemo]

@@ -1,0 +1,10 @@
+Demos of [ImageGalleryPlugin]
+
+!Attachments
+[{ImageGallery items=3 width=900 steps=3 autoplay=2000 speed=200 arrows=true nav=true sortby=name sortdesc=true}]
+
+!Lasoo
+[{ImageGallery url=lasoo items=5 width=900 autoplay=1000 speed=100 steps=2 speed=200 arrows=true nav=true sortby=name sortdesc=true suffix=jpg}]
+
+!SMH
+[{ImageGallery url=smh items=3 width=900 steps=3 autoplay=2000 speed=200 arrows=true nav=true sortby=name sortdesc=true}]

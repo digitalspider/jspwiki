@@ -1,0 +1,26 @@
+!Todo
+This is a list of things we need to do:
+* Migrate current Media wiki content to here
+** [http://wiki.digitalspider.com.au/mywiki]
+* Write more [Plugins]
+* Develop our [website|http://digitalspider.com.au]
+* Setup a JSPWiki on OpenShift
+* Rsync wiki data to openshift
+* Document my network setup
+* Propose category documentation split, How to, tags, 
+* Propose add AutoLinkHtmlFilter into core jspwiki. 
+* Build and use Base64PageProvider
+* Write test cases for custom page properties
+* Develop Like plugin/Filter
+* Document RCPJson usage
+* Document setting up database
+* Document how to write a filter
+* Document how to write a page provider
+* Develop a custom template
+* Develop a custom tag
+
+
+!Done
+* Hook in no-ip and expose this publically
+* Install a second private wiki - [http://digitalspider.com.au/mywiki]
+* Install a sandbox wiki - [http://digitalspider.com.au/testwiki]

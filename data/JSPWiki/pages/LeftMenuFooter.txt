@@ -1,0 +1,6 @@
+[{ALLOW view Authenticated}]
+[{ALLOW edit Authenticated}]
+__Date:__ [{CurrentTimePlugin format='dd/MM/yyyy'}]\\
+__Time:__ [{CurrentTimePlugin format='HH:mm aa'}]
+
+[LeftMenuFooter]

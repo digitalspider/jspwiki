@@ -1,0 +1,142 @@
+[{TableOfContents}]
+\\
+How to write a JSPWiki Plugin. 
+See [Plugins].
+
+!!Download
+!Source
+* [HowToWriteAPlugin/MyPlugin.zip]
+!Plugin
+* [HowToWriteAPlugin/MyPlugin-1.0-SNAPSHOT.jar]
+
+!!Prerequsites
+This documentation is using Windows, with Java already installed.
+
+!Install Eclipse
+* [http://www.eclipse.org/]
+!Install Tomcat
+* [http://tomcat.apache.org/]
+!Install Maven
+* [http://maven.apache.org/]
+!Maven Repository requirement
+A plugin requires the jar file with the core JSPWiki classes.
+
+!!Process
+!Create new maven project
+e.g. /plugins/MyPlugin/pom.xml
+%%information
+The scope of the dependancy is __provided__ as this will be available in the application container.
+%%
+{{{
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.jspwiki.plugin</groupId>
+  <artifactId>MyPlugin</artifactId>
+  <packaging>jar</packaging>
+  <version>1.0-SNAPSHOT</version>
+  <name>Maven Quick Start</name>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.jspwiki</groupId>
+      <artifactId>jspwiki-war</artifactId>
+      <version>2.10.1</version>
+      <classifier>classes</classifier>
+      <scope>compile</scope>
+    </dependency>
+  </dependencies>
+
+</project>
+}}}
+Create the following directory:
+{{{
+mkdir src\main\java
+mkdir src\main\resources\ini
+}}}
+Once this is created run Maven:
+{{{
+mvn package
+mvn eclipse:eclipse
+}}}
+
+!Using Eclipse
+* In Eclipse
+* Import - Existing Project Into Workspace - <MyPlugin dir> - MyPlugin - Finish
+* Create a new class
+** Package = com.jspwiki.plugin
+** Name = MyPlugin
+* Add:
+** import org.apache.wiki.api.plugin.WikiPlugin;
+** implements WikiPlugin
+{{{
+package com.jspwiki.plugin;
+
+import java.util.Map;
+
+import org.apache.log4j.Logger;
+import org.apache.wiki.WikiContext;
+import org.apache.wiki.api.exceptions.PluginException;
+import org.apache.wiki.api.plugin.WikiPlugin;
+
+public class MyPlugin implements WikiPlugin {
+
+        private final Logger log = Logger.getLogger(MyPlugin.class);
+
+	@Override
+	public String execute(WikiContext wikiContext, Map<String, String> params) throws PluginException {
+		log.info("Plugin executed");
+		return "My Plugin rocks";
+	}
+
+}
+}}}
+
+* Create the /src/main/resources/ini/__jspwiki_module.xml__ file
+{{{
+<?xml version="1.0" encoding="UTF-8"?>
+<modules>
+   <plugin class="com.jspwiki.plugin.MyPlugin">
+      <author>Your Name</author>
+      <minVersion>2.10.1</minVersion>
+   </plugin>
+</modules>
+}}}
+
+* Create the /src/main/resources/__log4j.properties__ configuration file:
+{{{
+# Root logger option
+log4j.rootLogger=WARN, stdout
+
+log4j.logger.com.jspwiki.plugin=INFO, stdout
+log4j.additivity.com.jspwiki.plugin=false
+
+# Direct log messages to stdout
+log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+log4j.appender.stdout.Target=System.out
+log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+log4j.appender.stdout.layout.ConversionPattern=%d{ISO8601} %-5p %c{1}:%L - %m%n
+}}}
+
+!Create the plugin
+* Run __mvn package__
+* You will find /target/__MyPlugin-1.0-SNAPSHOT.jar__
+!Deploy the plugin
+%%information
+I'm assuming you have [Tomcat|http://tomcat.apache.org/] installed, and the [2.10.1 war file|http://mvnrepository.com/artifact/org.apache.jspwiki/jspwiki-war/2.10.1] copied to /webroot/__JSPWiki.war__
+%%
+* Copy the above jar file to your tomcat <TomcatDir>/webroot/JSPWiki/WEB-INF/lib/
+* Restart your tomcat
+** [http://localhost:8080/JSPWiki]
+* Use your plugin on the page:
+{{{
+[{MyPlugin}]
+}}}
+[MyPlugin.png]

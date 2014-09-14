@@ -1,0 +1,25 @@
+!! MySQL
+! URL Connection
+{{{
+jdbc:mysql://mysql20-ultimo.lasoo.net:3306/elite
+}}}
+! Load Balance configuration
+{{{
+jdbc:mysql:loadbalance://mysql21-ultimo.lasoo.net:3306,mysql22-ultimo.lasoo.net:3306/elite
+}}}
+
+See also [TokuDB]
+
+!!SQL
+{{{
+select w.id as listId, w.listPublic, CONCAT('[http://www.lasoo.com.au/shoppinglist/',w.id,'.html']) as url, u.id as userId,u.screenName, u.firstName, u.lastName, u.email, u.state, u.dateCreated as userCreatedDate, w.datemodified listUpdatedDate 
+from SF_WishList w, SF_User u
+where w.userId=u.id and w.listPublic =1 and w.datemodified>='2014-08-11' and w.datemodified<'2014-08-31' and u.domain = 'Lasoo NZ'
+and w.id in (
+  select ol.listId from SF_WishListOfferList ol group by listId having count(listId)>4
+)
+order by w.datemodified desc
+}}}
+
+----
+[Database] [TechDocs]

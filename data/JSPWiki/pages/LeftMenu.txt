@@ -1,0 +1,21 @@
+[{ALLOW view Authenticated}]
+[{ALLOW edit Authenticated}]
+[Home]
+* [Links]
+* [Plugins]
+* [Filters]
+* [PageProviders]
+* [Templates]
+Other
+* [Documentation]
+* [Sandbox]
+* [TODO]
+[{If var='loginstatus' is='authenticated'
+
+Admin
+* [Page Index]
+* [Recent Changes]
+* [SystemInfo]
+[LeftMenu]
+}]
+

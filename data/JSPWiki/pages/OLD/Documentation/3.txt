@@ -1,0 +1,12 @@
+[{ALLOW view Authenticated}]
+[{ALLOW edit Authenticated}]
+
+This page is the core link to our Documentation:
+
+* [TechDocs]
+** [Network]
+** [GitHub]
+** [Servers]
+** [DevProcess]
+** [Tools]
+* [BusinessDocs]

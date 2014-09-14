@@ -1,0 +1,8 @@
+Here is a list of Operating Systems:
+* [Windows]
+* [Linux]
+* [Android]
+* [iOS]
+
+----
+[TechDocs]

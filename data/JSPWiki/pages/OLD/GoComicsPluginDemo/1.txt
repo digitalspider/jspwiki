@@ -1,0 +1,3 @@
+This page demonstrates the [GoComicsPlugin]
+
+[{GoComicPlugin comic=bc width=900 height=250 class=mycomic timeout=1}]

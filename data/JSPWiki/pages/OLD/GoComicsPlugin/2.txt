@@ -1,0 +1,41 @@
+[{TableOfContents}]
+\\
+See [ContributedPlugins]
+
+!!Overview
+Inspired by [DailyComicPlugin|http://www.ecyrd.com/JSPWiki/wiki/DailyComicPlugin]
+A plugin that pulls in a comic strip from [GoComic|http://www.gocomics.com/explore/comics].\\
+
+|| Written by | [David Vittor]
+|| Date | 20-Aug-2014
+|| Plugin Version | 0.1
+|| Wiki Versions | 2.10.1+
+|| Source | [GoComicPlugin-0.1-src.zip]
+|| Plugin | [GoComicPlugin-0.1.jar]
+|| Dependencies | None
+
+!!Usage
+* Place the jar file into your <tomcatDir>/webapps/JSPWiki/WEB-INF/lib/ directory
+* Restart your tomcat
+* Add the following to your page:
+{{{
+[{GoComicPlugin comic=bc width=900 height=250 class=mycomic timeout=1}]
+}}}
+* This generates:
+{{{
+<div class="mycomic"><img width="900" height="250" alt="http://assets.amuniversal.com/31e9ace004b501329124005056a9545d" src="http://assets.amuniversal.com/31e9ace004b501329124005056a9545d"></div>
+}}}
+
+!!Parameters
+|| Param || Description || Default
+|| comic | select the basic comic name from [GoComics|http://www.gocomics.com/explore/comics] e.g. dilbert-classics, calvinandhobbes, peanuts | garfield
+|| width | set the width | 600
+|| height | set the height | 200
+|| class | set the class of the div around the image. Used for css styles | comic
+|| timeout | set the timeout (in seconds) how long to wait for the URL connection to load | 10
+|| date | set the custom exact date for the comic you want. Format=yyyyMMdd | <today>
+
+!!Properties
+|| Property || Description || Default
+|| gocomicplugin.baseurl | the base url of where to pull images from | http://www.gocomics.com/
+|| gocomicplugin.srcpath | the CDN source path of the images to find | http://assets.amuniversal.com

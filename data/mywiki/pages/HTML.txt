@@ -1,0 +1,63 @@
+Here is sample HTML to emulate a webpage.
+
+You can do this using the __base__ header:
+{{{
+<base href="[http://www.palsliquor.com.au/]"/>
+}}}
+
+{{{
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" "[http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd]">
+<html class="cufon-active cufon-ready" xmlns="[http://www.w3.org/1999/xhtml]">
+<head>
+	<base href="[http://www.palsliquor.com.au/]"/>
+	<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+	<title>PALS - Parafield Airport Liquor Store</title>
+
+	<!-- css -->
+	<link type="text/css" href="/includes/css/text.css?1905201490237" rel="stylesheet">
+	<link type="text/css" href="/includes/css/menu.css" rel="stylesheet">
+	<link type="text/css" href="/includes/css/forms.css?1905201490237" rel="stylesheet">
+	<link type="text/css" href="/includes/css/googleMap.css" rel="stylesheet">
+	<link type="text/css" href="/includes/css/competitions.css" rel="stylesheet">
+
+	<!-- jquery -->
+	<script type="text/javascript" async="" src="[http://www.google-analytics.com/ga.js]"></script><script src="/includes/js/jquery-latest.js" type="text/javascript" style=""></script>
+	<script src="/includes/js/jquery.validate.js" type="text/javascript"></script>
+</head>
+<body id="home">
+<div class="container">
+<div class="pageWidth">
+<div class="pageSpace">
+<!-- header -->
+<div class="header">
+    <a title="Parafield Airport Liquor Store" class="logo" href="/"><img alt="Parafield Airport Liquor Store" src="/img/logo.gif"></a>
+    <ul>
+    <li><a class="contact-us" href="/contact-us/"><span>Enquiries: (08) 8258 7844</span></a></li>
+    <li><a class="shop-online" href="/shop-online/"><span>Shop Online</span></a></li>
+    </ul>
+</div>
+<!-- menu -->
+<div class="menu"><ul id="nav" class="sf-js-enabled">
+<li id="nav-1" class="here first"><a href="[http://www.palsliquor.com.au/]"><span>Home</span></a></li>
+<li id="nav-9"><a href="[http://www.palsliquor.com.au/]about-us/"><span>About Us</span></a></li>
+<li id="nav-12"><a href="[http://www.palsliquor.com.au/]current-specials/"><span>Current Specials</span></a></li>
+<li id="nav-13"><a href="[http://www.palsliquor.com.au/]shop-online/"><span>Shop Online</span></a></li>
+<li id="nav-11"><a href="[http://www.palsliquor.com.au/]party-quote/"><span>Party Quote</span></a></li>
+<li id="nav-15"><a href="[http://www.palsliquor.com.au/]contact-us/"><span>Contact Us</span></a></li>
+<li id="nav-16" class="last"><a href="[http://www.palsliquor.com.au/]enewsletter/"><span>eNewsletter</span></a></li>
+</ul></div>
+<!-- footer -->
+<div class="footer">
+<div class="footerSpace">
+    <div class="left">Copyright &copy; 2014 Parafield Airport Liquor Store</div>
+    <div class="right"><a target="_blank" href="[http://www.honeyweb.com.au]">Website Design by <span>Honeyweb</span></a></div>
+    <br class="clear">
+</div>
+</div>
+<!-- end -->
+</div>
+</div>
+</div>
+</body>
+</html>
+}}}

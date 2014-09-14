@@ -1,0 +1,9 @@
+!! MySQL
+! URL Connection
+{{{
+jdbc:mysql://mysql20-ultimo.lasoo.net:3306/elite
+}}}
+! Load Balance configuration
+{{{
+jdbc:mysql:loadbalance://mysql21-ultimo.lasoo.net:3306,mysql22-ultimo.lasoo.net:3306/elite
+}}}

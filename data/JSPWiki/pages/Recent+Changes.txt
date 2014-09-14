@@ -1,0 +1,5 @@
+[{ALLOW view Authenticated}]
+[{ALLOW edit Authenticated}]
+
+Recent Changes in the last month
+[{RecentChangesPlugin since=30}]

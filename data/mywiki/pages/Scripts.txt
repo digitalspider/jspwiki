@@ -1,0 +1,361 @@
+!!Run_master_deploy.sh
+
+{{{
+#!/bin/bash
+
+export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
+export SHELL=/bin/bash
+export MAIL=/var/spool/mail/root
+
+APP_DIR=/opt/applications
+CONFIG_DIR=${APP_DIR}/config
+WEBROOT_DIR=${APP_DIR}/webroot
+TOMCAT_DIR=/opt/tomcat
+DEPLOY_DIR=/opt/deploy
+
+if [ `whoami` != 'root' ] ; then
+        echo "ERROR: This command needs to be run as root user. You are: `whoami`"
+        exit 1;
+fi
+
+# Log output and error output to stdout and the LOGFILE
+exec >  >(tee -a $LOGFILE)
+trap "kill -9 $! 2>/dev/null" EXIT
+exec 2> >(tee -a $LOGFILE >&2)
+trap "kill -9 $! 2>/dev/null" EXIT
+
+
+TODAY=`date +%Y-%m-%d`
+DATETIME="${TODAY} `date +%H:%M`"
+echo ""
+echo "*****************************"
+echo "Deploying at $DATETIME"
+echo "*****************************"
+echo ""
+
+echo "${DEPLOY_DIR}/pull_build.sh"
+${DEPLOY_DIR}/pull_build.sh
+if [ $? != 0 ] ; then
+        echo ""
+        echo "Error downloading team city artifacts"
+        exit 1;
+fi
+
+for HOST in meli01 meli02
+do
+        fullHostname="${HOST}-ultimo.lasoo.net"
+        echo ""
+        echo "Deploying on: $HOST"
+        isLocalhost=`cat /etc//sysconfig/network | grep "=${fullHostname}" | wc -l`
+        if [ $isLocalhost == 1 ] ; then
+                echo "# ${DEPLOY_DIR}/run_deploy.sh"
+                ${DEPLOY_DIR}/run_deploy.sh
+        else
+                echo "# ssh root@${HOST} ${DEPLOY_DIR}/run_deploy.sh"
+                ssh root@${HOST} ${DEPLOY_DIR}/run_deploy.sh
+        fi
+
+        if [ $? != 0 ] ; then
+                echo "Error deploying Elite on ${HOST}"
+                exit 1;
+        fi
+
+done
+
+echo "Deployment at $DATETIME completed SUCCESSFULLY"
+}}}
+
+!!run_deploy.sh
+{{{
+#!/bin/sh
+
+# This script performs the automatic deployment of the Elite Web Application WAR file
+
+TOMCAT_DIR="/opt/tomcat"
+DEPLOY_DIR="/opt/deploy"
+APPLICATION_DIR="/opt/applications"
+CONFIG_DIR="${APPLICATION_DIR}/config"
+WEBROOT_DIR="${APPLICATION_DIR}/webroot"
+BACKUP_DIR="$DEPLOY_DIR/backup"
+BASE_DIR="$DEPLOY_DIR"
+cd ${DEPLOY_DIR}
+
+WARNAME_ROOT="ROOT.war"
+WARNAME_FILE=`ls ${DEPLOY_DIR}/Elite*.war | head -1`
+
+TODAY=`date +%Y-%m-%d`
+DATETIME="${TODAY}-`date +%H-%M`"
+PID=`ps -ef | grep tomcat | grep java | grep -v grep | awk '{print $2}'`
+
+echo ""
+echo "0. Validation"
+WARFILE_COUNT=`ls ${DEPLOY_DIR}/Elite*.war | wc -l`
+if [ $WARFILE_COUNT != 1 ] ; then
+        echo "ERROR: There are $WARFILE_COUNT files to deploy. Please ensure there is only 1 Elite*.war file in the folder ${DEPLOY_DIR}"
+        exit 1;
+elif [ `whoami` != 'root' ] ; then
+        echo "ERROR: This command needs to be run as root user. You are: `whoami`"
+        exit 1;
+fi
+
+echo ""
+echo "1. Stopping Tomcat Process. PID=$PID"
+if [ "$PID" == "" ]; then
+        echo "# Tomcat not running";
+else
+        echo "# sudo service tomcat stop"
+        service tomcat stop
+        echo "# ps -ef | grep tomcat | grep java | grep -v grep | awk '{print $2}'"
+        PID=`ps -ef | grep tomcat | grep java | grep -v grep | awk '{print $2}'`
+        if [ "$PID" != "" ]; then
+                echo "ERROR: Cannot stop tomcat naturally. Killing..."
+                echo "# kill -9 $PID"
+                kill -9 $PID
+                PID=`ps -ef | grep tomcat | grep java | grep -v grep | awk '{print $2}'`
+                if [ "$PID" != "" ]; then
+                        echo "ERROR: Trouble stopping tomcat. PID=$PID"
+                        exit 1;
+                else
+                        echo "# Tomcat process stopped successfully"
+                fi
+        else
+                echo "# Tomcat process stopped successfully"
+        fi
+fi
+
+echo ""
+echo "2. Backing up the current WAR file"
+if [ -f "${TOMCAT_DIR}/webapps/${WARNAME_ROOT}" ] ; then
+        echo "# mv -f ${TOMCAT_DIR}/webapps/${WARNAME_ROOT} ${BACKUP_DIR}/${WARNAME_ROOT}.${HOSTNAME}.${DATETIME}"
+        mv -f ${TOMCAT_DIR}/webapps/${WARNAME_ROOT} ${BACKUP_DIR}/${WARNAME_ROOT}.${HOSTNAME}.${DATETIME}
+fi
+echo "# rm -rf ${TOMCAT_DIR}/webapps/ROOT*"
+echo "# rm -rf ${TOMCAT_DIR}/work/Catalina*"
+echo "# rm -rf ${TOMCAT_DIR}/logs/*"
+rm -rf ${TOMCAT_DIR}/webapps/ROOT*
+rm -rf ${TOMCAT_DIR}/work/Catalina*
+rm -rf ${TOMCAT_DIR}/logs/*
+
+echo ""
+echo "3. Deploying the new WAR file"
+echo "# cp -rf ${WARNAME_FILE} ${TOMCAT_DIR}/webapps/${WARNAME_ROOT}"
+cp -rf ${WARNAME_FILE} ${TOMCAT_DIR}/webapps/${WARNAME_ROOT}
+
+echo ""
+echo "4. Starting Tomcat"
+echo "# service tomcat start"
+service tomcat start
+
+echo "# find ${TOMCAT_DIR}/logs/ -name catalina.* -exec grep 'Server startup' {} \;"
+STARTUP=`find ${TOMCAT_DIR}/logs/ -name catalina.* -exec grep 'Server startup' {} \; | wc -l`
+PID=`ps -ef | grep tomcat | grep java | grep -v grep | awk '{print $2}'`
+for INDEX in {1..25}
+do
+        sleep 5;
+        STARTUP=`find ${TOMCAT_DIR}/logs/ -name catalina.* -exec grep 'Server startup' {} \; | wc -l`
+        if [ $STARTUP = 0 ]; then
+                echo -n "${INDEX}."
+        else
+                break;
+        fi
+done
+echo ""
+if [ $STARTUP = 0 ]; then
+        echo "ERROR: Trouble starting tomcat. PID=$PID"
+        exit 1;
+else
+        echo "# `tail ${TOMCAT_DIR}/logs/catalina.* | grep 'Server startup'`"
+        echo "# Tomcat process started successfully. PID=$PID"
+fi
+
+echo ""
+echo "5. Change directory owner to tomcat"
+echo "# chown -R tomcat:tomcat ${TOMCAT_DIR}"
+chown -R tomcat:tomcat ${TOMCAT_DIR}
+
+echo ""
+echo "6. Deployment complete"
+
+echo "7. Testing Deployment"
+echo "${DEPLOY_DIR}/test_eliteDeployment.sh"
+${DEPLOY_DIR}/test_eliteDeployment.sh
+echo "8. Testing Deployment complete"
+}}}
+
+!!autoRestart.sh
+{{{
+#!/bin/sh
+
+LIMIT=90
+USEDSPACE=`df -h | grep "/dev/sda3" | cut -d'%' -f1 | tail -c 4 | tr -d ' '`
+
+TODAY=`date +%Y-%m-%d`
+DATETIME="${TODAY} `date +%H:%M`"
+
+PID=`ps -ef | grep "classpath /opt/tomcat" | grep -v grep | tr -s ' ' | cut -f 2 -d ' '`
+ELITEHOST=`echo $HOSTNAME | cut -f 1 -d '-'`
+OUTFILE=/mnt/media/logs/catalina.out.$ELITEHOST.$DATETIME.log
+LOGFILE=/opt/tomcat/autoRestart.log
+
+# Log output and error output to stdout and the LOGFILE
+exec >  >(tee -a $LOGFILE)
+trap "kill -9 $! 2>/dev/null" EXIT
+exec 2> >(tee -a $LOGFILE >&2)
+trap "kill -9 $! 2>/dev/null" EXIT
+
+
+echo "*********************************************************************"
+echo $DATETIME. PID=$PID. HOST: $ELITEHOST. Limit: $LIMIT%. Used Space: $USEDSPACE%.
+echo "*********************************************************************"
+
+if [[ $USEDSPACE -gt $LIMIT && "$PID" != "" ]]; then
+        echo "*****  OVER THE LIMIT "
+
+        #Stop tomcat
+        echo "***** STOPPING TOMCAT $PID"
+        kill -9 $PID
+
+        echo "***** LOGS COPIED TO $OUTFILE"
+        head -1000000 /opt/tomcat/logs/catalina.out > $OUTFILE
+
+        #delete log file
+        echo "***** REMOVE LOGS"
+        rm -rf /opt/tomcat/logs/*
+
+        echo "***** STARTING TOMCAT "
+        sleep 5;    # Wait 5 seconds before starting
+        /etc/init.d/tomcat start
+
+        #send out alert email
+        echo "Tomcat server restarted on $HOSTNAME." | mail -s "Tomcat $ELITEHOST restarted to free diskspace" LasooDev@salmat.com.au
+
+else
+        echo "***** System is fine with sufficient free space :)"
+fi
+}}}
+
+!!Logrotate
+{{{
+/opt/tomcat/logs/catalina.out {
+copytruncate
+daily
+rotate 10
+compress
+missingok
+size 100M
+}
+}}}
+
+!!service tomcat
+{{{
+#!/bin/sh
+#
+# Tomcat Server
+#
+# chkconfig: 2345 96 30
+# description: Java servlet container
+
+# Source function library.
+. /etc/init.d/functions
+
+RUN_AS_USER=root # Adjust run user here
+CATALINA_HOME=/opt/tomcat;
+
+if [ `whoami` != 'root' ] ; then
+        echo "ERROR: This command needs to be run as root user. You are: `whoami`"
+        exit 1;
+fi
+
+
+start() {
+        echo "Starting Tomcat: "
+        if [ "x$USER" != "x$RUN_AS_USER" ]; then
+          su - $RUN_AS_USER -c "$CATALINA_HOME/bin/startup.sh"
+        else
+          $CATALINA_HOME/bin/startup.sh
+        fi
+        echo "done."
+}
+stop() {
+        echo "Shutting down Tomcat: "
+        if [ "x$USER" != "x$RUN_AS_USER" ]; then
+          su - $RUN_AS_USER -c "$CATALINA_HOME/bin/shutdown.sh -force"
+        else
+          $CATALINA_HOME/bin/shutdown.sh -force
+        fi
+        echo "# ps -ef | grep "/opt/tomcat " | grep java | grep -v grep"
+        PID=`ps -ef | grep "/opt/tomcat " | grep java | grep -v grep | awk '{print $2}'`
+        if [ "$PID" != "" ]; then
+                for INDEX in {1..5}
+                do
+                        sleep 5;
+                        PID=`ps -ef | grep "/opt/tomcat " | grep java | grep -v grep | awk '{print $2}'`
+                        if [ "$PID" != "" ]; then
+                                echo -n "${INDEX}."
+                        else
+                                break;
+                        fi
+                done
+                echo ""
+                if [ "$PID" != "" ]; then
+                        echo "ERROR: Cannot stop tomcat naturally. Killing..."
+                        echo "# kill -9 $PID"
+                        kill -9 $PID
+                        PID=`ps -ef | grep "/opt/tomcat " | grep java | grep -v grep | awk '{print $2}'`
+                        if [ "$PID" != "" ]; then
+                                echo "ERROR: Trouble stopping tomcat. PID=$PID"
+                                exit 1;
+                        else
+                                echo "# Tomcat process stopped successfully"
+                        fi
+                else
+                        echo "# Tomcat process stopped successfully"
+                fi
+        fi
+        echo "done."
+}
+status() {
+        PID=`ps -ef | grep "/opt/tomcat " | grep java | grep -v grep | awk '{print $2}'`
+        if [ "$PID" != "" ]; then
+                echo "Tomcat is running. PID=$PID"
+        else
+                echo "Tomcat is down"
+        fi
+}
+
+case "$1" in
+  start)
+        start
+        ;;
+  stop)
+        stop
+        ;;
+  restart)
+        stop
+        sleep 10
+        #echo "Hard killing any remaining threads.."
+        #kill -9 `cat $CATALINA_HOME/work/catalina.pid`
+        start
+        ;;
+  status)
+        status
+        ;;
+  *)
+        echo "Usage: $0 {start|stop|restart|status}"
+esac
+
+exit 0
+}}}
+
+!!setup.sh
+{{{
+sudo ln -s /mnt/media/application/tools/ /opt/tools
+sudo ln -s /opt/tools/ /home/tomcat/tools
+sudo ln -s /opt/tools/ /root/tools
+
+sudo rm /etc/init.d/tomcat
+sudo ln -s /opt/tools/tomcat/service/tomcat /etc/init.d/tomcat
+
+sudo rm /etc/logrotate.d/tomcat
+sudo ln -s /opt/tools/tomcat/logrotate/tomcat /etc/logrotate.d/tomcat
+}}}

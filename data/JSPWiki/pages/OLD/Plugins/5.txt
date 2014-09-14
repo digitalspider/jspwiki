@@ -1,0 +1,9 @@
+!!Our Plugins
+Here is a list of custom plugins we have developed:
+* [MyPlugin]
+* [GoComicsPlugin]
+* [ImageGalleryPlugin]
+
+!!Others Plugins
+Plugins developed by others that are available through our site:
+* [TreePlugin]

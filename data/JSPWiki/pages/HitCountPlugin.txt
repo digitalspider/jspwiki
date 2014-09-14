@@ -1,0 +1,27 @@
+[{TableOfContents}]
+\\
+See [Plugins]
+
+!!Overview
+This plugin tells you the number of times a page has been viewed.\\
+The count is reset when the server is restarted or the page is editted.\\
+The HitCount is simply stored against the current [WikiPage|http://jspwiki.apache.org/apidocs/2.10.1/org/apache/wiki/WikiPage.html] attribute.\\
+
+|| Written by | [David Vittor]
+|| Date | 19-Aug-2014
+|| Plugin Version | 0.1
+|| Wiki Versions | 2.10.1+
+|| Source | [https://github.com/digitalspider/jspwiki-plugins/tree/master/HitCountPlugin]
+|| Plugin | [HitCountPlugin-0.1.jar]
+|| Dependencies | None
+
+!!Usage
+* Place the jar file into your <tomcatDir>/webapps/JSPWiki/WEB-INF/lib/ directory
+* Restart your tomcat
+* Add the following to your page:
+{{{
+This page has been viewed __[{HitCountPlugin}]__ times.
+}}}
+
+!!Example
+[{HitCountPlugin}]

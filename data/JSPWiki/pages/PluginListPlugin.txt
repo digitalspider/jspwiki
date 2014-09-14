@@ -1,0 +1,39 @@
+[{TableOfContents}]
+\\
+See [Plugins]
+
+!!Overview
+This plugin gives you a list of plugins, filters and editors installed in your JSPWiki instance.
+
+|| Written by | [David Vittor]
+|| Date | 07-Sep-2014
+|| Plugin Version | 0.1
+|| Wiki Versions | 2.10.1+
+|| Demo | [PluginListPluginDemo]
+|| Source | [https://github.com/digitalspider/jspwiki-plugins/tree/master/PluginListPlugin]
+|| Issues | [https://github.com/digitalspider/jspwiki-plugins/issues]
+|| Plugin | [PluginListPlugin-0.1.jar]
+|| Dependencies | None
+
+!!Usage
+* Place the __jar__ file into your <tomcatDir>/webapps/JSPWiki/WEB-INF/lib/ directory
+* Restart your tomcat
+* Add the following to your page:
+{{{
+[{PluginList type=all showstyle=true class=pluglist}]
+}}}
+
+
+!!Parameters
+|| Param || Description || Default
+|| type | which module types to show. One of all,plugin,filter or editor | all
+|| class | set the "class" for the div wrapper | plugin-list
+|| showstyle | true or false. Show the stylesheet and script for plugins | false
+
+!!Properties
+|| Property || Description || Default
+|| |  | 
+
+!!Release History
+v0.1
+* initial Release

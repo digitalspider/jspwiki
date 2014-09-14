@@ -1,0 +1,38 @@
+[{ALLOW view Authenticated}]
+[{ALLOW edit Authenticated}]
+
+Management is of: __People, Projects, Processes, Tools__
+
+* [People]
+** [HRIS] - HR Information System - including skills matrix
+*** [Training] - both technical and soft skills
+*** [Small Improvements] - [https://www.small-improvements.com/]
+*** [SuccessFactors] - SAP Jam API
+*** [Bamboo HR] - [http://www.bamboohr.com/]
+** [SWOT] - Strengths, Weaknesses, Opportunities, Threats
+** [Identity] - IDM, LDAP, SSO, Authentication and Roles
+*** [Google] - Google Accounts, Docs, etc
+*** [JDBC] - Database level authentication
+*** Crowd / Kerberos / OAuth / etc
+* [Project]
+** [Agile]
+*** [PivotalTracker] - [http://www.pivotaltracker.com/]
+*** [Atlassian] - JIRA
+** [Waterfall]
+*** [MSProject]
+* [Process]
+** Integrate Asset Management, Service Management, Change Management and Knowledge Management
+** [CMDB] - Configuration Management Database
+*** iTop, onecmdb, cmdbuild, Freshservice, samanage
+** [ITSM] - ITIL, Helpdesk - See [Standards]
+*** Raise Ticket, Action Ticket, Resolve Ticket
+*** Raise Change, Action Change, Resolve Change
+*** [Problem Management] - solving root causes
+** [Knowledge Management]
+*** Wiki - [Confluence], JSPWiki
+*** Document Storage - shared folders, Sharepoint, Version control, etc
+*** Collaboration - Jabber/GTalk/IM/Skype, Email, Slack, HitChat
+* [Tools]
+** getApp - [http://www.getapp.com/]
+** [Atlassian] - JIRA, Confluence, Bamboo, Fisheye, Crucible, etc
+** [GoogleApps] - Google Docs, etc

@@ -1,0 +1,60 @@
+[{TableOfContents}]
+\\
+See [Plugins]
+
+!!Overview
+Run a SELECT SQL query on database values and display the results as a table.
+Currently supports MySQL, Postgres, Microsoft SQL Server, Oracle. 
+It may also work with DB2 and Sybase (but I cannot test these)
+You will need to get the drivers as per here:
+* Oracle Drivers: [http://www.oracle.com/technetwork/database/features/jdbc/index-091264.html]
+* MySQL Drivers: [http://dev.mysql.com/downloads/connector/j/]
+* Microsoft JDBC Driver: [http://www.microsoft.com/en-au/download/details.aspx?id=11774]
+* MSSQL and Sybase jTDS Driver: [http://jtds.sourceforge.net/]
+* PostgreSQL: [http://jdbc.postgresql.org/download.html]
+* DB2 JDBC Driver: [http://www-01.ibm.com/support/docview.wss?uid=swg21363866]
+
+|| Written by | [David Vittor]
+|| Date | 09-Sep-2014
+|| Plugin Version | 0.1
+|| Wiki Versions | 2.10.1+
+|| Demo | [JDBCPluginDemo]
+|| Source | [https://github.com/digitalspider/jspwiki-plugins/tree/master/JDBCPlugin]
+|| Issues | [https://github.com/digitalspider/jspwiki-plugins/issues]
+|| Plugin | [JDBCPlugin-0.1.jar]
+|| Dependencies | __Database drivers__
+
+!!Usage
+* Place the __jar__ file into your <tomcatDir>/webapps/JSPWiki/WEB-INF/lib/ directory
+* Place the __Database drivers__ file into your <tomcatDir>/webapps/JSPWiki/WEB-INF/lib/ directory
+* Restart your tomcat
+* Add the following to your page:
+{{{
+[{DB sql='select * from table'}]
+}}}
+
+
+!!Parameters
+|| Param || Description || Default
+|| sql | query to be executed. Must start with select | select 1
+|| src | Can be the [JNDI|http://tomcat.apache.org/tomcat-6.0-doc/jndi-datasource-examples-howto.html] setup for tomcat. Note: jdbc/MyTestDB, would be src=MyTestDB. \\ or it can be the suffix for the properties, e.g. "src2" to get a different database connection | null = get default properties
+|| header | boolean, if false do not show the table header | true
+|| class | set the class of the wrapper div. Used for css styles | sql-table
+|| debug | boolean, if true set log level info | false
+
+!!Properties
+|| Property || Description || Default
+|| jdbc.driver | The database driver | null
+|| jdbc.url | The database url | null
+|| jdbc.username | The database username | null 
+|| jdbc.password | The database password | null
+|| jdbc.maxresults | The maximum results to return | 50
+|| jdbc.driver.src2 |  | 
+|| jdbc.url.src2 |  | 
+|| jdbc.username.src2 |  | 
+|| jdbc.password.src2 |  | 
+|| jdbc.maxresults.src2 |  | 
+
+!!Release History
+v0.1
+* initial Release

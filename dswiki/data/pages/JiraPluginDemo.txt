@@ -1,3 +1,0 @@
-Demo of [JiraPlugin]
-
-[{Jira project=JSPWIKI jql='status = open order by priority'}]

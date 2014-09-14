@@ -1,0 +1,4 @@
+I've opened an account on FreshService.
+* [http://digitalspider.freshservice.com/] - support@digitalspider.com.au
+
+Create CMDB assets, and allow users to log issues against these.

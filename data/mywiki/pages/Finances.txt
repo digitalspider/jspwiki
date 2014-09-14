@@ -1,0 +1,23 @@
+!!Costs 
+
+For Hosting see [Servers]
+
+* [GitHub] - $7/m for 5 private repos
+* [JIRA] - $20 for JIRA and Atlassian - self hosted
+* [OnlyDomains] - hosting costs for digital spider
+* [Openshift] - free for 3 gears, $0.02/hour after = $14.60/month
+* [VPSBlock] - Hosting $25/month
+* [Stripe] - payments at 1.5% +$0.30 per transaction (or 2.9% for international cards)
+
+!!Revenue
+* JSPWikiHosting - free for 1 month + $5.50/month - $29.95/month ($0.50 for stripe)
+* MediaWikiHosting - free for 1 month + $5.50/month - $29.95/month
+* Plugins - Password plugin - $50
+* Plugins - OSGi plugin - $50
+* Plugins - Panel plugin - $50
+* Development/Consulting = $20/hour
+
+5 wikis on one tomcat core = $25/month
+
+----
+[BusinessDocs]

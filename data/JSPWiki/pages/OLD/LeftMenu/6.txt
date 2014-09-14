@@ -1,0 +1,7 @@
+[LeftMenu]:
+* [Home]
+* [Links]
+* [Plugins]
+* [PageIndex]
+* [Documentation]
+* [TODO]

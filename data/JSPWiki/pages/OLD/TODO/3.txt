@@ -1,0 +1,11 @@
+!Todo
+This is a list of things we need to do:
+* Migrate current Media wiki content to here
+* Write more [Plugins]
+* Develop our [website|http://digitalspider.com.au]
+* Setup a JSPWiki on OpenShift
+* Install a second sandbox wiki
+* Document my network setup
+
+!Done
+* Hook in no-ip and expose this publically

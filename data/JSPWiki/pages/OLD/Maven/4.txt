@@ -1,0 +1,65 @@
+* If needing the very latest code get the file: jspwiki\jspwiki-war\target\JSPWiki-classes.jar
+* Run the following maven script:
+** [http://maven.apache.org/guides/mini/guide-3rd-party-jars-local.html]
+{{{
+mvn install:install-file -Dfile=./JSPWiki-classes.jar -DgroupId=org.apache.jspwiki -DartifactId=jspwiki-war -Dversion=2.10.2-SNAPSHOT -Dpackaging=jar
+}}}
+
+__settings.xml__
+{{{
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+    http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+  <localRepository>${user.home}/.m2/repository</localRepository>
+
+  <profiles>
+    <profile>
+     <id>default</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+        <tomcat-home>C:/opt/apache-tomcat-7.0.5</tomcat-home>
+      </properties>
+      <repositories>
+        <repository>
+          <id>atlassian-public</id>
+          <url>https://maven.atlassian.com/repository/public</url>
+          <snapshots>
+            <enabled>true</enabled>
+            <updatePolicy>never</updatePolicy>
+            <checksumPolicy>warn</checksumPolicy>
+          </snapshots>
+          <releases>
+            <enabled>true</enabled>
+            <checksumPolicy>warn</checksumPolicy>
+          </releases>
+        </repository>
+        <repository>
+          <id>atlassian-m1-repository</id>
+          <name>Atlassian Maven 1.x Repository</name>
+          <url>http://repository.atlassian.com</url>
+          <layout>legacy</layout>
+          <snapshots>
+            <enabled>true</enabled>
+          </snapshots>
+        </repository>
+        <repository>
+          <id>Codehaus</id>
+          <name>Codehaus Repository</name>
+          <url>http://repository.codehaus.org/</url>
+          <snapshots>
+            <enabled>true</enabled>
+          </snapshots>
+        </repository>
+      </repositories>
+      <pluginRepositories>
+      </pluginRepositories>
+    </profile>
+  </profiles>
+
+<activeProfiles/>
+</settings>
+}}}

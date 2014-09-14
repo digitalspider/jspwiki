@@ -1,0 +1,80 @@
+See: [http://viralpatel.net/blogs/calling-rpc-in-javascript-using-json-rpc-java/]
+
+Test: 
+* [http://digitalspider.com.au/test.jsp]
+* [{RPCSamplePlugin}]
+
+Source:
+* [JSONRPCManager.java|http://svn.apache.org/viewvc/jspwiki/trunk/jspwiki-war/src/main/java/org/apache/wiki/rpc/json/JSONRPCManager.java?view=markup]
+* [RPCSamplePlugin.java|http://svn.apache.org/viewvc/jspwiki/trunk/jspwiki-war/src/main/java/org/apache/wiki/plugin/RPCSamplePlugin.java?view=markup]
+
+
+!!Javascript
+{{{
+<%@page import="com.test.jsonrpc.BusinessObject"%>
+
+        <script type="text/javascript" src="js/jsonrpc.js"></script>
+        <script type="text/javascript">
+        function fnSum(form) {
+            try {
+                //Create a jsonrpc object for doing RPC.
+                jsonrpc = new JSONRpcClient("JSON-RPC");
+
+                // Call a Java method on the server
+                result = jsonrpc.BusinessObject.sum(form.a.value, form.b.value);
+
+                //Display the result
+                alert(result);
+            } catch(e) {
+                alert(e.description);
+            }
+        }
+        </script>
+}}}
+
+!!Bridge
+{{{
+        <jsp:useBean id="JSONRPCBridge" scope="session"
+           class="com.metaparadigm.jsonrpc.JSONRPCBridge" />
+
+<%
+        BusinessObject businessObject = new BusinessObject();
+        JSONRPCBridge.registerObject("BusinessObject", businessObject);
+%>
+}}}
+
+!!Html
+{{{
+   <form>
+       <input type="text" name="a"/>
+       <input type="text" name="b"/>
+       <input type="button" onclick="fnSum(this.form)" value="Sum"/>
+   </form>
+}}}
+
+!!Java Class
+{{{
+package com.test.jsonrpc;
+
+public class BusinessObject {
+        public Integer sum(Integer a, Integer b) {
+                return a + b;
+        }
+}
+}}}
+
+!!web.xml
+{{{
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="[http://www.w3.org/2001/XMLSchema-instance]" xmlns="[http://java.sun.com/xml/ns/javaee]" xmlns:web="[http://java.sun.com/xml/ns/javaee]/web-app_2_5.xsd" xsi:schemaLocation="[http://java.sun.com/xml/ns/javaee] [http://java.sun.com/xml/ns/javaee]/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
+  <servlet>
+    <servlet-name>com.metaparadigm.jsonrpc.JSONRPCServlet</servlet-name>
+    <servlet-class>com.metaparadigm.jsonrpc.JSONRPCServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>com.metaparadigm.jsonrpc.JSONRPCServlet</servlet-name>
+    <url-pattern>/JSON-RPC</url-pattern>
+  </servlet-mapping>
+
+</web-app>
+}}}

@@ -1,0 +1,5 @@
+[{ALLOW view Authenticated}]
+[{ALLOW edit Authenticated}]
+
+[LeftMenuFooter]
+* [SystemInfo]

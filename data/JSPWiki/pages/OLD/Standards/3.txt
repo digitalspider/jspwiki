@@ -1,0 +1,28 @@
+I've been interested recently in IT System Standards, such as:
+
+* ITIL
+** [http://en.wikipedia.org/wiki/Information_Technology_Infrastructure_Library]
+** [http://www.itil-officialsite.com/]
+* ISO 20000 (ISO20k)
+** [http://www.itgovernance.co.uk/iso20000.aspx#.VAZmz2Oyq2o
+** [http://www.iso.org/iso/catalogue_detail?csnumber=51986]
+** [http://en.it-processmaps.com/itil/iso-20000.html]
+* IEFT OAuth 2 - [http://tools.ietf.org/html/rfc6749]
+* IEFT XMPP - [http://www.ietf.org/rfc/rfc3920.txt] - [http://www.ietf.org/rfc/rfc3921.txt]
+
+And this brought me to doing some investigation into Java based open source software (mostly Apache).
+
+This led me to discover WSO2 a middleware that is provided as open source. Here are some interesting links:
+
+** [https://docs.wso2.com/]
+** [http://wso2.com/products/]
+** [http://engwar.com/blog/2013/07/01/introduction-to-wso2-platform/]
+
+Performance
+
+** [http://wso2.com/library/articles/2014/02/esb-performance-round-7.5/]
+** [http://esbperformance.org/display/comparison/ESB+Performance]
+
+A competitor is also UltraESB:
+
+** [http://adroitlogic.org/products/ultraesb.html]

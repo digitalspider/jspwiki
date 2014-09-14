@@ -1,0 +1,18 @@
+%%warning
+Note: You do need to log in to add content.
+%%
+
+!!Welcome to our new DigitalSpider Wiki!
+
+View our main website at:
+* [http://digitalspider.com.au]
+
+This is a public wiki where we showcase our JSPWiki __Plugins__, and users can add comments and share their thoughts.
+
+See the following:
+* [Links]
+* [Plugins]
+* [Filters]
+
+
+

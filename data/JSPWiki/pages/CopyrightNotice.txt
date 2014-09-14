@@ -1,0 +1,2 @@
+[{ALLOW view Authenticated}]
+[{ALLOW edit Authenticated}]

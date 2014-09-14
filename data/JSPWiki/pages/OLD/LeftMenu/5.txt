@@ -1,0 +1,6 @@
+Menu:
+* [Home]
+* [Links]
+* [Plugins]
+* [Documentation]
+* [TODO]

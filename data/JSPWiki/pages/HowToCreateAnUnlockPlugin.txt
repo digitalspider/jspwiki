@@ -1,0 +1,15 @@
+This is the idea behind spider. 
+
+Create a free community while paying for the efforts. 
+
+A plugin becomes free once it raises $X funds. Either through purchases of donations. 
+
+Author sets the limit, as they know how much effort was contributed. 
+
+Major version releases may be charged again.
+
+Create a marketplace at [http://plugins.digitalspider.com.au]
+
+Create a demo space at [http://jspwiki-demo.digitalspider.com.au]
+
+Can include JSPWiki, TWiki, Mediawiki, WordPress, Confluence, Jira, Bugzilla, Firefox, Chrome, Salesforce, Android App?, iPhone app?, other... 

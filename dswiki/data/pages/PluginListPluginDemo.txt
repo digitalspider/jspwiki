@@ -1,3 +1,0 @@
-Demo of [PluginListPlugin]
-
-[{PluginList type=all showstyle=true class=pluglist}]

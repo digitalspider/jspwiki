@@ -1,0 +1,19 @@
+Welcome to our new DigitalSpider Wiki!
+
+View our main website at:
+* [http://digitalspider.com.au]
+
+This is a public wiki where we showcase our JSPWiki plugins, and users can add ideas and thoughts.
+
+%%warning
+Note: You do need to log in to add content.
+%%
+
+See the following:
+* [Links]
+* [TODO]
+* [David Vittor]
+
+
+
+

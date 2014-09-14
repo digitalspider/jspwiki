@@ -1,0 +1,49 @@
+[{TableOfContents}]
+\\
+See [Plugins]
+
+!!Overview
+This plugin uses JIRA REST Java Client (JRJC) client to pull JIRA issues into your JSPWiki page.
+* JRJC: [https://ecosystem.atlassian.net/wiki/display/JRJC/Introduction]    
+* API: [https://docs.atlassian.com/jira-rest-java-client/0.4/apidocs/]
+* Source: [https://maven.atlassian.com/content/repositories/atlassian-public/com/atlassian/jira/jira-rest-java-client]
+
+|| Written by | [David Vittor]
+|| Date | 30-Aug-2014
+|| Plugin Version | 0.2
+|| Wiki Versions | 2.10.1+
+|| Demo | [JiraPluginDemo]
+|| Source | [https://github.com/digitalspider/jspwiki-plugins/tree/master/JiraPlugin]
+|| Issues | [https://github.com/digitalspider/jspwiki-plugins/issues]
+|| Plugin | [JiraPlugin-0.2.jar]
+|| Dependencies | [jira-plugin-jar-dependencies.zip]
+
+!!Usage
+* Download the __jira-plugin-jar-dependencies.zip__ file, and extract into your <tomcat>/webapps/JSPWiki/WEB-INF/lib directory
+* Place the __jar__ file into your <tomcatDir>/webapps/JSPWiki/WEB-INF/lib/ directory
+* Restart your tomcat
+* Add the following to your page:
+{{{
+[{Jira project=LASOO jql='status = open order by priority'}]
+}}}
+
+!!Parameters
+|| Param || Description || Default
+|| project | All queries with this plugin are restricted to a single project | JSPWIKI
+|| jql | the JQL query to execute. Needs to be in single quotes. | 'status = open order by key DESC'
+|| max | maximum number of issues to return. Will not allow more than 50 | 10
+|| start | An offset into the query, in theory can be used for pagination | 0
+|| class | set the class of the wrapper div. Used for css styles | jira-table
+|| debug | boolean, if true set log level info | false
+
+!!Properties
+|| Property || Description || Default
+|| jira.baseurl | A URL link to the hosted JIRA account | [https://issues.apache.org/jira] 
+|| jira.username |  | 
+|| jira.password |  | 
+
+!!Release History
+v0.2
+* Added debug and class parameter, and used engine.textToHtml()
+v0.1
+* initial Release

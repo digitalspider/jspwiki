@@ -1,0 +1,80 @@
+This is the page of David Vittor, the originator of Digital Spider.
+
+Hi All,
+
+I'm a senior Java developer, located in Sydney, Australia, and am intersted in getting involved in this project. I have a pretty good background with Confluence (my 2nd brain).
+
+Not quite sure how I can help just yet, or how much time I can devote, but I am looking forward to see how I can volunteer to make this project better.
+
+I've just managed to get the source code to compile, put it in eclispe, deployed it to Tomcat, and built the TreePlugin.
+
+Whoohoo now I have my own JSPWiki running on localhost!
+
+To set this up on __OpenShift__ See [https://jspwiki-wiki.apache.org/Wiki.jsp?page=JSPWikiPublications]. Now I just need to migrate my current mediawiki to jspwiki.
+
+!Plugins
+Plugin links:
+* Old Plugins = [http://www.ecyrd.com/JSPWiki/wiki/JSPWikiPlugins] (need converting/upgrading)
+* Core Plugins = [https://jspwiki-wiki.apache.org/Wiki.jsp?page=JSPWikiCorePlugins]
+* Contributed Plugins = [https://jspwiki-wiki.apache.org/Wiki.jsp?page=ContributedPlugins]
+* DigitalSpider Plugins = [http://digitalspider.com.au/JSPWiki/Wiki.jsp?page=Plugins]
+
+Some plugins I'm thinking of writing are:
+* [HitCountPlugin]
+* [GoComicsPlugin]
+* [ImageGalleryPlugin]
+* [PluginsListPlugin] - filers, plugins, pages
+* [AttachmentsPlugin]
+* [PasswordPlugin]
+* [CreatePagePlugin]
+* [VLCMeditPlayerPlugin]
+* [PrintPlugin]
+* [JDBCPlugin]
+* [JFreeChartPlugin] - [http://www.jfree.org/jfreechart/]
+* [YouTubePlugin]
+* [VimeoPlugin]
+* [RSSFeedPlugin]
+* [WordImportPlugin]
+* [FileExplorerPlugin]
+* [XSLTPlugin]
+* [IFramePlugin]
+* [DocViewerPlugin] - ViewerJS [http://viewerjs.org/]
+* [MailBlastPlugin] - provide html source, and list of data (email,field1,field2)
+* [JIRAPlugin] - [https://developer.atlassian.com/display/JIRADEV/JIRA+REST+APIs]
+* [TwitterPlugin] - [https://dev.twitter.com/docs]
+* [BitcoinWidgetPlugin] - [http://www.coindesk.com/price/bitcoin-price-ticker-widget/]
+* [QueryPlugin] - [https://issues.apache.org/jira/browse/JSPWIKI-624]
+* [TwitterRecentChanges] - [https://issues.apache.org/jira/browse/JSPWIKI-522]
+* [JSPWikiMarkupParser] - [https://issues.apache.org/jira/browse/JSPWIKI-852]
+
+!Filters
+* [AutoHtmlLinkFilter] - automatically convert http: links
+* [VideoEmbedFilter] - automatically embed https://www.youtube.com/watch?v=_ndfyn0y9B0 or http://vimeo.com/30998268
+* [MarkdownFilter] - [http://daringfireball.net/projects/markdown/] - [http://en.wikipedia.org/wiki/Markdown]
+* [ConfluenceMarkupFilter] - [https://confluence.atlassian.com/display/DOC/Confluence+Wiki+Markup]
+
+!PageProviders
+* [EnhancedFileSystemProvider] - persist any other properties (other than just author, changenote and last modified)
+* [JDBCProvider] - persist content to a database - Hibernate ORM - [http://hibernate.org/orm/documentation/]
+* [JackRabbitProvider] - persist to a JCR - [http://jackrabbit.apache.org/jcr-api.html]
+* [MemcacheProvider] - Interesting idea - [http://memcached.org/]
+* [EncryptedPageProvider] - [MailList|http://mail-archives.apache.org/mod_mbox/jspwiki-dev/201408.mbox/date]
+and [https://issues.apache.org/jira/browse/JSPWIKI-205]
+
+!Advanced
+Some of the more advanced things I would love to see in this wiki are:
+* UI for Administration pages - a way to edit the jspwiki.properties through a form
+* OSGi for plugins - [Apache Felix iPOJO|http://felix.apache.org/documentation/subprojects/apache-felix-ipojo.html]
+* UI for ACL controls - Edit/View controls for users / groups
+* CKEditor as a WYSIWIG editor
+* Spaces
+* Macro/Plugin browser
+* Theme/Skin management - [https://jspwiki-wiki.apache.org/Wiki.jsp?page=CleanBlue] or the haddock template [https://jspwiki-wiki.apache.org/Wiki.jsp?page=HADDOCK%20Template]
+* Mobile UI - [https://issues.apache.org/jira/browse/JSPWIKI-835]
+
+!Other JIRA issues
+* logo and favicon - [https://issues.apache.org/jira/browse/JSPWIKI-363]
+* login improve - [https://issues.apache.org/jira/browse/JSPWIKI-257]
+* support for niceedit - [https://issues.apache.org/jira/browse/JSPWIKI-362]
+* jQuery - [https://issues.apache.org/jira/browse/JSPWIKI-811]
+* Wiki on a Stick - [https://issues.apache.org/jira/browse/JSPWIKI-828]

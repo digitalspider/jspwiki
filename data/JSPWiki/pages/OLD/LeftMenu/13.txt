@@ -1,0 +1,15 @@
+[{ALLOW view Authenticated}]
+[{ALLOW edit Authenticated}]
+
+[LeftMenu]:
+* [Home]
+* [Links]
+* [Plugins]
+* [Filers]
+* [PageProviders]
+* [Templates]
+* [Page Index]
+* [Recent Changes]
+* [Sandbox]
+* [Documentation]
+* [TODO]
