@@ -2,6 +2,7 @@
 **/data/**/pages/OLD/**
 **/data/**/PageCount.txt
 **/data/**/refmgr.ser
+**/data/**/refmgr-attr/**
 **/data/mywiki/**
 **/data/testwiki/**
 **/wikis/**/WEB-INF/classes/jspwiki-custom.properties

@@ -28,6 +28,6 @@ cp -f $DATADIR/testwiki/jspwiki-custom.policy $WIKISDIR/testwiki/WEB-INF/classes
 
 # Deploy to live
 cp -rf $WIKISDIR/JSPWiki/* $WEBAPPS/JSPWiki/
-#cp -rf $WIKISDIR/mywiki/* $WEBAPPS/mywiki/
-#cp -rf $WIKISDIR/testwiki/* $WEBAPPS/testwiki/
+cp -rf $WIKISDIR/mywiki/* $WEBAPPS/mywiki/
+cp -rf $WIKISDIR/testwiki/* $WEBAPPS/testwiki/
 
