@@ -1,9 +1,0 @@
-List of Browsers:
-
-* [IE]
-* [Firefox]
-* [Chrome]
-* [Safari]
-
-----
-[TechDocs]

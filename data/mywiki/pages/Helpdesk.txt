@@ -1,7 +1,0 @@
-Options
-* JIRA
-* Kakayo [http://www.kayako.com/pricing/]
-* [FreshService] - See [Servers]
-* CMDB?
-----
-[TechDocs]

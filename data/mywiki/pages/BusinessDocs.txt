@@ -1,4 +1,0 @@
-[Documentation] - See also [TechDocs]
-* [Standards]
-* [Management]
-* [Finances]
