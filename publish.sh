@@ -1,4 +1,4 @@
-#CATALINA_HOME=/opt/tomcat/tomcat-9080
+CATALINA_HOME=/opt/tomcat/tomcat
 DSDIR=/opt/digitalspider
 BASEDIR=$DSDIR/jspwiki
 CONFIGDIR=$BASEDIR/config
