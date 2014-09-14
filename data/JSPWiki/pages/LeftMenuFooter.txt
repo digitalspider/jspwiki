@@ -3,4 +3,7 @@
 __Date:__ [{CurrentTimePlugin format='dd/MM/yyyy'}]\\
 __Time:__ [{CurrentTimePlugin format='HH:mm aa'}]
 
+[{If var='loginstatus' is='authenticated'
+
 [LeftMenuFooter]
+}]

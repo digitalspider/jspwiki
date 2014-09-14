@@ -17,9 +17,9 @@ cp -f $CONFIGDIR/mywiki/jspwiki-custom-linux.properties $WIKISDIR/mywiki/WEB-INF
 cp -f $CONFIGDIR/testwiki/jspwiki-custom-linux.properties $WIKISDIR/testwiki/WEB-INF/classes/jspwiki-custom.properties
 
 # Setup jspwiki-custom.policy
-cp -f $DATADIR/JSPWiki/jspwiki-custom.policy $WIKISDIR/JSPWiki/WEB-INF/classes/jspwiki-custom.policy
-cp -f $DATADIR/mywiki/jspwiki-custom.policy $WIKISDIR/mywiki/WEB-INF/classes/jspwiki-custom.policy
-cp -f $DATADIR/testwiki/jspwiki-custom.policy $WIKISDIR/testwiki/WEB-INF/classes/jspwiki-custom.policy
+cp -f $DATADIR/JSPWiki/jspwiki-custom.policy $WIKISDIR/JSPWiki/WEB-INF/jspwiki-custom.policy
+cp -f $DATADIR/mywiki/jspwiki-custom.policy $WIKISDIR/mywiki/WEB-INF/jspwiki-custom.policy
+cp -f $DATADIR/testwiki/jspwiki-custom.policy $WIKISDIR/testwiki/WEB-INF/jspwiki-custom.policy
 
 # Setup jspwiki-filters.xml
 #cp -f $BASEDIR/dswiki/data/jspwiki-filters.xml $JSPWIKIDIR/WEB-INF/classes/filters.xml

@@ -7,5 +7,12 @@ If you have an open wiki, ie anyone can edit page, you can restrict access to si
 [{ALLOW edit Authenticated}]
 }}}
 
+If you just want to secure a section of a page, you can do this using the [https://jspwiki-wiki.apache.org/Wiki.jsp?page=IfPlugin]:
+{{{
+[{If var='loginstatus' is='authenticated'
+
+This part is secure
+}]
+}}}
 ----
 [HowToPage]
