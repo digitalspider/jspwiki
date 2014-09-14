@@ -12,14 +12,14 @@ mkdir -p $WIKISDIR/mywiki/WEB-INF/classes
 mkdir -p $WIKISDIR/testwiki/WEB-INF/classes
 
 # Setup jspwiki-custom.properties
-cp -f $CONFIG/JSPWiki/jspwiki-custom-linux.properties $WIKISDIR/JSPWiki/WEB-INF/classes/jspwiki-custom.properties
-cp -f $CONFIG/mywiki/jspwiki-custom-linux.properties $WIKISDIR/mywiki/WEB-INF/classes/jspwiki-custom.properties
-cp -f $CONFIG/testwiki/jspwiki-custom-linux.properties $WIKISDIR/testwiki/WEB-INF/classes/jspwiki-custom.properties
+cp -f $CONFIGDIR/JSPWiki/jspwiki-custom-linux.properties $WIKISDIR/JSPWiki/WEB-INF/classes/jspwiki-custom.properties
+cp -f $CONFIGDIR/mywiki/jspwiki-custom-linux.properties $WIKISDIR/mywiki/WEB-INF/classes/jspwiki-custom.properties
+cp -f $CONFIGDIR/testwiki/jspwiki-custom-linux.properties $WIKISDIR/testwiki/WEB-INF/classes/jspwiki-custom.properties
 
 # Setup jspwiki-custom.policy
-cp -f $DATADIR/JSPWiki/data/jspwiki-custom.policy $WIKISDIR/JSPWiki/WEB-INF/classes/jspwiki-custom.policy
-cp -f $DATADIR/mywiki/data/jspwiki-custom.policy $WIKISDIR/mywiki/WEB-INF/classes/jspwiki-custom.policy
-cp -f $DATADIR/testwiki/data/jspwiki-custom.policy $WIKISDIR/testwiki/WEB-INF/classes/jspwiki-custom.policy
+cp -f $DATADIR/JSPWiki/jspwiki-custom.policy $WIKISDIR/JSPWiki/WEB-INF/classes/jspwiki-custom.policy
+cp -f $DATADIR/mywiki/jspwiki-custom.policy $WIKISDIR/mywiki/WEB-INF/classes/jspwiki-custom.policy
+cp -f $DATADIR/testwiki/jspwiki-custom.policy $WIKISDIR/testwiki/WEB-INF/classes/jspwiki-custom.policy
 
 # Setup jspwiki-filters.xml
 #cp -f $BASEDIR/dswiki/data/jspwiki-filters.xml $JSPWIKIDIR/WEB-INF/classes/filters.xml
@@ -28,6 +28,6 @@ cp -f $DATADIR/testwiki/data/jspwiki-custom.policy $WIKISDIR/testwiki/WEB-INF/cl
 
 # Deploy to live
 cp -rf $WIKISDIR/JSPWiki/* $WEBAPPS/JSPWiki/
-cp -rf $WIKISDIR/mywiki/* $WEBAPPS/mywiki/
-cp -rf $WIKISDIR/testwiki/* $WEBAPPS/testwiki/
+#cp -rf $WIKISDIR/mywiki/* $WEBAPPS/mywiki/
+#cp -rf $WIKISDIR/testwiki/* $WEBAPPS/testwiki/
 

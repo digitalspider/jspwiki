@@ -4,3 +4,4 @@
 **/data/**/refmgr.ser
 **/data/mywiki/**
 **/data/testwiki/**
+**/wikis/**/WEB-INF/classes/jspwiki-*.properties
