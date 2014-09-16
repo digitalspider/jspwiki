@@ -1,3 +1,0 @@
-This is a series of pages where I experiment with things.
-
-[{PluginListPlugin showstyle=true}]

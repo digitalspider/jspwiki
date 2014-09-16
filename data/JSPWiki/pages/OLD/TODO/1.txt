@@ -1,7 +1,0 @@
-This is a list of things we need to do:
-* Migrate current Media wiki content to here
-* Write more [Plugins]
-* Develop our website
-* Hook in no-ip and expose this publically
-* Setup a JSPWiki on OpenShift
-* Install a second sandbox wiki

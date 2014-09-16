@@ -1,3 +1,0 @@
-Demo of [VideoPlugin]
-
-[{Video url='https://www.youtube.com/watch?v=rYEDA3JcQqw' width=560 height=100}]

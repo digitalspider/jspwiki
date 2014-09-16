@@ -1,3 +1,0 @@
-This page demonstrates the [GoComicsPlugin]
-
-[{GoComicsPlugin comic=garfield width=900 height=250 class=mycomic timeout=10}]

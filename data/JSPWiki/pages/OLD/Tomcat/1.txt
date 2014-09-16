@@ -1,8 +1,0 @@
-!!Debug Tomcat
-{{{
-:doStart
-...
-set _EXECJAVA=start "%TITLE%" %_RUNJAVA%
-set DEBUG_OPTS=-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5555
-...
-}}}

@@ -1,8 +1,0 @@
-[LeftMenu]:
-* [Home]
-* [Links]
-* [Plugins]
-* [Page Index]
-* [Recent Changes]
-* [Documentation]
-* [TODO]

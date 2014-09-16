@@ -1,6 +1,0 @@
-The network is set up using the following providers:
-* Only Domains - [http://onlydomains.com/]
-* Optus ISP - [http://optus.com.au]
-* NoIP - [http://noip.com/] -> [http://vittor.ddns.net]
-* External IP Provider [http://icanhazip.com/] - (like [http://bot.whatismyipaddress.com/])
-* My Server - [http://10.1.1.5]

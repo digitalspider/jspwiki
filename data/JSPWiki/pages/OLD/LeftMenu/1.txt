@@ -1,5 +1,0 @@
-Menu:
-* [Links]
-* [Plugins]
-* [Documentation]
-* [TODO]

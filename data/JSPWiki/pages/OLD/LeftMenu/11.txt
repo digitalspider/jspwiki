@@ -1,9 +1,0 @@
-[LeftMenu]:
-* [Home]
-* [Links]
-* [Plugins]
-* [Page Index]
-* [Recent Changes]
-* [Sandbox]
-* [Documentation]
-* [TODO]
