@@ -16,7 +16,8 @@ while read WIKINAME; do
   WIKIDEST=$CATALINA_HOME/webapps/$WIKINAME
 
   # Deploy jspwiki-commons.js
-  cp $TARGET/generated-sources/wro/scripts/jspwiki-common.js $WIKIDEST/scripts/
+  cp $TARGET/JSPWiki/scripts/jspwiki-common.js $WIKIDEST/scripts/
+  #cp $SRCDIR/jspwiki-war/src/main/scripts/jspwiki-common.js $WIKIDEST/scripts/
 
   # Deploy JSPWiki-classes.jar
   cp $TARGET/JSPWiki-classes.jar $WIKIDEST/WEB-INF/lib/JSPWiki-classes.jar
@@ -24,4 +25,4 @@ while read WIKINAME; do
   echo "Deployed $WIKINAME"
 done < $BASEDIR/activewikis.txt
 
-sudo service tomcat restart
+#sudo service tomcat restart
