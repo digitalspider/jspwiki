@@ -14,13 +14,14 @@ cd $BASEDIR
 while read WIKINAME; do
   WIKIHOME=$WIKISDIR/$WIKINAME
   WIKIDEST=$CATALINA_HOME/webapps/$WIKINAME
+  WEBLIBDIR=$WIKIDEST/WEB-INF/lib/
 
   # Deploy jspwiki-commons.js
   cp $TARGET/JSPWiki/scripts/jspwiki-common.js $WIKIDEST/scripts/
   #cp $SRCDIR/jspwiki-war/src/main/scripts/jspwiki-common.js $WIKIDEST/scripts/
 
   # Deploy JSPWiki-classes.jar
-  cp $TARGET/JSPWiki-classes.jar $WIKIDEST/WEB-INF/lib/JSPWiki-classes.jar
+  cp $TARGET/JSPWiki-classes.jar $WEBLIBDIR/JSPWiki-classes.jar
 
   echo "Deployed $WIKINAME"
 done < $BASEDIR/activewikis.txt

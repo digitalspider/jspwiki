@@ -6,6 +6,9 @@ WIKISDIR=$BASEDIR/wikis
 
 while read WIKINAME; do
   WIKIHOME=$WIKISDIR/$WIKINAME
+  WIKIDEST=$CATALINA_HOME/webapps/$WIKINAME
+  WEBLIBDIR=$WIKIDEST/WEB-INF/lib/
+
   # Create classes directories
   mkdir -p $WIKIHOME/webapp/WEB-INF/classes
 
@@ -19,7 +22,7 @@ while read WIKINAME; do
   #cp -f $WIKIHOME/data/jspwiki-filters.xml $WIKIHOME/webapp/WEB-INF/classes/filters.xml
 
   # Deploy to live
-  cp -rf $WIKIHOME/webapp/* $CATALINA_HOME/webapps/$WIKINAME/
+  cp -rf $WIKIHOME/webapp/* $WIKIDEST/
 
   # Output
   echo "Published $WIKINAME"
