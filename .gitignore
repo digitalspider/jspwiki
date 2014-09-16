@@ -3,8 +3,8 @@
 **/data/**/PageCount.txt
 **/data/**/refmgr.ser
 **/data/**/refmgr-attr/**
-**/data/mywiki/**
-**/data/testwiki/**
+**/mywiki/data/**
+**/testwiki/data/**
 **/wikis/**/WEB-INF/classes/jspwiki-custom.properties
 **/wikis/**/WEB-INF/jspwiki-custom.policy
 **/wikis/**/WEB-INF/lib/*.jar
