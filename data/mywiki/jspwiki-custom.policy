@@ -1,5 +1,4 @@
 grant principal org.apache.wiki.auth.authorize.Role "All" {
-    permission org.apache.wiki.auth.permissions.PagePermission "*:*", "view";
     permission org.apache.wiki.auth.permissions.WikiPermission "*", "login";
 };
 

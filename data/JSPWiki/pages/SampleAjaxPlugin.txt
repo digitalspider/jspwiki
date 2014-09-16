@@ -1,0 +1,36 @@
+[TableOfContents}]
+See [Plugins]
+
+%%error
+This work is still in progress
+%%
+
+!!Overview
+A simple AJAX Plugin
+__TODO__ Document...
+
+
+|| Written by | [David Vittor]
+|| Date | 15-Sep-2014
+|| Plugin Version | 0.1
+|| Wiki Versions | 2.10.1+
+|| Demo | [SampleAjaxPluginDemo]
+|| Source |
+|| Issues |
+|| Plugin |
+|| Dependencies | None
+
+!!Usage
+* Place the __jar__ file into your <tomcatDir>/webapps/JSPWiki/WEB-INF/lib/ directory
+* Restart your tomcat
+* Add the following to your page:
+{{{
+[{SampleAjaxPlugin}]
+}}}
+
+
+!!Parameters
+|| Param || Description || Default
+
+!!Properties
+|| Property || Description || Default

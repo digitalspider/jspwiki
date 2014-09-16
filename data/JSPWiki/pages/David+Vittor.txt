@@ -10,6 +10,9 @@ Not quite sure how I can help just yet, or how much time I can devote, but I am 
 
 I've just managed to get the source code to compile, put it in eclispe, deployed it to Tomcat, and built the TreePlugin.
 
+!!Testing the RPCSamplePlugin
+[{RPCSamplePlugin}]
+
 Whoohoo now I have my own JSPWiki running on localhost!
 
 To set this up on __OpenShift__ See [https://jspwiki-wiki.apache.org/Wiki.jsp?page=JSPWikiPublications]. Now I just need to migrate my current mediawiki to jspwiki.

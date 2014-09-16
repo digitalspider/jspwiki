@@ -1,6 +1,9 @@
 This is a series of pages where I experiment with things.
 
-[http://google.com]
+!!Test SampleAjaxPlugin
+[{SampleAjaxPlugin}]
+
+!!JDBCPlugin
 
 [{DB sql='select * from jiraissue limit 5' src=jira header=0 debug=true
 

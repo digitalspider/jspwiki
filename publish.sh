@@ -24,4 +24,4 @@ while read WIKINAME; do
 
   # Output
   echo "Deployed $WIKINAME"
-done <activewikis.txt
+done < $BASEDIR/activewikis.txt

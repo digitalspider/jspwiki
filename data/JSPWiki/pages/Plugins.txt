@@ -16,6 +16,7 @@ Here is a list of custom plugins we have developed:
 * [PluginListPlugin] - [PluginListPluginDemo]
 * [JDBCPlugin] - [JDBCPluginDemo]
 * [PasswordPlugin] - [PasswordPluginDemo]
+* [SampleAjaxPlugin] - [SampleAjaxPluginDemo]
 * [LikePlugin] - [LikePluginDemo]
 * [VotePlugin] - [VotePluginDemo]
 * [AttachmentPlugin] - [AttachmentPluginDemo]
