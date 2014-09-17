@@ -1,4 +1,5 @@
-[TableOfContents}]
+[{TableOfContents}]
+\\
 See [Plugins]
 
 %%error

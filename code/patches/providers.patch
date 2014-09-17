@@ -1,0 +1,359 @@
+Index: jspwiki-war/src/main/java/org/apache/wiki/WikiPage.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- jspwiki-war/src/main/java/org/apache/wiki/WikiPage.java	(revision 1620492)
++++ jspwiki-war/src/main/java/org/apache/wiki/WikiPage.java	(revision )
+@@ -63,8 +63,14 @@
+     /** A special variable name for storing a redirect note */
+     public static final String REDIRECT = "redirect";
+ 
++    /** A special variable name for storing the author. */
++    public static final String AUTHOR = "author";
++    
+     /** A special variable name for storing a changenote. */
+     public static final String CHANGENOTE = "changenote";
++
++    /** A special variable name for storing a viewcount. */
++    public static final String VIEWCOUNT = "viewcount";
+     
+     private Acl m_accessList = null;
+     
+Index: jspwiki-war/src/test/java/org/apache/wiki/providers/FileSystemProviderTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- jspwiki-war/src/test/java/org/apache/wiki/providers/FileSystemProviderTest.java	(revision 1620492)
++++ jspwiki-war/src/test/java/org/apache/wiki/providers/FileSystemProviderTest.java	(revision )
+@@ -269,6 +269,33 @@
+         assertFalse( "properties exist", f.exists() );
+     }
+ 
++    public void testCustomProperties() throws Exception {
++        String pageDir = props.getProperty( FileSystemProvider.PROP_PAGEDIR );
++        String pageName = "CustomPropertiesTest";
++        String fileName = pageName+FileSystemProvider.FILE_EXT;
++        File file = new File (pageDir,fileName);
++
++        assertFalse( file.exists() );
++        WikiPage testPage = new WikiPage(m_engine,pageName);
++        testPage.setAuthor("TestAuthor");
++        testPage.setAttribute("@test","Save Me");
++        testPage.setAttribute("@test2","Save You");
++        testPage.setAttribute("test3","Do not save");
++        m_provider.putPageText( testPage, "This page has custom properties" );
++        assertTrue("No such file", file.exists() );
++        WikiPage pageRetrieved = m_provider.getPageInfo( pageName, -1 );
++        String value = (String)pageRetrieved.getAttribute("@test");
++        String value2 = (String)pageRetrieved.getAttribute("@test2");
++        String value3 = (String)pageRetrieved.getAttribute("test3");
++        assertNotNull(value);
++        assertNotNull(value2);
++        assertNull(value3);
++        assertEquals("Save Me",value);
++        assertEquals("Save You",value2);
++        file.delete();
++        assertFalse( file.exists() );
++    }
++
+     public static Test suite()
+     {
+         return new TestSuite( FileSystemProviderTest.class );
+Index: jspwiki-war/src/main/java/org/apache/wiki/providers/VersioningFileProvider.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- jspwiki-war/src/main/java/org/apache/wiki/providers/VersioningFileProvider.java	(revision 1620492)
++++ jspwiki-war/src/main/java/org/apache/wiki/providers/VersioningFileProvider.java	(revision )
+@@ -517,6 +517,9 @@
+                 props.setProperty( versionNumber+".changenote", changeNote );
+             }
+ 
++            // Get additional custom properties from page and add to props
++            getCustomProperties(page, props);
++            
+             putPageProperties( page.getName(), props );
+         }
+         catch( IOException e )
+@@ -599,7 +602,7 @@
+                     // we might not have a versioned author because the
+                     // old page was last maintained by FileSystemProvider
+                     Properties props2 = getHeritagePageProperties( page );
+-                    author = props2.getProperty( "author" );
++                    author = props2.getProperty( WikiPage.AUTHOR );
+                 }
+                 if ( author != null )
+                 {
+@@ -609,6 +612,8 @@
+                 String changenote = props.getProperty( realVersion+".changenote" );
+                 if( changenote != null ) p.setAttribute( WikiPage.CHANGENOTE, changenote );
+ 
++                // Set the props values to the page attributes
++                setCustomProperties(p, props);
+             }
+             catch( IOException e )
+             {
+@@ -698,7 +703,7 @@
+                 Properties props = new Properties();
+                 props.load(in);
+ 
+-                String originalAuthor = props.getProperty("author");
++                String originalAuthor = props.getProperty(WikiPage.AUTHOR);
+                 if ( originalAuthor.length() > 0 )
+                 {
+                     // simulate original author as if already versioned
+Index: jspwiki-war/src/main/java/org/apache/wiki/providers/FileSystemProvider.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- jspwiki-war/src/main/java/org/apache/wiki/providers/FileSystemProvider.java	(revision 1620492)
++++ jspwiki-war/src/main/java/org/apache/wiki/providers/FileSystemProvider.java	(revision )
+@@ -18,11 +18,16 @@
+  */
+ package org.apache.wiki.providers;
+ 
+-import java.io.*;
++import java.io.File;
++import java.io.FileInputStream;
++import java.io.FileOutputStream;
++import java.io.IOException;
++import java.io.InputStream;
++import java.io.OutputStream;
+ import java.util.Properties;
+ 
+ import org.apache.log4j.Logger;
+-import org.apache.wiki.*;
++import org.apache.wiki.WikiPage;
+ import org.apache.wiki.api.exceptions.ProviderException;
+ 
+ /**
+@@ -72,17 +77,27 @@
+         {
+             String author = page.getAuthor();
+             String changenote = (String)page.getAttribute( WikiPage.CHANGENOTE );
++            String viewcount = (String)page.getAttribute( WikiPage.VIEWCOUNT );
+             
+             if( author != null )
+             {
+-                props.setProperty( "author", author );
++                props.setProperty( WikiPage.AUTHOR, author );
+             }
+             
+             if( changenote != null )
+             {
+-                props.setProperty( "changenote", changenote );
++                props.setProperty( WikiPage.CHANGENOTE, changenote );
+             }
+-            
++
++            if( viewcount != null )
++            {
++                props.setProperty( WikiPage.VIEWCOUNT, viewcount );
++            }
++            
++            // Get additional custom properties from page and add to props
++            getCustomProperties(page, props);
++            	
++            
+             File file = new File( getPageDirectory(), 
+                                   mangleName(page.getName())+PROP_EXT );
+      
+@@ -95,7 +110,7 @@
+             if( out != null ) out.close();
+         }
+     }
+-
++    
+     /**
+      *  Gets basic metadata from file.
+      */
+@@ -116,13 +131,22 @@
+ 
+                 props.load(in);
+ 
+-                page.setAuthor( props.getProperty( "author" ) );
++                page.setAuthor( props.getProperty( WikiPage.AUTHOR ) );
+                 
+-                String changenote = props.getProperty( "changenote" );
++                String changenote = props.getProperty( WikiPage.CHANGENOTE );
+                 if( changenote != null )
+                 {
+                     page.setAttribute( WikiPage.CHANGENOTE, changenote );
+                 }
++                
++                String viewcount = props.getProperty( WikiPage.VIEWCOUNT );
++                if( viewcount != null )
++                {
++                    page.setAttribute( WikiPage.VIEWCOUNT, viewcount );
++                }
++                
++                // Set the props values to the page attributes
++                setCustomProperties(page, props);
+             }            
+         }
+         finally
+Index: jspwiki-war/src/main/java/org/apache/wiki/providers/AbstractFileProvider.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- jspwiki-war/src/main/java/org/apache/wiki/providers/AbstractFileProvider.java	(revision 1620492)
++++ jspwiki-war/src/main/java/org/apache/wiki/providers/AbstractFileProvider.java	(revision )
+@@ -31,11 +31,14 @@
+ import java.util.ArrayList;
+ import java.util.Collection;
+ import java.util.Date;
++import java.util.Enumeration;
+ import java.util.List;
++import java.util.Map;
+ import java.util.Properties;
+ import java.util.TreeSet;
+ 
+ import org.apache.commons.io.IOUtils;
++import org.apache.commons.lang.StringUtils;
+ import org.apache.log4j.Logger;
+ import org.apache.wiki.InternalWikiException;
+ import org.apache.wiki.WikiEngine;
+@@ -72,7 +75,19 @@
+     protected String m_encoding;
+     
+     protected WikiEngine m_engine;
+-
++    
++    public static final String PROP_CUSTOMPROP_MAXLIMIT = "custom.property.max.allowed";
++    public static final String PROP_CUSTOMPROP_MAXKEYLENGTH = "custom.property.key.length";
++    public static final String PROP_CUSTOMPROP_MAXVALLENGTH = "custom.property.value.length";
++    
++    public static final int DEFAULT_MAX_PROPLIMIT = 200;
++    public static final int DEFAULT_MAX_PROPKEYLENGTH = 255;
++    public static final int DEFAULT_MAX_PROPVALUELENGTH = 4096;
++    
++    public static int MAX_PROPLIMIT = DEFAULT_MAX_PROPLIMIT;
++    public static int MAX_PROPKEYLENGTH = DEFAULT_MAX_PROPKEYLENGTH;
++    public static int MAX_PROPVALUELENGTH = DEFAULT_MAX_PROPVALUELENGTH;
++
+     /**
+      *  Name of the property that defines where page directories are.
+      */
+@@ -136,6 +151,21 @@
+             m_windowsHackNeeded = true;
+         }
+         
++    	if (properties != null) {
++    		String maxLimit = (String)properties.get(PROP_CUSTOMPROP_MAXLIMIT);
++    		if (StringUtils.isNotBlank(maxLimit) && StringUtils.isNumeric(maxLimit)) {
++    			MAX_PROPLIMIT = Integer.parseInt(maxLimit);
++    		}
++    		String maxKeyLength = (String)properties.get(PROP_CUSTOMPROP_MAXKEYLENGTH);
++    		if (StringUtils.isNotBlank(maxKeyLength) && StringUtils.isNumeric(maxKeyLength)) {
++    			MAX_PROPKEYLENGTH = Integer.parseInt(maxKeyLength);
++    		}
++    		String maxValueLength = (String)properties.get(PROP_CUSTOMPROP_MAXVALLENGTH);
++    		if (StringUtils.isNotBlank(maxValueLength) && StringUtils.isNumeric(maxValueLength)) {
++    			MAX_PROPVALUELENGTH = Integer.parseInt(maxValueLength);
++    		}
++    	}
++        
+         log.info( "Wikipages are read from '" + m_pageDirectory + "'" );
+     }
+ 
+@@ -511,6 +541,95 @@
+         File f = findPage( pageName );
+ 
+         f.delete();
++    }
++
++    /**
++     * Set the custom properties provided into the given page.
++     * 
++     * @since 2.10.2
++     */
++    protected void setCustomProperties(WikiPage page, Properties properties) {
++        Enumeration propertyNames = properties.propertyNames();
++    	while (propertyNames.hasMoreElements()) {
++    		String key = (String) propertyNames.nextElement();
++    		if (!key.equals(WikiPage.AUTHOR) && !key.equals(WikiPage.CHANGENOTE) && !key.equals(WikiPage.VIEWCOUNT)) {
++    			page.setAttribute(key, properties.get(key));
++    		}
++    	}
++    }
++
++    /**
++     * Get custom properties using {@link this.addCustomPageProperties}, validate them using {@link this.validateCustomPageProperties}
++     * and add them to default properties provided
++     * 
++     * @since 2.10.2
++     */
++    protected void getCustomProperties(WikiPage page, Properties defaultProperties) throws IOException {
++        Properties customPageProperties = addCustomProperties(page,defaultProperties);
++    	validateCustomPageProperties(customPageProperties);
++    	defaultProperties.putAll(customPageProperties);
++    }
++    
++    /**
++     * By default all page attributes that start with "@" are returned as custom properties.
++     * This can be overwritten by custom FileSystemProviders to save additional properties.
++     * CustomPageProperties are validated by {@link this.validateCustomPageProperties}
++     * 
++     * @since 2.10.2
++     * @param page the current page
++     * @param props the default properties of this page
++     * @return default implementation returns empty Properties. 
++     */
++    protected Properties addCustomProperties(WikiPage page, Properties props) {
++    	Properties customProperties = new Properties();
++    	if (page != null) {
++    		Map<String,Object> atts = page.getAttributes();
++    		for (String key : atts.keySet()) {
++    			Object value = atts.get(key);
++    			if (key.startsWith("@") && value != null) {
++    				customProperties.put(key,value.toString());
++    			}
++    		}
++    		
++    	}
++    	return customProperties;
++    }
++    
++    /**
++     * Default validation, validates that key and value is ASCII <code>StringUtils.isAsciiPrintable()</code> and within lengths set up in jspwiki-custom.properties.
++     * This can be overwritten by custom FileSystemProviders to validate additional properties
++     * See https://issues.apache.org/jira/browse/JSPWIKI-856
++     * @since 2.10.2
++     * @param customProperties the custom page properties being added
++     */
++    protected void validateCustomPageProperties(Properties customProperties) throws IOException {
++    	// Default validation rules
++    	if (customProperties != null && !customProperties.isEmpty()) {
++    		if (customProperties.size()>MAX_PROPLIMIT) {
++    			throw new IOException("Too many custom properties. You are adding "+customProperties.size()+", but max limit is "+MAX_PROPLIMIT);
++    		}
++            Enumeration propertyNames = customProperties.propertyNames();
++        	while (propertyNames.hasMoreElements()) {
++        		String key = (String) propertyNames.nextElement();
++        		String value = (String)customProperties.get(key);
++    			if (key != null) {
++    				if (key.length()>MAX_PROPKEYLENGTH) {
++    					throw new IOException("Custom property key "+key+" is too long. Max allowed length is "+MAX_PROPKEYLENGTH);
++    				}
++    				if (!StringUtils.isAsciiPrintable(key)) {
++    					throw new IOException("Custom property key "+key+" is not simple ASCII!");
++    				}
++    			}
++    			if (value != null) {
++    				if (value.length()>MAX_PROPVALUELENGTH) {
++						throw new IOException("Custom property key "+key+" has value that is too long. Value="+value+". Max allowed length is "+MAX_PROPVALUELENGTH);
++					}
++    				if (!StringUtils.isAsciiPrintable(value)) {
++    					throw new IOException("Custom property key "+key+" has value that is not simple ASCII! Value="+value);
++    				}
++    			}
++        	}
++    	}
+     }
+ 
+     /**
