@@ -3,7 +3,7 @@
 #CATALINA_HOME=/opt/tomcat/tomcat
 DSDIR=/opt/digitalspider
 BASEDIR=$DSDIR/jspwiki
-CODEDIR=$DSDIR/code
+CODEDIR=$BASEDIR/code
 PATCHDIR=$CODEDIR/patches
 STAGEDIR=$CODEDIR/jspwiki-stage
 
