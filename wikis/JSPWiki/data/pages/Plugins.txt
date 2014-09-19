@@ -5,7 +5,7 @@
 See [https://jspwiki-wiki.apache.org/Wiki.jsp?page=JSPWikiCorePlugins]
 * A advanced plgin is the [https://jspwiki-wiki.apache.org/Wiki.jsp?page=PageViewPlugin]
 
-!!Our Plugins
+!!Our Released Plugins
 Here is a list of custom plugins we have developed:
 * [MyPlugin]
 * [HitCountPlugin]
@@ -15,14 +15,48 @@ Here is a list of custom plugins we have developed:
 * [JiraPlugin] - [JiraPluginDemo]
 * [PluginListPlugin] - [PluginListPluginDemo]
 * [JDBCPlugin] - [JDBCPluginDemo]
-* [PasswordPlugin] - [PasswordPluginDemo]
 * [SampleAjaxPlugin] - [SampleAjaxPluginDemo]
+
+!!In Progress Plugins
+
+
+!!Plugin Ideas
 * [LikePlugin] - [LikePluginDemo]
 * [VotePlugin] - [VotePluginDemo]
 * [AttachmentPlugin] - [AttachmentPluginDemo]
 * [PanelPlugin] - [PanelPluginDemo]
 * [AddPagePlugin] - [AddPagePluginDemo]
 * [espeakPlugin] - [espeakPluginDemo]
+* [PasswordPlugin] - [PasswordPluginDemo] 
+* [EmbedPagePlugin]
+* [WikiStatsPlugin]
+* [RemoteExecPlugin]
+* [AddPanelStylePlugin]
+* [RatePagePlugin]
+* [LikePagePlugin]
+* [HibernatePlugin] - data store plugin
+* [PageIndexPlusPlugin]
+* [ExportWikiPlugin]
+* [ImportWikiPlugin]
+* [ExportPageToPdfPlugin]
+* [ExportWikiToPdfPlugin]
+* [StripePagePlugin] - [https://stripe.com/au/pricing]
+* [VLCMeditPlayerPlugin]
+* [PrintPlugin]
+* [JFreeChartPlugin] - [http://www.jfree.org/jfreechart/]
+* [RSSFeedPlugin]
+* [WordImportPlugin]
+* [FileExplorerPlugin]
+* [XSLTPlugin]
+* [IFramePlugin]
+* [DocViewerPlugin] - ViewerJS [http://viewerjs.org/]
+* [MailBlastPlugin] - provide html source, and list of data (email,field1,field2)
+* [JIRAPlugin] - [https://developer.atlassian.com/display/JIRADEV/JIRA+REST+APIs]
+* [TwitterPlugin] - [https://dev.twitter.com/docs]
+* [BitcoinWidgetPlugin] - [http://www.coindesk.com/price/bitcoin-price-ticker-widget/]
+* [QueryPlugin] - [https://issues.apache.org/jira/browse/JSPWIKI-624]
+* [TwitterRecentChanges] - [https://issues.apache.org/jira/browse/JSPWIKI-522]
+* [JSPWikiMarkupParser] - [https://issues.apache.org/jira/browse/JSPWIKI-852]
 
 !! Others Plugins
 Plugins developed by others that are available through our site:
