@@ -2,12 +2,20 @@
 #CATALINA_HOME=/opt/tomcat/tomcat
 DSDIR=/opt/digitalspider
 BASEDIR=$DSDIR/jspwiki
-SRCDIR=$DSDIR/jspwiki-src
+CODEDIR=$BASEDIR/code
+SRCDIR=$CODEDIR/jspwiki-dev
 TARGET=$SRCDIR/jspwiki-war/target
 WIKISDIR=$BASEDIR/wikis
 
-# Run maven
 cd $SRCDIR
+# Apply patches
+patchfiles="$CODEDIR/patches/*.patch"
+for PATCH in $patchfiles
+do
+   svn patch $PATCH
+done
+
+# Run maven
 mvn -Dmaven.test.skip=true package
 cd $BASEDIR
 
