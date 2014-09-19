@@ -4,11 +4,19 @@
 
 !!Our Filters
 Here is a list of custom filters we have developed:
-* [AutoLinkHtmlFilter]
+* [AutoLinkHtmlFilter] - automatically convert http: links
+
+!!In Progress Filters
+* [EncryptedPageFilter]
+
+!! Filter Ideas
 * [EmoticonFilter]
-* VideoFilter
-* GoogleAnalyticsFilter
-* [ExtraMarkupFilter]
+* [VideoFilter]
+* [GoogleAnalyticsFilter]
+* [ExtraMarkupFilter] - [https://confluence.atlassian.com/display/DOC/Confluence+Wiki+Markup]
+* [VideoEmbedFilter] - automatically embed [https://www.youtube.com/watch?v=_ndfyn0y9B0] or [http://vimeo.com/30998268]
+* [MarkdownFilter] - [http://daringfireball.net/projects/markdown/] - [http://en.wikipedia.org/wiki/Markdown]
+
 
 !!Others Filters
 Filters developed by others that are available through our site:

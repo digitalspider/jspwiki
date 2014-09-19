@@ -7,15 +7,10 @@ SRCDIR=$CODEDIR/jspwiki-dev
 TARGET=$SRCDIR/jspwiki-war/target
 WIKISDIR=$BASEDIR/wikis
 
-cd $SRCDIR
-# Apply patches
-patchfiles="$CODEDIR/patches/*.patch"
-for PATCH in $patchfiles
-do
-   svn patch $PATCH
-done
+$BASEDIR/scripts/applypatches.sh
 
 # Run maven
+cd $SRCDIR
 mvn -Dmaven.test.skip=true package
 cd $BASEDIR
 

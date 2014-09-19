@@ -1,9 +1,12 @@
 !!Processes
 * [HowToWriteAPlugin] - [https://jspwiki-wiki.apache.org/Wiki.jsp?page=HowToWriteAPlugin]
 
-!! JSPWiki Core Plugins
-See [https://jspwiki-wiki.apache.org/Wiki.jsp?page=JSPWikiCorePlugins]
-* A advanced plgin is the [https://jspwiki-wiki.apache.org/Wiki.jsp?page=PageViewPlugin]
+!! JSPWiki Plugins
+Plugin links:
+* Old Plugins = [http://www.ecyrd.com/JSPWiki/wiki/JSPWikiPlugins] (need converting/upgrading)
+* Core Plugins = [https://jspwiki-wiki.apache.org/Wiki.jsp?page=JSPWikiCorePlugins]
+* Contributed Plugins = [https://jspwiki-wiki.apache.org/Wiki.jsp?page=ContributedPlugins]
+* A good advanced plugin to learn from is the [https://jspwiki-wiki.apache.org/Wiki.jsp?page=PageViewPlugin]
 
 !!Our Released Plugins
 Here is a list of custom plugins we have developed:
@@ -18,7 +21,6 @@ Here is a list of custom plugins we have developed:
 * [SampleAjaxPlugin] - [SampleAjaxPluginDemo]
 
 !!In Progress Plugins
-
 
 !!Plugin Ideas
 * [LikePlugin] - [LikePluginDemo]

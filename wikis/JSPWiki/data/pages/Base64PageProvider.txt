@@ -1,4 +1,2 @@
-[http://commons.apache.org/proper/commons-codec/apidocs/org/apache/commons/codec/binary/Base64.html]
-
-[http://jspwiki.apache.org/apidocs/2.10.1/index.html?org/apache/wiki/providers/AbstractFileProvider.html]
-
+%%error
+Deprecated. See [EncryptedPageFilter]
