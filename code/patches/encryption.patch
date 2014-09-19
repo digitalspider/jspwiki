@@ -1,0 +1,988 @@
+Index: src/main/java/org/apache/wiki/api/exceptions/EncryptionException.java
+===================================================================
+--- src/main/java/org/apache/wiki/api/exceptions/EncryptionException.java	(revision 0)
++++ src/main/java/org/apache/wiki/api/exceptions/EncryptionException.java	(working copy)
+@@ -0,0 +1,39 @@
++/*
++    Licensed to the Apache Software Foundation (ASF) under one
++    or more contributor license agreements.  See the NOTICE file
++    distributed with this work for additional information
++    regarding copyright ownership.  The ASF licenses this file
++    to you under the Apache License, Version 2.0 (the
++    "License"); you may not use this file except in compliance
++    with the License.  You may obtain a copy of the License at
++
++       http://www.apache.org/licenses/LICENSE-2.0
++
++    Unless required by applicable law or agreed to in writing,
++    software distributed under the License is distributed on an
++    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
++    KIND, either express or implied.  See the License for the
++    specific language governing permissions and limitations
++    under the License.
++ */
++package org.apache.wiki.api.exceptions;
++
++/**
++ *  A generic exception for anything with the crypto libraries.
++ *
++ *  @since 2.10.2
++ */
++public class EncryptionException extends WikiException {
++
++    private static final long serialVersionUID = -490652869936404653L;
++
++    /**
++     *  Constructs an exception.
++     *
++     *  @param msg {@inheritDoc}
++     */
++    public EncryptionException( String msg ) {
++        super( msg );
++    }
++
++}
+Index: src/main/java/org/apache/wiki/crypto/CryptoProvider.java
+===================================================================
+--- src/main/java/org/apache/wiki/crypto/CryptoProvider.java	(revision 0)
++++ src/main/java/org/apache/wiki/crypto/CryptoProvider.java	(working copy)
+@@ -0,0 +1,34 @@
++/*
++    Licensed to the Apache Software Foundation (ASF) under one
++    or more contributor license agreements.  See the NOTICE file
++    distributed with this work for additional information
++    regarding copyright ownership.  The ASF licenses this file
++    to you under the Apache License, Version 2.0 (the
++    "License"); you may not use this file except in compliance
++    with the License.  You may obtain a copy of the License at
++
++       http://www.apache.org/licenses/LICENSE-2.0
++
++    Unless required by applicable law or agreed to in writing,
++    software distributed under the License is distributed on an
++    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
++    KIND, either express or implied.  See the License for the
++    specific language governing permissions and limitations
++    under the License.
++ */
++package org.apache.wiki.crypto;
++
++import org.apache.wiki.WikiProvider;
++import org.apache.wiki.api.exceptions.EncryptionException;
++
++import javax.crypto.Cipher;
++
++/**
++ * Provides cryptographic encryption and decryption services
++ */
++public interface CryptoProvider extends WikiProvider {
++    public static final String DEFAULT_CRYPTO_FILENAME = "jspwiki-crypto.properties";
++
++    public byte[] encrypt(char[] key, byte[] content) throws EncryptionException;
++    public byte[] decrypt(char[] key, byte[] content) throws EncryptionException;
++}
+Index: src/main/java/org/apache/wiki/crypto/DefaultCryptoProvider.java
+===================================================================
+--- src/main/java/org/apache/wiki/crypto/DefaultCryptoProvider.java	(revision 0)
++++ src/main/java/org/apache/wiki/crypto/DefaultCryptoProvider.java	(working copy)
+@@ -0,0 +1,173 @@
++/*
++    Licensed to the Apache Software Foundation (ASF) under one
++    or more contributor license agreements.  See the NOTICE file
++    distributed with this work for additional information
++    regarding copyright ownership.  The ASF licenses this file
++    to you under the Apache License, Version 2.0 (the
++    "License"); you may not use this file except in compliance
++    with the License.  You may obtain a copy of the License at
++
++       http://www.apache.org/licenses/LICENSE-2.0
++
++    Unless required by applicable law or agreed to in writing,
++    software distributed under the License is distributed on an
++    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
++    KIND, either express or implied.  See the License for the
++    specific language governing permissions and limitations
++    under the License.
++ */
++package org.apache.wiki.crypto;
++
++import org.apache.commons.codec.binary.Base64;
++import org.apache.commons.lang.StringUtils;
++import org.apache.log4j.Logger;
++import org.apache.wiki.WikiEngine;
++import org.apache.wiki.api.exceptions.EncryptionException;
++import org.apache.wiki.api.exceptions.NoRequiredPropertyException;
++import org.apache.wiki.api.exceptions.ProviderException;
++import org.apache.wiki.util.TextUtil;
++
++import java.io.File;
++import java.io.FileReader;
++import java.io.IOException;
++import java.util.Properties;
++
++import javax.crypto.Cipher;
++import javax.crypto.SecretKey;
++import javax.crypto.SecretKeyFactory;
++import javax.crypto.spec.PBEKeySpec;
++import javax.crypto.spec.PBEParameterSpec;
++
++/**
++ * Provides cryptographic encryption and decryption services.
++ *
++ * See: <a href="http://docs.oracle.com/javase/8/docs/technotes/guides/security/crypto/CryptoSpec.html">Oracle CryptoSpec.html</a>
++ *
++ * The default implementation here uses a password-based encryption (PBE) cipher.
++ *
++ * The configuration expects <b>crypto.file</b> in jspwiki-custom.properties which is the absolute
++ * path to a file specifying the other cryptographic properties. Ideally this file should be well
++ * protected, and read only.
++ *
++ * Properties within the "crypto.file" include:
++ * <table>
++ *     <th>
++ *         <td>property</td>
++ *         <td>description</td>
++ *     </th>
++ *     <tr>
++ *         <td>crypto.base64</td>
++ *         <td>If true will apply base64 encoding and decoding to the encrypted content.
++ *         This ensures the content store in the {@link org.apache.wiki.providers.WikiPageProvider} is not just binary, but base64 encoded.
++ *         Default is true</td>
++ *     </tr>
++ *     <tr>
++ *         <td>crypto.salt</td>
++ *         <td>The salt used to create the PBEParameterSpec</td>
++ *     </tr>
++ *     <tr>
++ *         <td>crypto.blocksize</td>
++ *         <td>The blocksize specified the length of the salt, must be equal or smaller than the salt length</td>
++ *     </tr>
++ *     <tr>
++ *         <td>crypto.itrcount</td>
++ *         <td>The iteration count used to create the PBEParameterSpec</td>
++ *     </tr>
++ *     <tr>
++ *         <td>crypto.algorithm</td>
++ *         <td>The algorithm to use to create the SecretKeyFactory and Cipher</td>
++ *     </tr>
++ *
++ * </table>
++ */
++public class DefaultCryptoProvider implements CryptoProvider {
++
++    private static final Logger log = Logger.getLogger(DefaultCryptoProvider.class);
++
++    public static final String PROP_CRYPTO_FILE = "crypto.file";
++    public static final String PROP_CRYPTO_BASE64 = "crypto.base64";
++    public static final String PROP_CRYPTO_SALT = "crypto.salt";
++    public static final String PROP_CRYPTO_BLOCKSIZE = "crypto.blocksize";
++    public static final String PROP_CRYPTO_ITERACTIONCOUNT = "crypto.itrcount";
++    public static final String PROP_CRYPTO_ALGORITHM = "crypto.algorithm";
++
++    private boolean base64;
++    private String salt;
++    private int blockSize;
++    private int iterationCount;
++    private String algorithm;
++
++    @Override
++    public void initialize(WikiEngine engine, Properties properties) throws NoRequiredPropertyException, IOException {
++        Properties cryptoProperties = new Properties();
++        String filename = TextUtil.getStringProperty(properties,PROP_CRYPTO_FILE, CryptoProvider.DEFAULT_CRYPTO_FILENAME);
++        File f = new File(filename);
++        if (!f.exists()) {
++            log.warn("The file specified by " + PROP_CRYPTO_FILE + "=" + f.getAbsolutePath() + " does not exist!");
++        } else {
++            cryptoProperties.load(new FileReader(f));
++        }
++        base64 = TextUtil.getBooleanProperty(cryptoProperties, PROP_CRYPTO_BASE64, true);
++        salt = TextUtil.getStringProperty(cryptoProperties,PROP_CRYPTO_SALT, "Ra%$ESSQA#!@)#$@)");
++        blockSize = TextUtil.getIntegerProperty(cryptoProperties, PROP_CRYPTO_BLOCKSIZE, 8);
++        iterationCount = TextUtil.getIntegerProperty(cryptoProperties,PROP_CRYPTO_ITERACTIONCOUNT, 2048);
++        algorithm = TextUtil.getStringProperty(cryptoProperties,PROP_CRYPTO_ALGORITHM, "PBEWithMD5AndDES");
++        if (blockSize > salt.length()) {
++            throw new NoRequiredPropertyException("The block size specified is longer then the salt length",PROP_CRYPTO_BLOCKSIZE);
++        }
++    }
++
++    @Override
++    public byte[] encrypt(char[] key, byte[] content) throws EncryptionException {
++        try {
++            Cipher pbeCipher = getCipher(key, Cipher.ENCRYPT_MODE);
++            byte[] encrypted = pbeCipher.doFinal(content);
++            if (base64) {
++                encrypted = Base64.encodeBase64(encrypted);
++            }
++            return encrypted;
++        } catch (Exception e) {
++            throw new EncryptionException("Could not encrypt content. ERROR="+e+" "+e.getMessage());
++        }
++    }
++
++    @Override
++    public byte[] decrypt(char[] key, byte[] content) throws EncryptionException {
++        try {
++            Cipher pbeCipher = getCipher(key, Cipher.DECRYPT_MODE);
++            if (base64) {
++                content = Base64.decodeBase64(content);
++            }
++            content = pbeCipher.doFinal(content);
++            return content;
++        } catch (Exception e) {
++            throw new EncryptionException("Could not decrypt content. ERROR="+e+" "+e.getMessage());
++        }
++    }
++
++    private Cipher getCipher(char[] key, int mode) throws EncryptionException {
++        Cipher cipher = null;
++        try {
++            String transformation = algorithm;
++            byte[] saltBytes = salt.substring(0, blockSize).getBytes();
++            int count = iterationCount;
++
++            // Create PBE parameter set
++            PBEParameterSpec pbeParamSpec = new PBEParameterSpec(saltBytes, count);
++            PBEKeySpec pbeKeySpec = new PBEKeySpec(key);
++            SecretKeyFactory keyFac = SecretKeyFactory.getInstance(transformation);
++            SecretKey pbeKey = keyFac.generateSecret(pbeKeySpec);
++
++            Cipher pbeCipher = Cipher.getInstance(transformation);
++            pbeCipher.init(mode, pbeKey, pbeParamSpec);
++            return pbeCipher;
++        } catch (Exception e) {
++            throw new EncryptionException("Could not create cipher. ERROR="+e+" "+e.getMessage());
++        }
++    }
++
++    @Override
++    public String getProviderInfo() {
++        return "DefaultCryptoProvider";
++    }
++}
+Index: src/main/java/org/apache/wiki/crypto/CryptoProvider.java
+===================================================================
+--- src/main/java/org/apache/wiki/crypto/CryptoProvider.java	(revision 0)
++++ src/main/java/org/apache/wiki/crypto/CryptoProvider.java	(working copy)
+@@ -0,0 +1,34 @@
++/*
++    Licensed to the Apache Software Foundation (ASF) under one
++    or more contributor license agreements.  See the NOTICE file
++    distributed with this work for additional information
++    regarding copyright ownership.  The ASF licenses this file
++    to you under the Apache License, Version 2.0 (the
++    "License"); you may not use this file except in compliance
++    with the License.  You may obtain a copy of the License at
++
++       http://www.apache.org/licenses/LICENSE-2.0
++
++    Unless required by applicable law or agreed to in writing,
++    software distributed under the License is distributed on an
++    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
++    KIND, either express or implied.  See the License for the
++    specific language governing permissions and limitations
++    under the License.
++ */
++package org.apache.wiki.crypto;
++
++import org.apache.wiki.WikiProvider;
++import org.apache.wiki.api.exceptions.EncryptionException;
++
++import javax.crypto.Cipher;
++
++/**
++ * Provides cryptographic encryption and decryption services
++ */
++public interface CryptoProvider extends WikiProvider {
++    public static final String DEFAULT_CRYPTO_FILENAME = "jspwiki-crypto.properties";
++
++    public byte[] encrypt(char[] key, byte[] content) throws EncryptionException;
++    public byte[] decrypt(char[] key, byte[] content) throws EncryptionException;
++}
+Index: src/main/java/org/apache/wiki/crypto/DefaultCryptoProvider.java
+===================================================================
+--- src/main/java/org/apache/wiki/crypto/DefaultCryptoProvider.java	(revision 0)
++++ src/main/java/org/apache/wiki/crypto/DefaultCryptoProvider.java	(working copy)
+@@ -0,0 +1,173 @@
++/*
++    Licensed to the Apache Software Foundation (ASF) under one
++    or more contributor license agreements.  See the NOTICE file
++    distributed with this work for additional information
++    regarding copyright ownership.  The ASF licenses this file
++    to you under the Apache License, Version 2.0 (the
++    "License"); you may not use this file except in compliance
++    with the License.  You may obtain a copy of the License at
++
++       http://www.apache.org/licenses/LICENSE-2.0
++
++    Unless required by applicable law or agreed to in writing,
++    software distributed under the License is distributed on an
++    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
++    KIND, either express or implied.  See the License for the
++    specific language governing permissions and limitations
++    under the License.
++ */
++package org.apache.wiki.crypto;
++
++import org.apache.commons.codec.binary.Base64;
++import org.apache.commons.lang.StringUtils;
++import org.apache.log4j.Logger;
++import org.apache.wiki.WikiEngine;
++import org.apache.wiki.api.exceptions.EncryptionException;
++import org.apache.wiki.api.exceptions.NoRequiredPropertyException;
++import org.apache.wiki.api.exceptions.ProviderException;
++import org.apache.wiki.util.TextUtil;
++
++import java.io.File;
++import java.io.FileReader;
++import java.io.IOException;
++import java.util.Properties;
++
++import javax.crypto.Cipher;
++import javax.crypto.SecretKey;
++import javax.crypto.SecretKeyFactory;
++import javax.crypto.spec.PBEKeySpec;
++import javax.crypto.spec.PBEParameterSpec;
++
++/**
++ * Provides cryptographic encryption and decryption services.
++ *
++ * See: <a href="http://docs.oracle.com/javase/8/docs/technotes/guides/security/crypto/CryptoSpec.html">Oracle CryptoSpec.html</a>
++ *
++ * The default implementation here uses a password-based encryption (PBE) cipher.
++ *
++ * The configuration expects <b>crypto.file</b> in jspwiki-custom.properties which is the absolute
++ * path to a file specifying the other cryptographic properties. Ideally this file should be well
++ * protected, and read only.
++ *
++ * Properties within the "crypto.file" include:
++ * <table>
++ *     <th>
++ *         <td>property</td>
++ *         <td>description</td>
++ *     </th>
++ *     <tr>
++ *         <td>crypto.base64</td>
++ *         <td>If true will apply base64 encoding and decoding to the encrypted content.
++ *         This ensures the content store in the {@link org.apache.wiki.providers.WikiPageProvider} is not just binary, but base64 encoded.
++ *         Default is true</td>
++ *     </tr>
++ *     <tr>
++ *         <td>crypto.salt</td>
++ *         <td>The salt used to create the PBEParameterSpec</td>
++ *     </tr>
++ *     <tr>
++ *         <td>crypto.blocksize</td>
++ *         <td>The blocksize specified the length of the salt, must be equal or smaller than the salt length</td>
++ *     </tr>
++ *     <tr>
++ *         <td>crypto.itrcount</td>
++ *         <td>The iteration count used to create the PBEParameterSpec</td>
++ *     </tr>
++ *     <tr>
++ *         <td>crypto.algorithm</td>
++ *         <td>The algorithm to use to create the SecretKeyFactory and Cipher</td>
++ *     </tr>
++ *
++ * </table>
++ */
++public class DefaultCryptoProvider implements CryptoProvider {
++
++    private static final Logger log = Logger.getLogger(DefaultCryptoProvider.class);
++
++    public static final String PROP_CRYPTO_FILE = "crypto.file";
++    public static final String PROP_CRYPTO_BASE64 = "crypto.base64";
++    public static final String PROP_CRYPTO_SALT = "crypto.salt";
++    public static final String PROP_CRYPTO_BLOCKSIZE = "crypto.blocksize";
++    public static final String PROP_CRYPTO_ITERACTIONCOUNT = "crypto.itrcount";
++    public static final String PROP_CRYPTO_ALGORITHM = "crypto.algorithm";
++
++    private boolean base64;
++    private String salt;
++    private int blockSize;
++    private int iterationCount;
++    private String algorithm;
++
++    @Override
++    public void initialize(WikiEngine engine, Properties properties) throws NoRequiredPropertyException, IOException {
++        Properties cryptoProperties = new Properties();
++        String filename = TextUtil.getStringProperty(properties,PROP_CRYPTO_FILE, CryptoProvider.DEFAULT_CRYPTO_FILENAME);
++        File f = new File(filename);
++        if (!f.exists()) {
++            log.warn("The file specified by " + PROP_CRYPTO_FILE + "=" + f.getAbsolutePath() + " does not exist!");
++        } else {
++            cryptoProperties.load(new FileReader(f));
++        }
++        base64 = TextUtil.getBooleanProperty(cryptoProperties, PROP_CRYPTO_BASE64, true);
++        salt = TextUtil.getStringProperty(cryptoProperties,PROP_CRYPTO_SALT, "Ra%$ESSQA#!@)#$@)");
++        blockSize = TextUtil.getIntegerProperty(cryptoProperties, PROP_CRYPTO_BLOCKSIZE, 8);
++        iterationCount = TextUtil.getIntegerProperty(cryptoProperties,PROP_CRYPTO_ITERACTIONCOUNT, 2048);
++        algorithm = TextUtil.getStringProperty(cryptoProperties,PROP_CRYPTO_ALGORITHM, "PBEWithMD5AndDES");
++        if (blockSize > salt.length()) {
++            throw new NoRequiredPropertyException("The block size specified is longer then the salt length",PROP_CRYPTO_BLOCKSIZE);
++        }
++    }
++
++    @Override
++    public byte[] encrypt(char[] key, byte[] content) throws EncryptionException {
++        try {
++            Cipher pbeCipher = getCipher(key, Cipher.ENCRYPT_MODE);
++            byte[] encrypted = pbeCipher.doFinal(content);
++            if (base64) {
++                encrypted = Base64.encodeBase64(encrypted);
++            }
++            return encrypted;
++        } catch (Exception e) {
++            throw new EncryptionException("Could not encrypt content. ERROR="+e+" "+e.getMessage());
++        }
++    }
++
++    @Override
++    public byte[] decrypt(char[] key, byte[] content) throws EncryptionException {
++        try {
++            Cipher pbeCipher = getCipher(key, Cipher.DECRYPT_MODE);
++            if (base64) {
++                content = Base64.decodeBase64(content);
++            }
++            content = pbeCipher.doFinal(content);
++            return content;
++        } catch (Exception e) {
++            throw new EncryptionException("Could not decrypt content. ERROR="+e+" "+e.getMessage());
++        }
++    }
++
++    private Cipher getCipher(char[] key, int mode) throws EncryptionException {
++        Cipher cipher = null;
++        try {
++            String transformation = algorithm;
++            byte[] saltBytes = salt.substring(0, blockSize).getBytes();
++            int count = iterationCount;
++
++            // Create PBE parameter set
++            PBEParameterSpec pbeParamSpec = new PBEParameterSpec(saltBytes, count);
++            PBEKeySpec pbeKeySpec = new PBEKeySpec(key);
++            SecretKeyFactory keyFac = SecretKeyFactory.getInstance(transformation);
++            SecretKey pbeKey = keyFac.generateSecret(pbeKeySpec);
++
++            Cipher pbeCipher = Cipher.getInstance(transformation);
++            pbeCipher.init(mode, pbeKey, pbeParamSpec);
++            return pbeCipher;
++        } catch (Exception e) {
++            throw new EncryptionException("Could not create cipher. ERROR="+e+" "+e.getMessage());
++        }
++    }
++
++    @Override
++    public String getProviderInfo() {
++        return "DefaultCryptoProvider";
++    }
++}
+Index: src/main/java/org/apache/wiki/filters/EncryptedPageFilter.java
+===================================================================
+--- src/main/java/org/apache/wiki/filters/EncryptedPageFilter.java	(revision 0)
++++ src/main/java/org/apache/wiki/filters/EncryptedPageFilter.java	(working copy)
+@@ -0,0 +1,167 @@
++/*
++    Licensed to the Apache Software Foundation (ASF) under one
++    or more contributor license agreements.  See the NOTICE file
++    distributed with this work for additional information
++    regarding copyright ownership.  The ASF licenses this file
++    to you under the Apache License, Version 2.0 (the
++    "License"); you may not use this file except in compliance
++    with the License.  You may obtain a copy of the License at
++
++       http://www.apache.org/licenses/LICENSE-2.0
++
++    Unless required by applicable law or agreed to in writing,
++    software distributed under the License is distributed on an
++    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
++    KIND, either express or implied.  See the License for the
++    specific language governing permissions and limitations
++    under the License.
++ */
++package org.apache.wiki.filters;
++
++import org.apache.log4j.Logger;
++import org.apache.wiki.WikiContext;
++import org.apache.wiki.WikiEngine;
++import org.apache.wiki.api.exceptions.FilterException;
++import org.apache.wiki.api.exceptions.NoRequiredPropertyException;
++import org.apache.wiki.api.exceptions.WikiException;
++import org.apache.wiki.api.filters.BasicPageFilter;
++import org.apache.wiki.crypto.CryptoProvider;
++import org.apache.wiki.util.ClassUtil;
++import org.apache.wiki.util.TextUtil;
++
++import java.io.File;
++import java.io.FileReader;
++import java.util.Properties;
++
++/**
++ * This class uses a {@link org.apache.wiki.crypto.CryptoProvider} to encrypt and decrypt page content.
++ *
++ * The default crypto provider is {@link org.apache.wiki.crypto.DefaultCryptoProvider}.
++ *
++ * An alternative crypto provider can be set by setting <b>crypto.provider</b> in jspwiki-custom.properties
++ *
++ * This functionality only encrypts the page content, and not the page properties files.
++ * The encryption happens on a {@link org.apache.wiki.providers.FileSystemProvider:putPageText()} and
++ * decryption on {@link org.apache.wiki.providers.FileSystemProvider:getPageText()}.
++ * This means one page is encrypted at a time.
++ *
++ * The configuration expects <b>crypto.file</b> in jspwiki-custom.properties which is the absolute
++ * path to a file specifying the other cryptographic properties. Ideally this file should be well
++ * protected, and read only.
++ *
++ * <div style="color: red>WARNING: Once you use this <b>EncryptedPageFilter</b> there is no going back. Make sure you know what you are doing!</div>
++ *
++ * In future there are plans to be able to export your wiki content, so you can import it back with
++ * with a simple {@link org.apache.wiki.providers.FileSystemProvider}. This does not exist yet!!
++ *
++ * Properties within the "crypto.file" include:
++ * <table>
++ *     <th>
++ *         <td>property</td>
++ *         <td>description</td>
++ *     </th>
++ *     <tr>
++ *         <td>crypto.key</td>
++ *         <td>The password that will do the encryption and decryption of content. <b>Required</b></td>
++ *     </tr>
++ *     <tr>
++ *         <td>crypto.prefix</td>
++ *         <td>A value used to determine if the page content is correctly decrypted. Should be a random string of minimum 10 length</td>
++ *     </tr>
++ *     <tr>
++ *         <td>crypto.suffix</td>
++ *         <td>A value appended to the end of the encrypted string. Should be a random string of minimum 10 length</td>
++ *     </tr>
++ * </table>
++ */
++public class EncryptedPageFilter extends BasicPageFilter {
++
++    private static final Logger log = Logger.getLogger(EncryptedPageFilter.class);
++
++    private static final int MIN_LENGTH = 10;
++    public static final String PROP_CRYPTO_PROVIDER = "crypto.provider";
++    public static final String PROP_CRYPTO_FILE = "crypto.file";
++    public static final String PROP_CRYPTO_KEY = "crypto.key";
++    public static final String PROP_CRYPTO_PREFIX = "crypto.prefix";
++    public static final String PROP_CRYPTO_SUFFIX = "crypto.suffix";
++
++    private CryptoProvider cryptoProvider;
++    private char[] key;
++    private String prefix;
++    private String suffix;
++
++    @Override
++    public void initialize(WikiEngine engine, Properties properties) throws FilterException {
++
++            String providerClassName = TextUtil.getStringProperty(properties, PROP_CRYPTO_PROVIDER, "org.apache.wiki.crypto.DefaultCryptoProvider");
++
++            try {
++                cryptoProvider = (CryptoProvider) ClassUtil.getMappedObject(providerClassName);
++            } catch (WikiException e) {
++                throw new FilterException("Could not create filter for "+PROP_CRYPTO_PROVIDER+"="+providerClassName+". "+e.getMessage());
++            }
++
++            Properties cryptoProperties = new Properties();
++            try {
++
++                String filename = TextUtil.getStringProperty(properties, PROP_CRYPTO_FILE, CryptoProvider.DEFAULT_CRYPTO_FILENAME);
++                File f = new File(filename);
++
++                if (!f.exists()) {
++                    log.warn("The file specified by " + PROP_CRYPTO_FILE + "=" + f.getAbsolutePath() + " does not exist!");
++                } else {
++                    cryptoProperties.load(new FileReader(f));
++                }
++            } catch (Exception e) {
++                throw new FilterException(e.getMessage());
++            }
++
++            try {
++                key = TextUtil.getRequiredProperty(cryptoProperties, PROP_CRYPTO_KEY).toCharArray();
++                if (key.length < MIN_LENGTH) {
++                    throw new FilterException("The encryption key "+PROP_CRYPTO_KEY+" provided is to short. Min Length required is " + MIN_LENGTH);
++                }
++                prefix = TextUtil.getStringProperty(cryptoProperties, PROP_CRYPTO_PREFIX, "A@I@#!)KDAS)$:");
++                if (prefix.length() < MIN_LENGTH) {
++                    throw new FilterException("The property value "+PROP_CRYPTO_PREFIX+"="+ prefix + " is to short. Min Length required is " + MIN_LENGTH);
++                }
++                suffix = TextUtil.getStringProperty(cryptoProperties, PROP_CRYPTO_SUFFIX, ")FEJ*$Y@LSDFKJ@V");
++                if (suffix.length() < MIN_LENGTH) {
++                    throw new FilterException("The property value "+PROP_CRYPTO_SUFFIX+"="+ suffix + " is to short. Min Length required is " + MIN_LENGTH);
++                }
++            } catch (NoRequiredPropertyException e) {
++                throw new FilterException(e.getMessage());
++            }
++    }
++
++    @Override
++    public String preSave(WikiContext wikiContext, String content) throws FilterException {
++        try {
++            content = prefix + content;
++            content = new String(cryptoProvider.encrypt(key, content.getBytes()));
++            content += suffix;
++        } catch (Exception e) {
++            throw new FilterException("Error encrypting content. ERROR="+e+" "+e.getMessage());
++        }
++        return super.preSave(wikiContext, content);
++    }
++
++    @Override
++    public String preTranslate(WikiContext wikiContext, String content) throws FilterException {
++        String result = super.preTranslate(wikiContext, content);
++        try {
++            if (result.endsWith(suffix)) {
++                result = result.substring(0,result.length()-suffix.length());
++                String plain = new String(cryptoProvider.decrypt(key, result.getBytes()));
++                if (plain.startsWith(prefix)) {
++                    result = plain.substring(prefix.length());
++                }
++            }
++
++        } catch (Exception e) {
++            throw new FilterException("Error decrypting content. ERROR="+e+" "+e.getMessage());
++        }
++        return result;
++    }
++
++}
+Index: src/main/java/org/apache/wiki/providers/EncryptedFileSystemProvider.java
+===================================================================
+--- src/main/java/org/apache/wiki/providers/EncryptedFileSystemProvider.java	(revision 0)
++++ src/main/java/org/apache/wiki/providers/EncryptedFileSystemProvider.java	(working copy)
+@@ -0,0 +1,155 @@
++/*
++    Licensed to the Apache Software Foundation (ASF) under one
++    or more contributor license agreements.  See the NOTICE file
++    distributed with this work for additional information
++    regarding copyright ownership.  The ASF licenses this file
++    to you under the Apache License, Version 2.0 (the
++    "License"); you may not use this file except in compliance
++    with the License.  You may obtain a copy of the License at
++
++       http://www.apache.org/licenses/LICENSE-2.0
++
++    Unless required by applicable law or agreed to in writing,
++    software distributed under the License is distributed on an
++    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
++    KIND, either express or implied.  See the License for the
++    specific language governing permissions and limitations
++    under the License.
++ */
++package org.apache.wiki.providers;
++
++import org.apache.log4j.Logger;
++import org.apache.wiki.WikiEngine;
++import org.apache.wiki.WikiPage;
++import org.apache.wiki.api.exceptions.NoRequiredPropertyException;
++import org.apache.wiki.api.exceptions.ProviderException;
++import org.apache.wiki.api.exceptions.WikiException;
++import org.apache.wiki.crypto.CryptoProvider;
++import org.apache.wiki.util.ClassUtil;
++import org.apache.wiki.util.TextUtil;
++
++import java.io.File;
++import java.io.FileReader;
++import java.io.IOException;
++import java.util.Properties;
++
++/**
++ * This class uses a {@link org.apache.wiki.crypto.CryptoProvider} to encrypt and decrypt page content.
++ *
++ * The default crypto provider is {@link org.apache.wiki.crypto.DefaultCryptoProvider}.
++ *
++ * An alternative crypto provider can be set by setting <b>crypto.provider</b> in jspwiki-custom.properties
++ *
++ * This functionality only encrypts the page content, and not the page properties files.
++ * The encryption happens on a {@link org.apache.wiki.providers.FileSystemProvider:putPageText()} and
++ * decryption on {@link org.apache.wiki.providers.FileSystemProvider:getPageText()}.
++ * This means one page is encrypted at a time.
++ *
++ * The configuration expects <b>crypto.file</b> in jspwiki-custom.properties which is the absolute
++ * path to a file specifying the other cryptographic properties. Ideally this file should be well
++ * protected, and read only.
++ *
++ * <div style="color: red>WARNING: Once you use this <b>EncryptedFileSystemProvider</b> there is no going back. Make sure you know what you are doing!</div>
++ *
++ * In future there are plans to be able to export your wiki content, so you can import it back with
++ * with a simple {@link org.apache.wiki.providers.FileSystemProvider}. This does not exist yet!!
++ *
++ * Properties within the "crypto.file" include:
++ * <table>
++ *     <th>
++ *         <td>property</td>
++ *         <td>description</td>
++ *     </th>
++ *     <tr>
++ *         <td>crypto.key</td>
++ *         <td>The password that will do the encryption and decryption of content. <b>Required</b></td>
++ *     </tr>
++ *     <tr>
++ *         <td>crypto.prefix</td>
++ *         <td>A value used to determine if the page content is correctly decrypted. Should be a random string of minimum 10 length</td>
++ *     </tr>
++ *     <tr>
++ *         <td>crypto.suffix</td>
++ *         <td>A value appended to the end of the encrypted string. Should be a random string of minimum 10 length</td>
++ *     </tr>
++ * </table>
++ */
++public class EncryptedFileSystemProvider extends FileSystemProvider {
++
++    private static final Logger log = Logger.getLogger(EncryptedFileSystemProvider.class);
++
++    private static final int MIN_LENGTH = 10;
++    public static final String PROP_CRYPTO_PROVIDER = "crypto.provider";
++    public static final String PROP_CRYPTO_FILE = "crypto.file";
++    public static final String PROP_CRYPTO_KEY = "crypto.key";
++    public static final String PROP_CRYPTO_PREFIX = "crypto.prefix";
++    public static final String PROP_CRYPTO_SUFFIX = "crypto.suffix";
++
++    private CryptoProvider cryptoProvider;
++    private char[] key;
++    private String prefix;
++    private String suffix;
++
++    @Override
++    public void initialize(WikiEngine engine, Properties properties) throws NoRequiredPropertyException, IOException {
++        super.initialize(engine, properties);
++
++        String providerClassName = TextUtil.getStringProperty(properties, PROP_CRYPTO_PROVIDER, "org.apache.wiki.crypto.DefaultCryptoProvider");
++        try {
++            cryptoProvider = (CryptoProvider) ClassUtil.getMappedObject(providerClassName);
++        } catch (WikiException e) {
++            throw new NoRequiredPropertyException("Could not create provider for "+providerClassName+". "+e.getMessage(),PROP_CRYPTO_PROVIDER);
++        }
++
++        Properties cryptoProperties = new Properties();
++        String filename = TextUtil.getStringProperty(properties,PROP_CRYPTO_FILE, CryptoProvider.DEFAULT_CRYPTO_FILENAME);
++        File f = new File(filename);
++        if (!f.exists()) {
++            log.warn("The file specified by " + PROP_CRYPTO_FILE + "=" + f.getAbsolutePath() + " does not exist!");
++        } else {
++            cryptoProperties.load(new FileReader(f));
++        }
++        key = TextUtil.getRequiredProperty(cryptoProperties, PROP_CRYPTO_KEY).toCharArray();
++        if (key.length<MIN_LENGTH) {
++            throw new NoRequiredPropertyException("The encryption key provided is to short. Min Length required is "+MIN_LENGTH,PROP_CRYPTO_KEY);
++        }
++        prefix = TextUtil.getStringProperty(cryptoProperties, PROP_CRYPTO_PREFIX, "A@I@#!)KDAS)$:");
++        if (prefix.length()<MIN_LENGTH) {
++            throw new NoRequiredPropertyException("The property value "+prefix+" is to short. Min Length required is "+MIN_LENGTH,PROP_CRYPTO_PREFIX);
++        }
++        suffix = TextUtil.getStringProperty(cryptoProperties,PROP_CRYPTO_SUFFIX, ")FEJ*$Y@LSDFKJ@V");
++        if (suffix.length()<MIN_LENGTH) {
++            throw new NoRequiredPropertyException("The property value "+suffix+" is to short. Min Length required is "+MIN_LENGTH,PROP_CRYPTO_SUFFIX);
++        }
++    }
++
++    @Override
++    public String getPageText(String page, int version) throws ProviderException {
++        String result = super.getPageText(page, version);
++        try {
++            if (result.endsWith(suffix)) {
++                result = result.substring(0,result.length()-suffix.length());
++                String plain = new String(cryptoProvider.decrypt(key, result.getBytes()));
++                if (plain.startsWith(prefix)) {
++                    result = plain.substring(prefix.length());
++                }
++            }
++
++        } catch (Exception e) {
++            throw new ProviderException("Error decrypting content. ERROR="+e+" "+e.getMessage());
++        }
++        return result;
++    }
++
++    @Override
++    public void putPageText(WikiPage page, String text) throws ProviderException {
++        try {
++            text = prefix + text;
++            text = new String(cryptoProvider.encrypt(key, text.getBytes()));
++            text += suffix;
++        } catch (Exception e) {
++            throw new ProviderException("Error encrypting content. ERROR="+e+" "+e.getMessage());
++        }
++        super.putPageText(page, text);
++    }
++}
+Index: src/test/java/org/apache/wiki/crypto/DefaultCryptoProviderTest.java
+===================================================================
+--- src/test/java/org/apache/wiki/crypto/DefaultCryptoProviderTest.java	(revision 0)
++++ src/test/java/org/apache/wiki/crypto/DefaultCryptoProviderTest.java	(working copy)
+@@ -0,0 +1,84 @@
++/*
++    Licensed to the Apache Software Foundation (ASF) under one
++    or more contributor license agreements.  See the NOTICE file
++    distributed with this work for additional information
++    regarding copyright ownership.  The ASF licenses this file
++    to you under the Apache License, Version 2.0 (the
++    "License"); you may not use this file except in compliance
++    with the License.  You may obtain a copy of the License at
++
++       http://www.apache.org/licenses/LICENSE-2.0
++
++    Unless required by applicable law or agreed to in writing,
++    software distributed under the License is distributed on an
++    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
++    KIND, either express or implied.  See the License for the
++    specific language governing permissions and limitations
++    under the License.
++ */
++package org.apache.wiki.crypto;
++
++import junit.framework.TestCase;
++
++import net.sf.ehcache.CacheManager;
++
++import org.apache.wiki.TestEngine;
++import org.apache.wiki.WikiEngine;
++import org.apache.wiki.api.exceptions.EncryptionException;
++
++import java.io.File;
++import java.io.FileWriter;
++import java.util.Properties;
++
++import javax.crypto.BadPaddingException;
++
++public class DefaultCryptoProviderTest extends TestCase {
++
++    TestEngine m_engine;
++
++    protected void setUp() throws Exception
++    {
++        super.setUp();
++        Properties props = TestEngine.getTestProperties();
++        CacheManager.getInstance().removeAllCaches();
++        TestEngine.emptyWorkDir();
++
++        // Create crypto properties and write to file
++        Properties cryptoProps = new Properties();
++        cryptoProps.setProperty("crypto.key","xyzpwd");
++
++        String tmpdir = System.getProperties().getProperty("java.io.tmpdir");
++        File cryptoFile = new File(tmpdir+CryptoProvider.DEFAULT_CRYPTO_FILENAME);
++        cryptoProps.store(new FileWriter(cryptoFile),"Save to file");
++
++        //props.setProperty("crypto.file",f.getAbsolutePath());
++
++        m_engine = new TestEngine(props);
++    }
++
++    public void testEncryptAndDecrypt() throws Exception {
++        DefaultCryptoProvider provider = new DefaultCryptoProvider();
++        provider.initialize(m_engine,m_engine.getWikiProperties());
++        char[] password1 = "P@ssword1".toCharArray();
++        char[] password2 = "Pa$$w0rd2".toCharArray();
++        String content1 = "This is simple";
++        String content2 = "This may work";
++
++        // Test content1&2 with password1
++        byte[] secret1 = provider.encrypt(password1,content1.getBytes());
++        byte[] secret2 = provider.encrypt(password1,content2.getBytes());
++        String result1 = new String(provider.decrypt(password1,secret1));
++        String result2 = new String(provider.decrypt(password1,secret2));
++        assertNotNull(result1);
++        assertNotNull(result2);
++        assertEquals(content1,result1);
++        assertEquals(content2,result2);
++
++        try {
++            result1 = new String(provider.decrypt(password2, secret1));
++        } catch (EncryptionException e) {
++            assertTrue(e.getMessage().contains("BadPaddingException"));
++        }
++        assertEquals(content1, result1);
++    }
++}
+Index: src/test/java/org/apache/wiki/crypto/DefaultCryptoProviderTest.java
+===================================================================
+--- src/test/java/org/apache/wiki/crypto/DefaultCryptoProviderTest.java	(revision 0)
++++ src/test/java/org/apache/wiki/crypto/DefaultCryptoProviderTest.java	(working copy)
+@@ -0,0 +1,84 @@
++/*
++    Licensed to the Apache Software Foundation (ASF) under one
++    or more contributor license agreements.  See the NOTICE file
++    distributed with this work for additional information
++    regarding copyright ownership.  The ASF licenses this file
++    to you under the Apache License, Version 2.0 (the
++    "License"); you may not use this file except in compliance
++    with the License.  You may obtain a copy of the License at
++
++       http://www.apache.org/licenses/LICENSE-2.0
++
++    Unless required by applicable law or agreed to in writing,
++    software distributed under the License is distributed on an
++    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
++    KIND, either express or implied.  See the License for the
++    specific language governing permissions and limitations
++    under the License.
++ */
++package org.apache.wiki.crypto;
++
++import junit.framework.TestCase;
++
++import net.sf.ehcache.CacheManager;
++
++import org.apache.wiki.TestEngine;
++import org.apache.wiki.WikiEngine;
++import org.apache.wiki.api.exceptions.EncryptionException;
++
++import java.io.File;
++import java.io.FileWriter;
++import java.util.Properties;
++
++import javax.crypto.BadPaddingException;
++
++public class DefaultCryptoProviderTest extends TestCase {
++
++    TestEngine m_engine;
++
++    protected void setUp() throws Exception
++    {
++        super.setUp();
++        Properties props = TestEngine.getTestProperties();
++        CacheManager.getInstance().removeAllCaches();
++        TestEngine.emptyWorkDir();
++
++        // Create crypto properties and write to file
++        Properties cryptoProps = new Properties();
++        cryptoProps.setProperty("crypto.key","xyzpwd");
++
++        String tmpdir = System.getProperties().getProperty("java.io.tmpdir");
++        File cryptoFile = new File(tmpdir+CryptoProvider.DEFAULT_CRYPTO_FILENAME);
++        cryptoProps.store(new FileWriter(cryptoFile),"Save to file");
++
++        //props.setProperty("crypto.file",f.getAbsolutePath());
++
++        m_engine = new TestEngine(props);
++    }
++
++    public void testEncryptAndDecrypt() throws Exception {
++        DefaultCryptoProvider provider = new DefaultCryptoProvider();
++        provider.initialize(m_engine,m_engine.getWikiProperties());
++        char[] password1 = "P@ssword1".toCharArray();
++        char[] password2 = "Pa$$w0rd2".toCharArray();
++        String content1 = "This is simple";
++        String content2 = "This may work";
++
++        // Test content1&2 with password1
++        byte[] secret1 = provider.encrypt(password1,content1.getBytes());
++        byte[] secret2 = provider.encrypt(password1,content2.getBytes());
++        String result1 = new String(provider.decrypt(password1,secret1));
++        String result2 = new String(provider.decrypt(password1,secret2));
++        assertNotNull(result1);
++        assertNotNull(result2);
++        assertEquals(content1,result1);
++        assertEquals(content2,result2);
++
++        try {
++            result1 = new String(provider.decrypt(password2, secret1));
++        } catch (EncryptionException e) {
++            assertTrue(e.getMessage().contains("BadPaddingException"));
++        }
++        assertEquals(content1, result1);
++    }
++}
