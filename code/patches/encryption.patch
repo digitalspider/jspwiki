@@ -2,7 +2,39 @@ Index: jspwiki-war/src/main/java/org/apache/wiki/WikiEngine.java
 ===================================================================
 --- jspwiki-war/src/main/java/org/apache/wiki/WikiEngine.java	(revision 1622810)
 +++ jspwiki-war/src/main/java/org/apache/wiki/WikiEngine.java	(working copy)
-@@ -62,6 +62,7 @@
+@@ -18,31 +18,6 @@
+  */
+ package org.apache.wiki;
+ 
+-import java.io.File;
+-import java.io.IOException;
+-import java.io.UnsupportedEncodingException;
+-import java.net.URLDecoder;
+-import java.net.URLEncoder;
+-import java.security.Principal;
+-import java.util.ArrayList;
+-import java.util.Collection;
+-import java.util.Collections;
+-import java.util.Date;
+-import java.util.Enumeration;
+-import java.util.HashMap;
+-import java.util.Iterator;
+-import java.util.List;
+-import java.util.Locale;
+-import java.util.Map;
+-import java.util.Properties;
+-import java.util.TimeZone;
+-import java.util.TreeSet;
+-
+-import javax.servlet.ServletConfig;
+-import javax.servlet.ServletContext;
+-import javax.servlet.ServletRequest;
+-import javax.servlet.http.HttpServletRequest;
+-
+ import org.apache.commons.lang.time.StopWatch;
+ import org.apache.log4j.Logger;
+ import org.apache.log4j.PropertyConfigurator;
+@@ -62,6 +37,7 @@
  import org.apache.wiki.auth.acl.DefaultAclManager;
  import org.apache.wiki.auth.authorize.GroupManager;
  import org.apache.wiki.content.PageRenamer;
@@ -10,6 +42,39 @@ Index: jspwiki-war/src/main/java/org/apache/wiki/WikiEngine.java
  import org.apache.wiki.diff.DifferenceManager;
  import org.apache.wiki.event.WikiEngineEvent;
  import org.apache.wiki.event.WikiEventListener;
+@@ -94,7 +70,32 @@
+ import org.apache.wiki.workflow.WorkflowBuilder;
+ import org.apache.wiki.workflow.WorkflowManager;
+ 
++import java.io.File;
++import java.io.IOException;
++import java.io.UnsupportedEncodingException;
++import java.net.URLDecoder;
++import java.net.URLEncoder;
++import java.security.Principal;
++import java.util.ArrayList;
++import java.util.Collection;
++import java.util.Collections;
++import java.util.Date;
++import java.util.Enumeration;
++import java.util.HashMap;
++import java.util.Iterator;
++import java.util.List;
++import java.util.Locale;
++import java.util.Map;
++import java.util.Properties;
++import java.util.TimeZone;
++import java.util.TreeSet;
+ 
++import javax.servlet.ServletConfig;
++import javax.servlet.ServletContext;
++import javax.servlet.ServletRequest;
++import javax.servlet.http.HttpServletRequest;
++
++
+ /**
+  *  Provides Wiki services to the JSP page.
+  *
 @@ -290,6 +291,9 @@
      /** Each engine has its own workflow manager. */
      private WorkflowManager m_workflowMgr = null;
@@ -91,6 +156,175 @@ Index: jspwiki-war/src/main/java/org/apache/wiki/api/exceptions/EncryptionExcept
 +        super( msg );
 +    }
 +
++}
+Index: jspwiki-war/src/main/java/org/apache/wiki/crypto/BaseCryptoProvider.java
+===================================================================
+--- jspwiki-war/src/main/java/org/apache/wiki/crypto/BaseCryptoProvider.java	(revision 0)
++++ jspwiki-war/src/main/java/org/apache/wiki/crypto/BaseCryptoProvider.java	(working copy)
+@@ -0,0 +1,88 @@
++
++package org.apache.wiki.crypto;
++
++import org.apache.commons.lang.StringUtils;
++import org.apache.log4j.Logger;
++import org.apache.wiki.WikiEngine;
++import org.apache.wiki.api.exceptions.EncryptionException;
++import org.apache.wiki.api.exceptions.NoRequiredPropertyException;
++import org.apache.wiki.util.PropertyReader;
++import org.apache.wiki.util.TextUtil;
++
++import java.io.File;
++import java.io.FileNotFoundException;
++import java.io.FileReader;
++import java.io.IOException;
++import java.io.InputStream;
++import java.util.Properties;
++
++/**
++ * This default implementation just does an identity return, not encrypting or decrypting any
++ * content. This should be overwritten by more advanced cryptography providers.
++ * @since 2.10.2
++ */
++public class BaseCryptoProvider implements CryptoProvider {
++    public Logger log = Logger.getLogger(this.getClass());
++
++    public static final String PROP_CRYPTO_FILE = "jspwiki.cryptoFile";
++
++    private WikiEngine m_engine;
++    Properties cryptoProperties = new Properties();
++
++    @Override
++    public void initialize(WikiEngine engine, Properties properties) throws NoRequiredPropertyException, IOException {
++        m_engine = engine;
++        cryptoProperties = getCryptoProperties();
++    }
++
++    /**
++     * Returns the content provided.
++     * Key parameter is ignored.
++     */
++    public byte[] encrypt(char[] key, byte[] content) throws EncryptionException {
++        return content;
++    }
++
++    /**
++     * Returns the cotent provided.
++     * Key parameter is ignored.
++     */
++    public byte[] decrypt(char[] key, byte[] content) throws EncryptionException {
++        return content;
++    }
++
++    @Override
++    public String getProviderInfo() {
++        return getClass().getSimpleName();
++    }
++
++    protected Properties getCryptoProperties() throws IOException, FileNotFoundException {
++        Properties properties = m_engine.getWikiProperties();
++        Properties cryptoProperties = new Properties();
++        String filename = TextUtil.getStringProperty(properties, PROP_CRYPTO_FILE, CryptoProvider.DEFAULT_CRYPTO_FILENAME);
++        File f = new File(filename);
++        if (!f.exists()) {
++            InputStream is = PropertyReader.locateClassPathResource(m_engine.getServletContext(), filename);
++            if (is != null) {
++                cryptoProperties.load(is);
++            } else {
++                log.warn("The file specified by " + PROP_CRYPTO_FILE + "=" + f.getAbsolutePath() + " does not exist!");
++            }
++        } else {
++            cryptoProperties.load(new FileReader(f));
++        }
++        return cryptoProperties;
++    }
++
++    public String getExtraCryptoProperty(String key) {
++        return getExtraCryptoProperty(key,null);
++    }
++
++    public String getExtraCryptoProperty(String key, String defaultValue) {
++        String result = (String)cryptoProperties.get(key);
++        if (StringUtils.isNotEmpty(result)) {
++            return result;
++        }
++        return defaultValue;
++    }
++}
+Index: jspwiki-war/src/main/java/org/apache/wiki/crypto/CryptoManager.java
+===================================================================
+--- jspwiki-war/src/main/java/org/apache/wiki/crypto/CryptoManager.java	(revision 0)
++++ jspwiki-war/src/main/java/org/apache/wiki/crypto/CryptoManager.java	(working copy)
+@@ -0,0 +1,71 @@
++/*
++    Licensed to the Apache Software Foundation (ASF) under one
++    or more contributor license agreements.  See the NOTICE file
++    distributed with this work for additional information
++    regarding copyright ownership.  The ASF licenses this file
++    to you under the Apache License, Version 2.0 (the
++    "License"); you may not use this file except in compliance
++    with the License.  You may obtain a copy of the License at
++
++       http://www.apache.org/licenses/LICENSE-2.0
++
++    Unless required by applicable law or agreed to in writing,
++    software distributed under the License is distributed on an
++    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
++    KIND, either express or implied.  See the License for the
++    specific language governing permissions and limitations
++    under the License.
++ */
++package org.apache.wiki.crypto;
++
++import org.apache.log4j.Logger;
++import org.apache.wiki.WikiEngine;
++import org.apache.wiki.api.exceptions.FilterException;
++import org.apache.wiki.api.exceptions.WikiException;
++import org.apache.wiki.util.ClassUtil;
++import org.apache.wiki.util.PropertyReader;
++import org.apache.wiki.util.TextUtil;
++
++import java.io.File;
++import java.io.FileNotFoundException;
++import java.io.FileReader;
++import java.io.IOException;
++import java.io.InputStream;
++import java.util.Properties;
++
++/**
++ * Class for managing crypto services
++ *
++ * @since 2.10.2
++ */
++public class CryptoManager {
++
++    private static final Logger log = Logger.getLogger(CryptoManager.class);
++
++    public static final String PROP_CRYPTO_PROVIDER = "jspwiki.cryptoProvider";
++    public static final String DEFAULT_CRYPTO_PROVIDER = "org.apache.wiki.crypto.PBECryptoProvider";
++
++    private CryptoProvider cryptoProvider;
++    private WikiEngine m_engine;
++
++    public CryptoManager(WikiEngine engine) {
++        m_engine = engine;
++    }
++
++    public CryptoProvider getCryptoProvider() throws WikiException {
++        Properties properties = m_engine.getWikiProperties();
++        String providerClassName = TextUtil.getStringProperty(properties, PROP_CRYPTO_PROVIDER, DEFAULT_CRYPTO_PROVIDER);
++
++        try {
++            cryptoProvider = (CryptoProvider) ClassUtil.getMappedObject(providerClassName);
++            if (cryptoProvider != null) {
++                cryptoProvider.initialize(m_engine, m_engine.getWikiProperties());
++            }
++        } catch (WikiException e) {
++            throw new WikiException("Could not create cryptoProvider for "+PROP_CRYPTO_PROVIDER+"="+providerClassName+". "+e.getMessage());
++        } catch (IOException e) {
++            throw new WikiException("Could not initialise cryptoProvider for "+PROP_CRYPTO_PROVIDER+"="+providerClassName+". "+e.getMessage());
++        }
++        return cryptoProvider;
++    }
 +}
 Index: jspwiki-war/src/main/java/org/apache/wiki/crypto/CryptoProvider.java
 ===================================================================
@@ -528,6 +762,74 @@ Index: jspwiki-war/src/main/java/org/apache/wiki/filters/EncryptedPageFilter.jav
 +    }
 +
 +}
+Index: jspwiki-war/src/main/java/org/apache/wiki/plugin/EncryptPlugin.java
+===================================================================
+--- jspwiki-war/src/main/java/org/apache/wiki/plugin/EncryptPlugin.java	(revision 0)
++++ jspwiki-war/src/main/java/org/apache/wiki/plugin/EncryptPlugin.java	(working copy)
+@@ -0,0 +1,63 @@
++/*
++    Licensed to the Apache Software Foundation (ASF) under one
++    or more contributor license agreements.  See the NOTICE file
++    distributed with this work for additional information
++    regarding copyright ownership.  The ASF licenses this file
++    to you under the Apache License, Version 2.0 (the
++    "License"); you may not use this file except in compliance
++    with the License.  You may obtain a copy of the License at
++
++       http://www.apache.org/licenses/LICENSE-2.0
++
++    Unless required by applicable law or agreed to in writing,
++    software distributed under the License is distributed on an
++    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
++    KIND, either express or implied.  See the License for the
++    specific language governing permissions and limitations
++    under the License.  
++ */
++package org.apache.wiki.plugin;
++
++import org.apache.commons.lang.StringUtils;
++import org.apache.log4j.Logger;
++import org.apache.wiki.WikiContext;
++import org.apache.wiki.api.exceptions.EncryptionException;
++import org.apache.wiki.api.exceptions.PluginException;
++import org.apache.wiki.api.exceptions.WikiException;
++import org.apache.wiki.api.plugin.WikiPlugin;
++import org.apache.wiki.crypto.CryptoProvider;
++
++import java.util.Map;
++
++/**
++ *
++ * @since 2.10.2
++ */
++public class EncryptPlugin implements WikiPlugin {
++
++    private static Logger log = Logger.getLogger( EncryptPlugin.class );
++
++    /**
++     *  {@inheritDoc}
++     */
++    public String execute(WikiContext context, Map<String, String> params) throws PluginException
++    {
++        CryptoProvider cryptoProvider;
++        try {
++            cryptoProvider = context.getEngine().getCryptoManager().getCryptoProvider();
++        } catch (WikiException e) {
++            throw new PluginException("Encryption not configured correctly. "+e.getMessage());
++        }
++        String body = params.get(DefaultPluginManager.PARAM_BODY);
++        if (StringUtils.isNotEmpty(body)) {
++            String hiddenData = "";
++            try {
++                hiddenData = new String(cryptoProvider.encrypt("password".toCharArray(), body.getBytes()));
++            } catch (EncryptionException e) {
++                throw new PluginException("Encryption failed: " + e.getMessage());
++            }
++            return "<div class='encrypted'>" + hiddenData + "</div>";
++        }
++        return "";
++    }
++}
 Index: jspwiki-war/src/main/resources/ini/classmappings.xml
 ===================================================================
 --- jspwiki-war/src/main/resources/ini/classmappings.xml	(revision 1622810)
@@ -573,14 +875,23 @@ Index: jspwiki-war/src/main/resources/ini/jspwiki_module.xml
 ===================================================================
 --- jspwiki-war/src/main/resources/ini/jspwiki_module.xml	(revision 1622810)
 +++ jspwiki-war/src/main/resources/ini/jspwiki_module.xml	(working copy)
-@@ -59,5 +59,9 @@
+@@ -55,9 +55,18 @@
+       <minVersion>2.4</minVersion>
+    </plugin>
+ 
++   <plugin class="org.apache.wiki.plugin.EncryptPlugin">
++      <author>David Vittor</author>
++      <minVersion>2.10.2</minVersion>
++   </plugin>
++
+    <filter class="org.apache.wiki.filters.SpamFilter">
        <author>Janne Jalkanen</author>
        <minVersion>2.6</minVersion>
     </filter>
 -   
 +   <filter class="org.apache.wiki.filters.EncryptedPageFilter">
 +       <author>David Vittor</author>
-+       <minVersion>2.10.1</minVersion>
++       <minVersion>2.10.2</minVersion>
 +   </filter>
 +
  </modules>
@@ -700,6 +1011,127 @@ Index: jspwiki-war/src/test/java/org/apache/wiki/filters/DefaultFilterManagerTes
      }
  
      public void testInitParams() throws Exception {
+Index: jspwiki-war/src/test/java/org/apache/wiki/filters/EncryptedPageFilterTest.java
+===================================================================
+--- jspwiki-war/src/test/java/org/apache/wiki/filters/EncryptedPageFilterTest.java	(revision 0)
++++ jspwiki-war/src/test/java/org/apache/wiki/filters/EncryptedPageFilterTest.java	(working copy)
+@@ -0,0 +1,116 @@
++/*
++    Licensed to the Apache Software Foundation (ASF) under one
++    or more contributor license agreements.  See the NOTICE file
++    distributed with this work for additional information
++    regarding copyright ownership.  The ASF licenses this file
++    to you under the Apache License, Version 2.0 (the
++    "License"); you may not use this file except in compliance
++    with the License.  You may obtain a copy of the License at
++
++       http://www.apache.org/licenses/LICENSE-2.0
++
++    Unless required by applicable law or agreed to in writing,
++    software distributed under the License is distributed on an
++    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
++    KIND, either express or implied.  See the License for the
++    specific language governing permissions and limitations
++    under the License.
++ */
++package org.apache.wiki.filters;
++
++import junit.framework.Test;
++import junit.framework.TestCase;
++import junit.framework.TestSuite;
++
++import net.sf.ehcache.CacheManager;
++import net.sourceforge.stripes.mock.MockHttpServletRequest;
++
++import org.apache.wiki.PageManager;
++import org.apache.wiki.TestEngine;
++import org.apache.wiki.WikiContext;
++import org.apache.wiki.WikiPage;
++import org.apache.wiki.WikiSession;
++import org.apache.wiki.api.exceptions.EncryptionException;
++import org.apache.wiki.api.exceptions.WikiException;
++import org.apache.wiki.api.filters.BasicPageFilter;
++import org.apache.wiki.api.filters.PageFilter;
++import org.apache.wiki.auth.Users;
++import org.apache.wiki.crypto.CryptoProvider;
++import org.apache.wiki.crypto.PBECryptoProvider;
++import org.apache.wiki.providers.WikiPageProvider;
++
++import java.io.File;
++import java.io.FileWriter;
++import java.util.List;
++import java.util.Properties;
++
++/**
++ * Test the filter {@link org.apache.wiki.filters.EncryptedPageFilter}.
++ *
++ * @since 2.10.2
++ */
++public class EncryptedPageFilterTest extends TestCase {
++    TestEngine testEngine;
++    File cryptoFile;
++    Properties cryptoProps;
++
++    protected void setUp() throws Exception
++    {
++        super.setUp();
++        Properties props = TestEngine.getTestProperties();
++        CacheManager.getInstance().removeAllCaches();
++        TestEngine.emptyWorkDir();
++        testEngine = new TestEngine(props);
++    }
++
++    /**
++     * Returns a {@link WikiContext} for the given page, with user {@link org.apache.wiki.auth.Users#JANNE} logged in.
++     *
++     * @param page given {@link WikiPage}.
++     * @return {@link WikiContext} associated to given {@link WikiPage}.
++     * @throws org.apache.wiki.api.exceptions.WikiException problems while logging in.
++     */
++    WikiContext getAdminBasedWikiContextFor( WikiPage page ) throws WikiException
++    {
++        MockHttpServletRequest request = testEngine.newHttpRequest();
++        WikiSession session =  WikiSession.getWikiSession( testEngine, request );
++        testEngine.getAuthenticationManager().login( session,
++                request,
++                Users.ADMIN,
++                Users.ADMIN_PASS );
++
++        return new WikiContext( testEngine, request, page );
++    }
++
++    public void testEncryptAndDecrypt() throws Exception {
++
++        String ENDLINE = "\n";
++        String src = "test content"+ENDLINE;
++        String expected = "test content"+ENDLINE;
++
++        testEngine.saveText( "Test", src );
++        WikiPage page = testEngine.getPage( "Test", WikiPageProvider.LATEST_VERSION );
++        WikiContext context = getAdminBasedWikiContextFor(page);
++        String res = testEngine.getHTML( context, page );
++        assertEquals( expected, res );
++
++        String text = testEngine.getPageManager().getPageText( page.getName(), WikiPageProvider.LATEST_VERSION  );
++//        System.out.println("text=" + text);
++//        assertEquals( "test content\r\n", text );
++        assertNotSame( expected, text );
++        assertEquals( "jO9mPV4LSAsOBL9cV9mQlxcrZ9lip7lKTqNduAeViww=)FEJ*$Y@LSDFKJ@V", text );
++        text = testEngine.getHTML(page.getName());
++//        System.out.println("text=" + text);
++        assertEquals( expected, text );
++
++        String change = "Text changed"+ENDLINE;
++        String expectedChange = "Text changed"+ENDLINE;
++        testEngine.saveText( context, change);
++        String textChanged = testEngine.getHTML( page.getName() );
++        assertEquals(expectedChange, textChanged);
++    }
++
++    public static Test suite() {
++        return new TestSuite( EncryptedPageFilterTest.class );
++    }
++}
 Index: jspwiki-war/src/test/resources/filters.xml
 ===================================================================
 --- jspwiki-war/src/test/resources/filters.xml	(revision 1622810)
