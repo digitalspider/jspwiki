@@ -15,7 +15,8 @@ patchfiles="$CODEDIR/patches/*.patch"
 for PATCH in $patchfiles
 do
    echo "### Applying $PATCH START ###"
-   patch -p0 < $PATCH
+#   patch -p0 < $PATCH
+   svn patch $PATCH
    echo "### Applying $PATCH DONE ###"
 done
 
