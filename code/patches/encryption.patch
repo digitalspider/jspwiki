@@ -989,13 +989,14 @@ Index: jspwiki-war/src/main/resources/ini/jspwiki_module.xml
 ===================================================================
 --- jspwiki-war/src/main/resources/ini/jspwiki_module.xml	(revision 1622810)
 +++ jspwiki-war/src/main/resources/ini/jspwiki_module.xml	(working copy)
-@@ -55,9 +55,18 @@
+@@ -55,9 +55,19 @@
        <minVersion>2.4</minVersion>
     </plugin>
  
 +   <plugin class="org.apache.wiki.plugin.EncryptPlugin">
 +      <author>David Vittor</author>
 +      <minVersion>2.10.2</minVersion>
++       <alias>Encrypt</alias>
 +   </plugin>
 +
     <filter class="org.apache.wiki.filters.SpamFilter">
@@ -1286,6 +1287,44 @@ Index: jspwiki-war/src/test/java/org/apache/wiki/filters/EncryptedPageFilterTest
 +        return new TestSuite( EncryptedPageFilterTest.class );
 +    }
 +}
+Index: jspwiki-war/src/test/java/org/apache/wiki/ui/admin/beans/PluginBeanTest.java
+===================================================================
+--- jspwiki-war/src/test/java/org/apache/wiki/ui/admin/beans/PluginBeanTest.java	(revision 1622810)
++++ jspwiki-war/src/test/java/org/apache/wiki/ui/admin/beans/PluginBeanTest.java	(working copy)
+@@ -44,6 +44,7 @@
+                                 "<h4>Plugins</h4>" +
+                                 "<table border=\"1\">" +
+                                   "<tr><th>Name</th><th>Alias</th><th>Author</th><th>Notes</th></tr>" +
++                                  "<tr><td>EncryptPlugin</td><td>Encrypt</td><td>David Vittor</td><td></td></tr>" +
+                                   "<tr><td>IfPlugin</td><td>If</td><td>Janne Jalkanen</td><td></td></tr>" +
+                                   "<tr><td>Note</td><td></td><td>Janne Jalkanen</td><td></td></tr>" +
+                                   "<tr><td>SamplePlugin</td><td>samplealias</td><td>Janne Jalkanen</td><td></td></tr>" +
+Index: jspwiki-war/src/test/java/org/apache/wiki/util/XmlUtilTest.java
+===================================================================
+--- jspwiki-war/src/test/java/org/apache/wiki/util/XmlUtilTest.java	(revision 1622810)
++++ jspwiki-war/src/test/java/org/apache/wiki/util/XmlUtilTest.java	(working copy)
+@@ -40,10 +40,10 @@
+     
+     public void testParseFromClasspath() {
+     	List< Element > elements = XmlUtil.parse( ModuleManager.PLUGIN_RESOURCE_LOCATION, "/modules/plugin" );
+-    	assertEquals( 4, elements.size() ); // 2 on src/main/resources, another 2 on src/test/resources
++    	assertEquals( 5, elements.size() ); // 2 on src/main/resources, another 2 on src/test/resources
+     	
+     	elements = XmlUtil.parse( ModuleManager.PLUGIN_RESOURCE_LOCATION, "/modules/filter" );
+-     	assertEquals( 1, elements.size() );
++     	assertEquals( 2, elements.size() );
+      	
+      	elements = XmlUtil.parse( ModuleManager.PLUGIN_RESOURCE_LOCATION, "/modules/editor" );
+      	assertEquals( 1, elements.size() );
+@@ -61,7 +61,7 @@
+      	assertEquals( 0, elements.size() );
+      	
+      	elements = XmlUtil.parse( ClassUtil.MAPPINGS, "/classmappings/mapping" );
+-     	assertEquals( 19, elements.size() );
++     	assertEquals( 21, elements.size() );
+     }
+     
+     public void testParseFromStream() throws FileNotFoundException {
 Index: jspwiki-war/src/test/resources/filters.xml
 ===================================================================
 --- jspwiki-war/src/test/resources/filters.xml	(revision 1622810)
