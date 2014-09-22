@@ -161,7 +161,7 @@ Index: jspwiki-war/src/main/java/org/apache/wiki/crypto/BaseCryptoProvider.java
 ===================================================================
 --- jspwiki-war/src/main/java/org/apache/wiki/crypto/BaseCryptoProvider.java	(revision 0)
 +++ jspwiki-war/src/main/java/org/apache/wiki/crypto/BaseCryptoProvider.java	(working copy)
-@@ -0,0 +1,88 @@
+@@ -0,0 +1,124 @@
 +
 +package org.apache.wiki.crypto;
 +
@@ -188,15 +188,26 @@ Index: jspwiki-war/src/main/java/org/apache/wiki/crypto/BaseCryptoProvider.java
 +public class BaseCryptoProvider implements CryptoProvider {
 +    public Logger log = Logger.getLogger(this.getClass());
 +
++    /** The "jspwiki.cryptoFile" property key */
 +    public static final String PROP_CRYPTO_FILE = "jspwiki.cryptoFile";
 +
++    /** The internal {@link org.apache.wiki.WikiEngine} */
 +    private WikiEngine m_engine;
++    /** The properties loaded from the "jspwiki.cryptoFile" */
 +    Properties cryptoProperties = new Properties();
 +
++    /**
++     * initialise the BaseCrpytoProvider, by setting the WikiEngine, and CryptoProperties, as
++     * defined in {@link this.getCryptoProperties}.
++     * @param engine WikiEngine to own this provider
++     * @param properties A set of properties used to initialize this provider
++     * @throws NoRequiredPropertyException
++     * @throws IOException
++     */
 +    @Override
 +    public void initialize(WikiEngine engine, Properties properties) throws NoRequiredPropertyException, IOException {
 +        m_engine = engine;
-+        cryptoProperties = getCryptoProperties();
++        cryptoProperties = getCryptoProperties(properties);
 +    }
 +
 +    /**
@@ -215,13 +226,27 @@ Index: jspwiki-war/src/main/java/org/apache/wiki/crypto/BaseCryptoProvider.java
 +        return content;
 +    }
 +
++    /**
++     * Returns the simpleName of this class
++     * @return
++     */
 +    @Override
 +    public String getProviderInfo() {
 +        return getClass().getSimpleName();
 +    }
 +
-+    protected Properties getCryptoProperties() throws IOException, FileNotFoundException {
-+        Properties properties = m_engine.getWikiProperties();
++    /**
++     * Get the cryptoProperties as defined within the property parameter {@link this.PROP_CRYPTO_FILE}.
++     * The default is {@link org.apache.wiki.crypto.CryptoProvider:DEFAULT_CRYPTO_FILENAME}
++     * "jspwiki-crypto.properties".
++     * The location of the file can be an absolute path or something that can be found by
++     * {@link org.apache.wiki.util.PropertyReader:locateClassPathResource}.
++     * @param properties the properties which contain the "jspwiki.cryptoFile" key entry.
++     * @return the cryptoProperties loaded from the cryptoFile
++     * @throws IOException
++     * @throws FileNotFoundException
++     */
++    protected Properties getCryptoProperties(Properties properties) throws IOException, FileNotFoundException {
 +        Properties cryptoProperties = new Properties();
 +        String filename = TextUtil.getStringProperty(properties, PROP_CRYPTO_FILE, CryptoProvider.DEFAULT_CRYPTO_FILENAME);
 +        File f = new File(filename);
@@ -238,10 +263,21 @@ Index: jspwiki-war/src/main/java/org/apache/wiki/crypto/BaseCryptoProvider.java
 +        return cryptoProperties;
 +    }
 +
++    /**
++     * Get additional properties from the cryptoProperties file, with a null default value.
++     * @param key the property key
++     * @return the property value
++     */
 +    public String getExtraCryptoProperty(String key) {
 +        return getExtraCryptoProperty(key,null);
 +    }
 +
++    /**
++     * Get additional properties from the cryptoProperties file.
++     * @param key the property key
++     * @param defaultValue the default value to return
++     * @return the property value
++     */
 +    public String getExtraCryptoProperty(String key, String defaultValue) {
 +        String result = (String)cryptoProperties.get(key);
 +        if (StringUtils.isNotEmpty(result)) {
@@ -254,7 +290,7 @@ Index: jspwiki-war/src/main/java/org/apache/wiki/crypto/CryptoManager.java
 ===================================================================
 --- jspwiki-war/src/main/java/org/apache/wiki/crypto/CryptoManager.java	(revision 0)
 +++ jspwiki-war/src/main/java/org/apache/wiki/crypto/CryptoManager.java	(working copy)
-@@ -0,0 +1,71 @@
+@@ -0,0 +1,76 @@
 +/*
 +    Licensed to the Apache Software Foundation (ASF) under one
 +    or more contributor license agreements.  See the NOTICE file
@@ -277,21 +313,19 @@ Index: jspwiki-war/src/main/java/org/apache/wiki/crypto/CryptoManager.java
 +
 +import org.apache.log4j.Logger;
 +import org.apache.wiki.WikiEngine;
-+import org.apache.wiki.api.exceptions.FilterException;
 +import org.apache.wiki.api.exceptions.WikiException;
 +import org.apache.wiki.util.ClassUtil;
-+import org.apache.wiki.util.PropertyReader;
 +import org.apache.wiki.util.TextUtil;
 +
-+import java.io.File;
-+import java.io.FileNotFoundException;
-+import java.io.FileReader;
 +import java.io.IOException;
-+import java.io.InputStream;
 +import java.util.Properties;
 +
 +/**
-+ * Class for managing crypto services
++ * Class for managing the {@link org.apache.wiki.crypto.CryptoProvider}.
++ *
++ * The cryptoProvider is read from the {@link this.PROP_CRYPTO_PROVIDER} property "jspwiki.cryptoProvider".
++ *
++ * The default cyptoProvider is {@link org.apache.wiki.crypto.BaseCryptoProvider}.
 + *
 + * @since 2.10.2
 + */
@@ -300,7 +334,7 @@ Index: jspwiki-war/src/main/java/org/apache/wiki/crypto/CryptoManager.java
 +    private static final Logger log = Logger.getLogger(CryptoManager.class);
 +
 +    public static final String PROP_CRYPTO_PROVIDER = "jspwiki.cryptoProvider";
-+    public static final String DEFAULT_CRYPTO_PROVIDER = "org.apache.wiki.crypto.PBECryptoProvider";
++    public static final String DEFAULT_CRYPTO_PROVIDER = "org.apache.wiki.crypto.BaseCryptoProvider";
 +
 +    private CryptoProvider cryptoProvider;
 +    private WikiEngine m_engine;
@@ -309,6 +343,13 @@ Index: jspwiki-war/src/main/java/org/apache/wiki/crypto/CryptoManager.java
 +        m_engine = engine;
 +    }
 +
++    /**
++     * Get the CryptoProvider by className as specified in the properties file.
++     * This uses the {@link org.apache.wiki.util.ClassUtil:getMappedObject} to find the class.
++     * The CryptoProvider instance then calls {@link this.initialise}
++     * @return the configured CryptoProvider
++     * @throws WikiException if the class cannot be found or initialised or any other issue
++     */
 +    public CryptoProvider getCryptoProvider() throws WikiException {
 +        Properties properties = m_engine.getWikiProperties();
 +        String providerClassName = TextUtil.getStringProperty(properties, PROP_CRYPTO_PROVIDER, DEFAULT_CRYPTO_PROVIDER);
@@ -316,7 +357,7 @@ Index: jspwiki-war/src/main/java/org/apache/wiki/crypto/CryptoManager.java
 +        try {
 +            cryptoProvider = (CryptoProvider) ClassUtil.getMappedObject(providerClassName);
 +            if (cryptoProvider != null) {
-+                cryptoProvider.initialize(m_engine, m_engine.getWikiProperties());
++                cryptoProvider.initialize(m_engine, properties);
 +            }
 +        } catch (WikiException e) {
 +            throw new WikiException("Could not create cryptoProvider for "+PROP_CRYPTO_PROVIDER+"="+providerClassName+". "+e.getMessage());
@@ -330,7 +371,7 @@ Index: jspwiki-war/src/main/java/org/apache/wiki/crypto/CryptoProvider.java
 ===================================================================
 --- jspwiki-war/src/main/java/org/apache/wiki/crypto/CryptoProvider.java	(revision 0)
 +++ jspwiki-war/src/main/java/org/apache/wiki/crypto/CryptoProvider.java	(working copy)
-@@ -0,0 +1,55 @@
+@@ -0,0 +1,58 @@
 +/*
 +    Licensed to the Apache Software Foundation (ASF) under one
 +    or more contributor license agreements.  See the NOTICE file
@@ -363,9 +404,12 @@ Index: jspwiki-war/src/main/java/org/apache/wiki/crypto/CryptoProvider.java
 + * @since 2.10.2
 + */
 +public interface CryptoProvider extends WikiProvider {
++    /** The default filename of the cryptoProperties file is  "jspwiki-crypto.properties" */
 +    public static final String DEFAULT_CRYPTO_FILENAME = "jspwiki-crypto.properties";
 +
++    /** Get additional properties from the cryptoProperties, with defaultValue null */
 +    public String getExtraCryptoProperty(String key);
++    /** Get additional properties from the cryptoProperties, with the given defaultValue */
 +    public String getExtraCryptoProperty(String key, String defaultValue);
 +
 +    /**
@@ -390,7 +434,7 @@ Index: jspwiki-war/src/main/java/org/apache/wiki/crypto/PBECryptoProvider.java
 ===================================================================
 --- jspwiki-war/src/main/java/org/apache/wiki/crypto/PBECryptoProvider.java	(revision 0)
 +++ jspwiki-war/src/main/java/org/apache/wiki/crypto/PBECryptoProvider.java	(working copy)
-@@ -0,0 +1,181 @@
+@@ -0,0 +1,211 @@
 +/*
 +    Licensed to the Apache Software Foundation (ASF) under one
 +    or more contributor license agreements.  See the NOTICE file
@@ -501,10 +545,16 @@ Index: jspwiki-war/src/main/java/org/apache/wiki/crypto/PBECryptoProvider.java
 +    private int iterationCount = DEFAULT_CRYPTO_ITERATIONCOUNT;
 +    private String algorithm = DEFAULT_CRYPTO_ALGORITHM;
 +
++    /**
++     * Initialise the PBECryptoProperties with values within the cryptoProperties file.
++     * @param engine WikiEngine to own this provider
++     * @param properties A set of properties used to initialize this provider
++     * @throws NoRequiredPropertyException
++     * @throws IOException
++     */
 +    @Override
 +    public void initialize(WikiEngine engine, Properties properties) throws NoRequiredPropertyException, IOException {
 +        super.initialize(engine,properties);
-+        Properties cryptoProperties = getCryptoProperties();
 +        base64 = TextUtil.getBooleanProperty(cryptoProperties, PROP_CRYPTO_BASE64, DEFAULT_CRYPTO_BASE64);
 +        salt = TextUtil.getStringProperty(cryptoProperties,PROP_CRYPTO_SALT, DEFAULT_CRYPTO_SALT);
 +        blockSize = TextUtil.getIntegerProperty(cryptoProperties, PROP_CRYPTO_BLOCKSIZE, DEFAULT_CRYPTO_BLOCKSIZE);
@@ -515,6 +565,13 @@ Index: jspwiki-war/src/main/java/org/apache/wiki/crypto/PBECryptoProvider.java
 +        }
 +    }
 +
++    /**
++     * Encrypt content using the {@link this.getCipher} cipher.
++     * @param key the secret password
++     * @param content the content to encrypt
++     * @return the encrypted content
++     * @throws EncryptionException
++     */
 +    @Override
 +    public byte[] encrypt(char[] key, byte[] content) throws EncryptionException {
 +        try {
@@ -529,6 +586,13 @@ Index: jspwiki-war/src/main/java/org/apache/wiki/crypto/PBECryptoProvider.java
 +        }
 +    }
 +
++    /**
++     * Decrypt content using the {@link this.getCipher} cipher.
++     * @param key the secret password
++     * @param content the content to decrypt
++     * @return the decrypted content
++     * @throws EncryptionException
++     */
 +    @Override
 +    public byte[] decrypt(char[] key, byte[] content) throws EncryptionException {
 +        try {
@@ -543,6 +607,13 @@ Index: jspwiki-war/src/main/java/org/apache/wiki/crypto/PBECryptoProvider.java
 +        }
 +    }
 +
++    /**
++     * A PBE base cipher generated with {@link javax.crypto.spec.PBEKeySpec}
++     * @param key the secret password
++     * @param mode the mode encrypt or decrypt
++     * @return the Cipher in the correct mode
++     * @throws EncryptionException
++     */
 +    private Cipher getCipher(char[] key, int mode) throws EncryptionException {
 +        Cipher cipher = null;
 +        try {
@@ -564,6 +635,9 @@ Index: jspwiki-war/src/main/java/org/apache/wiki/crypto/PBECryptoProvider.java
 +        }
 +    }
 +
++    /**
++     * {@inheritDoc}
++     */
 +    public String getExtraCryptoProperty(String key, String defaultValue) {
 +        if (key!=null && !key.equals(PROP_CRYPTO_SALT)) {
 +            return super.getExtraCryptoProperty(key,defaultValue);
@@ -576,7 +650,7 @@ Index: jspwiki-war/src/main/java/org/apache/wiki/filters/EncryptedPageFilter.jav
 ===================================================================
 --- jspwiki-war/src/main/java/org/apache/wiki/filters/EncryptedPageFilter.java	(revision 0)
 +++ jspwiki-war/src/main/java/org/apache/wiki/filters/EncryptedPageFilter.java	(working copy)
-@@ -0,0 +1,185 @@
+@@ -0,0 +1,225 @@
 +/*
 +    Licensed to the Apache Software Foundation (ASF) under one
 +    or more contributor license agreements.  See the NOTICE file
@@ -597,6 +671,7 @@ Index: jspwiki-war/src/main/java/org/apache/wiki/filters/EncryptedPageFilter.jav
 + */
 +package org.apache.wiki.filters;
 +
++import org.apache.commons.lang.StringUtils;
 +import org.apache.log4j.Logger;
 +import org.apache.wiki.WikiContext;
 +import org.apache.wiki.WikiEngine;
@@ -610,19 +685,20 @@ Index: jspwiki-war/src/main/java/org/apache/wiki/filters/EncryptedPageFilter.jav
 +/**
 + * This class uses a {@link org.apache.wiki.crypto.CryptoProvider} to encrypt and decrypt page content.
 + *
-+ * The default crypto provider for this filter is {@link org.apache.wiki.crypto.PBECryptoProvider}.
++ * The default crypto provider for this filter is {@link org.apache.wiki.crypto.BaseCryptoProvider}
++ * which does no encryption at all.
 + *
 + * An alternative crypto provider can be set by setting <b>jspwiki.cryptoProvider</b> in
-+ * <i>filters.xml</i>
++ * <i>jspwiki-custom.properties</i>.
 + *
 + * The encryption happens on a {@link org.apache.wiki.api.filters.BasicPageFilter:preSave()} and
 + * decryption on {@link org.apache.wiki.api.filters.BasicPageFilter:preTranslate()}.
 + * One page is encrypted at a time, as saved or loaded.
 + * See also: {@link org.apache.wiki.PageManager} for when filters are executed.
 + *
-+ * The configuration expects <b>jspwiki.cryptoFile</b> in <i>filters.xml</i> which is the absolute
-+ * path to a file specifying the other cryptographic properties. Ideally this file should be well
-+ * protected, and read only.
++ * The configuration expects <b>jspwiki.cryptoFile</b> in <i>jspwiki-custom.properties</i> which
++ * is the absolute path to a file specifying the other cryptographic properties.
++ * Ideally this file should be well protected, and read only.
 + *
 + * <div style="color: red>WARNING: Once you use this <b>EncryptedPageFilter</b> there is no going
 + * back. Make sure you know what you are doing!</div>
@@ -630,8 +706,8 @@ Index: jspwiki-war/src/main/java/org/apache/wiki/filters/EncryptedPageFilter.jav
 + * In future there are plans to be able to export your wiki content, so you can import it back with
 + * with a simple {@link org.apache.wiki.providers.FileSystemProvider}. This does not exist yet!!
 + *
-+ * Properties within the "jspwiki.cryptoFile" include:
-+ * Note: All values here must be a minimum of 10 characters long!
++ * Additional properties within the "jspwiki.cryptoFile" include:
++ * <b>Note: All values here must be a minimum of 10 characters long!</b>
 + * <table>
 + *     <th>
 + *         <td>property</td>
@@ -653,6 +729,18 @@ Index: jspwiki-war/src/main/java/org/apache/wiki/filters/EncryptedPageFilter.jav
 + *         <td>A value appended to the end of the encrypted string. Should be a random string of minimum 10 length</td>
 + *         <td>A random string</td>
 + *     </tr>
++ *     <tr>
++ *         <td>pagename.prefix</td>
++ *         <td>Only pages that start with this value are encrypted. If this is enabled you
++ *         will not be able to rename these pages outside this prefix.</td>
++ *         <td>empty string</td>
++ *     </tr>
++ *     <tr>
++ *         <td>pagename.suffix</td>
++ *         <td>Only pages that end with this value are encrypted. If this is enabled you
++ *         will not be able to rename these pages outside this suffix.</td>
++ *         <td>empty string</td>
++ *     </tr>
 + * </table>
 + *
 + * @since 2.10.2
@@ -662,17 +750,24 @@ Index: jspwiki-war/src/main/java/org/apache/wiki/filters/EncryptedPageFilter.jav
 +    private static final Logger log = Logger.getLogger(EncryptedPageFilter.class);
 +
 +    private static final int MIN_LENGTH = 10;
++    private static final int MIN_LENGTH_PAGENAME = 2;
 +    public static final String PROP_CRYPTO_KEY = "crypto.key";
 +    public static final String PROP_CRYPTO_PREFIX = "crypto.prefix";
 +    public static final String PROP_CRYPTO_SUFFIX = "crypto.suffix";
++    public static final String PROP_PAGENAME_PREFIX = "pagename.prefix";
++    public static final String PROP_PAGENAME_SUFFIX = "pagename.suffix";
 +
 +    private static final String DEFAULT_CRYPTO_PREFIX = "A@I@#!)KDAS)$:";
 +    private static final String DEFAULT_CRYPTO_SUFFIX = ")FEJ*$Y@LSDFKJ@V";
++    private static final String DEFAULT_PAGENAME_PREFIX = "";
++    private static final String DEFAULT_PAGENAME_SUFFIX = "";
 +
 +    private CryptoProvider cryptoProvider;
 +    private char[] key;
 +    private String prefix = DEFAULT_CRYPTO_PREFIX;
 +    private String suffix = DEFAULT_CRYPTO_SUFFIX;
++    private String pagenamePrefix = DEFAULT_PAGENAME_PREFIX;
++    private String pagenameSuffix = DEFAULT_PAGENAME_SUFFIX;
 +
 +    @Override
 +    public void initialize(WikiEngine engine, Properties properties) throws FilterException {
@@ -703,27 +798,34 @@ Index: jspwiki-war/src/main/java/org/apache/wiki/filters/EncryptedPageFilter.jav
 +        if (suffix.length() < MIN_LENGTH) {
 +            throw new FilterException("The property value "+PROP_CRYPTO_SUFFIX+"="+ suffix + " is to short. Min Length required is " + MIN_LENGTH);
 +        }
++        pagenamePrefix = cryptoProvider.getExtraCryptoProperty(PROP_PAGENAME_PREFIX, DEFAULT_PAGENAME_PREFIX);
++        if (pagenamePrefix.length() > 0 && pagenamePrefix.length() < MIN_LENGTH_PAGENAME) {
++            throw new FilterException("The property value "+PROP_PAGENAME_PREFIX+"="+ pagenamePrefix + " is to short. Min Length required is " + MIN_LENGTH_PAGENAME);
++        }
++        pagenameSuffix = cryptoProvider.getExtraCryptoProperty(PROP_PAGENAME_SUFFIX, DEFAULT_PAGENAME_SUFFIX);
++        if (pagenameSuffix.length() > 0 && pagenameSuffix.length() < MIN_LENGTH_PAGENAME) {
++            throw new FilterException("The property value "+PROP_PAGENAME_SUFFIX+"="+ pagenameSuffix + " is to short. Min Length required is " + MIN_LENGTH_PAGENAME);
++        }
 +    }
 +
 +    /**
-+     * Given a crypto provider and a key, encrypt the content provided on preSave.
-+     * The actual implementation adds a prefix to the raw content, and a suffix to the encrypted content.
++     * Given the initialised cryptoProvider and a key, encrypt the content provided on preSave.
++     * The actual implementation adds a prefix to the raw content, and a suffix to the encrypted
++     * content.
++     * This calls {@link this.enableEncrpytion} to determine if encryption should occur
++     * If the cryptoProvier is of class {@link org.apache.wiki.crypto.BaseCryptoProvider}, we
++     * do nothing here, just return the content.
 +     */
 +    @Override
 +    public String preSave(WikiContext wikiContext, String content) throws FilterException {
 +        try {
 +            if (enableEncrpytion(wikiContext)) {
-+                boolean addPrefixSuffix = true;
 +                if (cryptoProvider.getClass().getName().equals(new BaseCryptoProvider().getClass().getName())) {
-+                    addPrefixSuffix = false;
++                    return super.preSave(wikiContext, content);
 +                }
-+                if (addPrefixSuffix) {
-+                    content = prefix + content;
-+                }
++                content = prefix + content;
 +                content = new String(cryptoProvider.encrypt(key, content.getBytes()));
-+                if (addPrefixSuffix) {
-+                    content += suffix;
-+                }
++                content += suffix;
 +            }
 +        } catch (Exception e) {
 +            throw new FilterException("Error encrypting content. ERROR="+e+" "+e.getMessage());
@@ -732,7 +834,7 @@ Index: jspwiki-war/src/main/java/org/apache/wiki/filters/EncryptedPageFilter.jav
 +    }
 +
 +    /**
-+     * Given a crypto provider and a key, decrypt the content provided on preTranslate.
++     * Given the initialised cryptoProvider and a key, decrypt the content provided on preTranslate.
 +     * If the suffix does not match the provided suffix, we assume the page was not encrypted and
 +     * return the content.
 +     * Otherwise we trim the suffix, decrypt, remove the prefix and return the plain content.
@@ -757,8 +859,20 @@ Index: jspwiki-war/src/main/java/org/apache/wiki/filters/EncryptedPageFilter.jav
 +        return result;
 +    }
 +
++    /**
++     * Validate the
++     * @param wikiContext
++     * @return
++     */
 +    private boolean enableEncrpytion(WikiContext wikiContext) {
-+        return true;
++        boolean result = false;
++        String pageName = wikiContext.getPage().getName();
++        if (StringUtils.isNotEmpty(pageName)) {
++            if (pageName.startsWith(pagenamePrefix) && pageName.endsWith(pagenameSuffix)) {
++                result = true;
++            }
++        }
++        return result;
 +    }
 +
 +}
@@ -857,9 +971,9 @@ Index: jspwiki-war/src/main/resources/ini/jspwiki.properties
  
 +#
 +#  The implementing class of the Cryptographic Provider (CryptoProvider) for jspwiki.
-+#  Default is PBECryptoProvider, but you can reduce this to BaseCryptoProvider.
++#  Default is BaseCryptoProvider, but you can enhance this to use PBECryptoProvider.
 +#
-+jspwiki.cryptoProvider = org.apache.wiki.crypto.PBECryptoProvider
++jspwiki.cryptoProvider = org.apache.wiki.crypto.BaseCryptoProvider
 +#
 +#  The location of the jspwiki cryptographic settings file. This file should be protected at all
 +#  costs, as it contains the passwords and settings for your encryption and decryption ciphers.
@@ -900,7 +1014,7 @@ Index: jspwiki-war/src/test/java/org/apache/wiki/crypto/PBECryptoProviderTest.ja
 ===================================================================
 --- jspwiki-war/src/test/java/org/apache/wiki/crypto/PBECryptoProviderTest.java	(revision 0)
 +++ jspwiki-war/src/test/java/org/apache/wiki/crypto/PBECryptoProviderTest.java	(working copy)
-@@ -0,0 +1,74 @@
+@@ -0,0 +1,75 @@
 +/*
 +    Licensed to the Apache Software Foundation (ASF) under one
 +    or more contributor license agreements.  See the NOTICE file
@@ -923,13 +1037,9 @@ Index: jspwiki-war/src/test/java/org/apache/wiki/crypto/PBECryptoProviderTest.ja
 +
 +import junit.framework.TestCase;
 +
-+import net.sf.ehcache.CacheManager;
-+
 +import org.apache.wiki.TestEngine;
 +import org.apache.wiki.api.exceptions.EncryptionException;
 +
-+import java.io.File;
-+import java.io.FileWriter;
 +import java.util.Properties;
 +
 +/**
@@ -948,6 +1058,11 @@ Index: jspwiki-war/src/test/java/org/apache/wiki/crypto/PBECryptoProviderTest.ja
 +        m_engine = new TestEngine(props);
 +    }
 +
++    /**
++     * Test the {@link org.apache.wiki.crypto.PBECryptoProvider} with some sample content,
++     * both the encrypt and decrypt methods.
++     * @throws Exception
++     */
 +    public void testEncryptAndDecrypt() throws Exception {
 +        PBECryptoProvider provider = new PBECryptoProvider();
 +        provider.initialize(m_engine,m_engine.getWikiProperties());
@@ -1015,7 +1130,7 @@ Index: jspwiki-war/src/test/java/org/apache/wiki/filters/EncryptedPageFilterTest
 ===================================================================
 --- jspwiki-war/src/test/java/org/apache/wiki/filters/EncryptedPageFilterTest.java	(revision 0)
 +++ jspwiki-war/src/test/java/org/apache/wiki/filters/EncryptedPageFilterTest.java	(working copy)
-@@ -0,0 +1,116 @@
+@@ -0,0 +1,155 @@
 +/*
 +    Licensed to the Apache Software Foundation (ASF) under one
 +    or more contributor license agreements.  See the NOTICE file
@@ -1043,23 +1158,14 @@ Index: jspwiki-war/src/test/java/org/apache/wiki/filters/EncryptedPageFilterTest
 +import net.sf.ehcache.CacheManager;
 +import net.sourceforge.stripes.mock.MockHttpServletRequest;
 +
-+import org.apache.wiki.PageManager;
 +import org.apache.wiki.TestEngine;
 +import org.apache.wiki.WikiContext;
 +import org.apache.wiki.WikiPage;
 +import org.apache.wiki.WikiSession;
-+import org.apache.wiki.api.exceptions.EncryptionException;
 +import org.apache.wiki.api.exceptions.WikiException;
-+import org.apache.wiki.api.filters.BasicPageFilter;
-+import org.apache.wiki.api.filters.PageFilter;
 +import org.apache.wiki.auth.Users;
-+import org.apache.wiki.crypto.CryptoProvider;
-+import org.apache.wiki.crypto.PBECryptoProvider;
 +import org.apache.wiki.providers.WikiPageProvider;
 +
-+import java.io.File;
-+import java.io.FileWriter;
-+import java.util.List;
 +import java.util.Properties;
 +
 +/**
@@ -1068,9 +1174,8 @@ Index: jspwiki-war/src/test/java/org/apache/wiki/filters/EncryptedPageFilterTest
 + * @since 2.10.2
 + */
 +public class EncryptedPageFilterTest extends TestCase {
++    TestEngine pbeTestEngine;
 +    TestEngine testEngine;
-+    File cryptoFile;
-+    Properties cryptoProps;
 +
 +    protected void setUp() throws Exception
 +    {
@@ -1078,17 +1183,22 @@ Index: jspwiki-war/src/test/java/org/apache/wiki/filters/EncryptedPageFilterTest
 +        Properties props = TestEngine.getTestProperties();
 +        CacheManager.getInstance().removeAllCaches();
 +        TestEngine.emptyWorkDir();
++        pbeTestEngine = new TestEngine(props);
++
++        props.setProperty("jspwiki.cryptoProvider", "org.apache.wiki.crypto.BaseCryptoProvider");
 +        testEngine = new TestEngine(props);
 +    }
 +
 +    /**
-+     * Returns a {@link WikiContext} for the given page, with user {@link org.apache.wiki.auth.Users#JANNE} logged in.
++     * Returns a {@link WikiContext} for the given page and testEngine,
++     * with user {@link org.apache.wiki.auth.Users#ADMIN} logged in.
 +     *
++     * @param testEngine give {@link org.apache.wiki.TestEngine}
 +     * @param page given {@link WikiPage}.
 +     * @return {@link WikiContext} associated to given {@link WikiPage}.
 +     * @throws org.apache.wiki.api.exceptions.WikiException problems while logging in.
 +     */
-+    WikiContext getAdminBasedWikiContextFor( WikiPage page ) throws WikiException
++    WikiContext getAdminBasedWikiContextFor( TestEngine testEngine, WikiPage page ) throws WikiException
 +    {
 +        MockHttpServletRequest request = testEngine.newHttpRequest();
 +        WikiSession session =  WikiSession.getWikiSession( testEngine, request );
@@ -1100,31 +1210,75 @@ Index: jspwiki-war/src/test/java/org/apache/wiki/filters/EncryptedPageFilterTest
 +        return new WikiContext( testEngine, request, page );
 +    }
 +
-+    public void testEncryptAndDecrypt() throws Exception {
-+
++    /**
++     * Run a simple test storing content to a page, using the {@link org.apache.wiki.TestEngine}
++     * with {@link org.apache.wiki.crypto.BaseCryptoProvider} configured.
++     * @throws Exception
++     */
++    public void testBaseEncryptAndDecrypt() throws Exception {
 +        String ENDLINE = "\n";
 +        String src = "test content"+ENDLINE;
 +        String expected = "test content"+ENDLINE;
 +
 +        testEngine.saveText( "Test", src );
 +        WikiPage page = testEngine.getPage( "Test", WikiPageProvider.LATEST_VERSION );
-+        WikiContext context = getAdminBasedWikiContextFor(page);
++        WikiContext context = getAdminBasedWikiContextFor(testEngine,page);
 +        String res = testEngine.getHTML( context, page );
 +        assertEquals( expected, res );
 +
 +        String text = testEngine.getPageManager().getPageText( page.getName(), WikiPageProvider.LATEST_VERSION  );
-+//        System.out.println("text=" + text);
-+//        assertEquals( "test content\r\n", text );
-+        assertNotSame( expected, text );
-+        assertEquals( "jO9mPV4LSAsOBL9cV9mQlxcrZ9lip7lKTqNduAeViww=)FEJ*$Y@LSDFKJ@V", text );
++        assertEquals( "test content\r"+ENDLINE, text );
 +        text = testEngine.getHTML(page.getName());
-+//        System.out.println("text=" + text);
 +        assertEquals( expected, text );
 +
 +        String change = "Text changed"+ENDLINE;
 +        String expectedChange = "Text changed"+ENDLINE;
 +        testEngine.saveText( context, change);
 +        String textChanged = testEngine.getHTML( page.getName() );
++        assertEquals(expectedChange, textChanged);
++    }
++
++    /**
++     * Run a simple test storing content to two pages, "Test" and "secureTest",
++     * using the {@link org.apache.wiki.TestEngine}
++     * with {@link org.apache.wiki.crypto.PBECryptoProvider} configured.
++     * The "Test" page content should remain the same, while the "secureTest" content gets encrypted.
++     * @throws Exception
++     */
++    public void testPBEEncryptAndDecrypt() throws Exception {
++
++        String ENDLINE = "\n";
++        String src = "test content"+ENDLINE;
++        String expected = "test content"+ENDLINE;
++
++        pbeTestEngine.saveText( "Test", src );
++        pbeTestEngine.saveText( "secureTest", src );
++        WikiPage pageTest = pbeTestEngine.getPage( "Test", WikiPageProvider.LATEST_VERSION );
++        WikiPage pageSecure = pbeTestEngine.getPage( "secureTest", WikiPageProvider.LATEST_VERSION );
++        WikiContext contextTest = getAdminBasedWikiContextFor(pbeTestEngine,pageTest);
++        WikiContext contextSecure = getAdminBasedWikiContextFor(pbeTestEngine,pageSecure);
++        String resTest = pbeTestEngine.getHTML( contextTest, pageTest );
++        String resSecure = pbeTestEngine.getHTML( contextSecure, pageSecure );
++        assertEquals( expected, resTest );
++        assertEquals( expected, resSecure );
++
++        String text = pbeTestEngine.getPageManager().getPageText( pageTest.getName(), WikiPageProvider.LATEST_VERSION  );
++        assertEquals( "test content\r"+ENDLINE, text );
++        text = testEngine.getHTML(pageTest.getName());
++        assertEquals( expected, text );
++        text = pbeTestEngine.getPageManager().getPageText( pageSecure.getName(), WikiPageProvider.LATEST_VERSION  );
++        assertNotSame( expected, text );
++        assertEquals( "jO9mPV4LSAsOBL9cV9mQlxcrZ9lip7lKTqNduAeViww=)FEJ*$Y@LSDFKJ@V", text );
++        text = pbeTestEngine.getHTML(pageSecure.getName());
++        assertEquals( expected, text );
++
++        String change = "Text changed"+ENDLINE;
++        String expectedChange = "Text changed"+ENDLINE;
++        pbeTestEngine.saveText( contextTest, change);
++        pbeTestEngine.saveText( contextSecure, change);
++        String textChanged = pbeTestEngine.getHTML( pageTest.getName() );
++        assertEquals(expectedChange, textChanged);
++        textChanged = pbeTestEngine.getHTML( pageSecure.getName() );
 +        assertEquals(expectedChange, textChanged);
 +    }
 +
@@ -1158,5 +1312,21 @@ Index: jspwiki-war/src/test/resources/jspwiki-crypto.properties
 ===================================================================
 --- jspwiki-war/src/test/resources/jspwiki-crypto.properties	(revision 0)
 +++ jspwiki-war/src/test/resources/jspwiki-crypto.properties	(working copy)
-@@ -0,0 +1 @@
+@@ -0,0 +1,2 @@
 +crypto.key=xyzpwd123456
++pagename.prefix=secure
+\ No newline at end of file
+Index: jspwiki-war/src/test/resources/jspwiki-custom.properties
+===================================================================
+--- jspwiki-war/src/test/resources/jspwiki-custom.properties	(revision 1622810)
++++ jspwiki-war/src/test/resources/jspwiki-custom.properties	(working copy)
+@@ -72,6 +72,9 @@
+ #mail.smtp.account =
+ #mail.smtp.password =
+ 
++# for EncryptedPageFilterTest
++jspwiki.cryptoProvider = org.apache.wiki.crypto.PBECryptoProvider
++
+ # for JDBC tests
+ server.port=9321
+ server.database.0=file:target/jspwiki.hsqldb
