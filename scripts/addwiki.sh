@@ -34,7 +34,7 @@ TOMCATENV=`echo $1 | cut -d '-' -f 2`
 WIKIFILE=wikis-$TOMCATENV.txt
 TOMCATURL=$TOMCATENV.
 if [ "$TOMCATENV" == "live" ] ; then
-  unset $TOMCATURL;
+  unset TOMCATURL
 fi
 
 EXISTSWIKI=`grep "^$WIKINAME$" $BASEDIR/$WIKIFILE | wc -l`
