@@ -3,10 +3,7 @@
 #CATALINA_HOME=/opt/tomcat/tomcat
 DSDIR=/opt/digitalspider
 BASEDIR=$DSDIR/jspwiki
-CONFIGDIR=$BASEDIR/config
-DATADIR=$BASEDIR/data
 WIKISDIR=$BASEDIR/wikis
-WEBAPPS=$CATALINA_HOME/webapps
 
 #Ensure this script is run as spider
 if [ `whoami` != 'spider' ] ; then
@@ -14,20 +11,42 @@ if [ `whoami` != 'spider' ] ; then
         exit 1;
 fi
 
-if [ $# -ne 1 ] ; then
-  echo "Usage $0 <wikiname>"
+if [ $# -ne 2 ] ; then
+  echo "Usage $0 <tomcat> <wikiname>"
   exit 1;
 fi
 
-WIKINAME=$1
-EXISTSWIKI=`grep "^$WIKINAME$" $BASEDIR/activewikis.txt | wc -l`
+CATALINA_HOME=/opt/tomcat/$1
+if [ ! -d $CATALINA_HOME ] ; then
+  echo "Tomcat $1 does not exist";
+  exit 1;
+fi
+WIKINAME=$2
+WIKIHOME=$WIKISDIR/$WIKINAME
+WIKIDEST=$CATALINA_HOME/webapps/$WIKINAME
+WEBLIBDIR=$WIKIDEST/WEB-INF/lib/
+if [ ! -d $WIKIHOME ] ; then
+  echo "The folder $WIKIHOME does not exist";
+  exit 1;
+fi
+if [ ! -d $WIKIDEST ] ; then
+  echo "The folder $WIKIDEST does not exist";
+  exit 1;
+fi
+
+TOMCATENV=`echo $1 | cut -d '-' -f 2`
+WIKIFILE=wikis-$TOMCATENV.txt
+
+EXISTSWIKI=`grep "^$WIKINAME$" $BASEDIR/$WIKIFILE | wc -l`
 if [ $EXISTSWIKI -ne 1 ] ; then
-  echo "There is no wiki called $WIKINAME"
+  echo "There is no wiki called $WIKINAME in $BASEDIR/$WIKIFILE"
   exit 1;
 fi
-cat $BASEDIR/activewikis.txt > $BASEDIR/activewikis.txt.~
-cat $BASEDIR/activewikis.txt.~ | grep -v "^$WIKINAME$" > $BASEDIR/activewikis.txt
 
-rm -rf $CONFIGDIR/$WIKINAME
-rm -rf $DATADIR/$WIKINAME
-rm -rf $WIKISDIR/$WIKINAME
+cat $BASEDIR/$WIKIFILE > $BASEDIR/$WIKIFILE.~
+cat $BASEDIR/$WIKIFILE.~ | grep -v "^$WIKINAME$" > $BASEDIR/$WIKIFILE
+
+#mv $WIKIHOME $WIKISDIR/archive/ # no not get rid of content yet
+rm -rf $WIKIDEST*
+
+echo "$WIKINAME wiki deleted"
