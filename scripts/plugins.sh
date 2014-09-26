@@ -3,6 +3,7 @@
 DSDIR=/opt/digitalspider
 BASEDIR=$DSDIR/jspwiki
 PLUGINSDIR=$DSDIR/jspwiki-plugins
+WIKISDIR=$BASEDIR/wikis
 
 #Ensure this script is run as spider
 if [ `whoami` != 'spider' ] ; then
