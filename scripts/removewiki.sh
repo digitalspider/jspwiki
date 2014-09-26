@@ -8,6 +8,12 @@ DATADIR=$BASEDIR/data
 WIKISDIR=$BASEDIR/wikis
 WEBAPPS=$CATALINA_HOME/webapps
 
+#Ensure this script is run as spider
+if [ `whoami` != 'spider' ] ; then
+        echo "ERROR: This command needs to be run as spider user. You are: `whoami`"
+        exit 1;
+fi
+
 if [ $# -ne 1 ] ; then
   echo "Usage $0 <wikiname>"
   exit 1;

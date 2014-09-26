@@ -1,0 +1,37 @@
+#!/bin/bash
+#CATALINA_HOME=/opt/tomcat/tomcat
+DSDIR=/opt/digitalspider
+BASEDIR=$DSDIR/jspwiki
+
+#Ensure this script is run as spider
+if [ `whoami` != 'spider' ] ; then
+        echo "ERROR: This command needs to be run as spider user. You are: `whoami`"
+        exit 1;
+fi
+
+if [ $# -lt 1 ] ; then
+  echo "Usage $0 <tomcat> [-m]"
+  exit 1;
+fi
+
+CATALINA_HOME=/opt/tomcat/$1
+if [ ! -d $CATALINA_HOME ] ; then
+  echo "Tomcat $1 does not exist";
+  exit 1;
+fi
+
+if [ "$3" == "-m" ] ; then
+  # Run maven
+  cd $SRCDIR
+  mvn -Dmaven.test.skip=true package
+  cd $BASEDIR
+fi
+
+TOMCATENV=`echo $1 | cut -d '-' -f 2`
+WIKIFILE=wikis-$TOMCATENV.txt
+
+while read WIKINAME; do
+  $BASEDIR/scripts/deploy.sh $1 $WIKINAME
+done < $BASEDIR/$WIKIFILE
+
+#sudo service tomcat restart
