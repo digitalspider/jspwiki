@@ -1,33 +1,119 @@
-%%error
-This is an idea in progress
-%%
+[{TableOfContents}]
+\\
+|| Written by | [David Vittor]
+|| Date | 23-Oct-2014
+|| Plugin Version | 0.1
+|| Wiki Versions | 2.10.1+
+|| Demo | [PanelPluginDemo]
+|| Source | [https://github.com/digitalspider/jspwiki-plugins/tree/master/PanelPlugin]
+|| Issues | [https://github.com/digitalspider/jspwiki-plugins/issues]
+|| Plugin | [PanelPlugin-0.1.jar]
+|| Dependencies | [panel-resources.zip]
+
+!!Overview
+Create a panel on the page with a header and footer, and customised CSS.
 
 Develop a panel like this:
 {{{
-[{Panel id='abc' name='xyz' cssid='123' header='Header Text' body='
+[{Panel id='123' classid='blue' header='Header Text' footer='Footer Text'
+
 ...other wiki content...
-'}]
+}]
 }}}
 
 This would output the following:
 {{{
-<link rel="stylesheet" type="text/css" href="panel/css/base.css">
-<link rel="stylesheet" type="text/css" href="panel/css/123.css">
-<div id="abc" name="xyz" class="wikipanel wikipanel-123">
-  <div id="wikipanel-header-abc" class="wikipanel-header">Header Text</div>
-  <div id="wikipanel-logo-abc" class="wikipanel-logo"/>
-  <div id="wikipanel-content-abc" id="wikipanel-content">
+<head>
+<script type="text/javascript" src="panel/panel.js"></script>
+<link rel="stylesheet" type="text/css" href="panel/panel.css">
+<link rel="stylesheet" type="text/css" href="panel/blue.css">
+</head>
+
+<div class="panel panel-blue" id="panel-blue-123">
+  <div class="header header-blue" id="header-blue-123">Header Text</div>
+  <div class="content content-blue" id="content-blue-123">
      ...other wiki content...
   </div>
-  <div id="wikipanel-footer-abc" id="wikipanel-footer">
+  <div class="footer footer-blue" id="footer-blue-123">Footer Text</div>
 </div>
 }}}
-* __base.css__ would define styles for wikipanel, wikipanel-header, wikipanel-logo, wikipanel_body & wikipanel_footer
-* __123.css__ would define styles for wikipanel-123 and all subcomponents (e.g. "wikipanel-123 wikipanel-content")
+* __panel.css__ would define styles for panel-default, header-default, content-default, & footer-default
+* __blue.css__ would define styles for panel-blue and all subcomponents (e.g. "header-blue, content-blue & footer-blue")
 
 The content of the css files would control:
 * width/height (ideally responsive)
-* colours (text color, background color, etc)
+* colours (text color, background color, border)
 * margins and padding
+* border
 * fonts
 * layouts (float, valign, etc)
+
+All of these values can be overridden in the custom blue.css, and some can also be overridden by parameters in the panel. For CSS design, you can use: [http://codepen.io/]
+
+Here is the contents of the __panel.css__, which can be copied to create different panel class styles:
+{{{
+panel-default {
+  border: solid thin;
+  float: left;
+  margin: 2px;
+}
+.header-default {
+  background: #D2D2D2;
+  padding: 5px;
+}
+.content-default {
+  padding: 5px;
+}
+.footer-default {
+  background: #D2D2D2;
+  padding: 5px;
+}
+}}}
+
+!!Usage
+* Place the __jar__ file into your <tomcatDir>/webapps/JSPWiki/WEB-INF/lib/ directory
+* Unzip the __panel-resources.zip__ file into your <tomcatDir>/webapps/JSPWiki/ directory
+* Restart your tomcat
+* Add the following to your page:
+{{{
+[{Panel id='1' header='Header'
+
+Some content
+}]
+}}}
+
+
+!!Parameters
+|| Param || Description || Default
+|| id | the unique id for this panel, used for controlling the javascript element id | 
+|| classid | the class id for this panel | 'default'
+|| width | set the width for this panel | 
+|| minwidth | set the min width for this panel | 
+|| height | set the height for this panel | 
+|| minheight | set the min height for this panel | 
+|| colorpanelbg | set the background color for the whole panel | 
+|| colorheaderbg | set the background color for the header of the panel | #D2D2D2
+|| colorcontentbg | set the background color for the content of the panel | 
+|| colorfooterbg | set the background color for the footer of the panel | #D2D2D2
+|| colorpaneltext | set the text color for the whole panel | 
+|| colorheadertext | set the text color for the header of the panel | 
+|| colorcontenttext | set the text color for the content of the panel | 
+|| colorfootertext | set the text color for the footer of the panel | 
+|| colorborder | set the border color of the panel | 
+|| border | set the border css of the panel | solid thin
+|| padding | set the padding css of the panel | 5px
+|| margin | set the margin css of the panel | 2px
+|| corners | set the border radius css of the panel |  
+|| debug | boolean, if true set log level info | false
+
+!!Properties
+|| Property || Description || Default
+||  |  | 
+
+
+!!Release History
+v0.1
+* initial Release
+
+----
+[Plugins]

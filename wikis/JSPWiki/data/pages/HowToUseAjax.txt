@@ -11,3 +11,6 @@ And [http://javapapers.com/ajax/getting-started-with-ajax-using-java/]
 service Loader [http://stackoverflow.com/questions/251336/is-something-similar-to-serviceloader-in-java-1-5]
 
 Service Registry [http://docs.oracle.com/javase/1.5.0/docs/api/index.html?javax/imageio/spi/ServiceRegistry.html]
+
+----
+[HowToPage]

@@ -1,3 +1,27 @@
 See [https://issues.apache.org/jira/browse/JSPWIKI-205]
 
 And [MailList|http://mail-archives.apache.org/mod_mbox/jspwiki-dev/201408.mbox/date]
+
+{{{
+    <filter>
+      <class>org.apache.wiki.filters.EncryptedPageFilter</class>
+      <param>
+          <name>jspwiki.cryptoFile</name>
+          <value>/path/to/file/jspwiki-crypto.properties</value>
+      </param>
+    </filter>
+}}}
+
+{{{
+#
+#  The implementing class of the Cryptographic Provider (CryptoProvider) for jspwiki.
+#  Default is BaseCryptoProvider, but you can enhance it to PBECryptoProvider.
+#
+jspwiki.cryptoProvider = org.apache.wiki.crypto.BaseCryptoProvider
+#
+#  The location of the jspwiki cryptographic settings file. This file should be protected at all
+#  costs, as it contains the passwords and settings for your encryption and decryption ciphers.
+#  WARNING: If this file is lost, or altered, you will no longer be able to read any wiki content.
+#
+#jspwiki.cryptoFile = /usr/local/etc/jspwiki-crypto.properties
+}}}

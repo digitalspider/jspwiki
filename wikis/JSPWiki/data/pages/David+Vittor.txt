@@ -4,43 +4,52 @@ This is the page of David Vittor, the originator of Digital Spider.
 
 Hi All,
 
-I'm a senior Java developer, located in Sydney, Australia, and am intersted in getting involved in this project. I have a pretty good background with Confluence (my 2nd brain).
+I'm a senior [Java|https://www.oracle.com/java/index.html] developer, located in [Sydney, Australia|https://www.google.com.au/maps/@-33.7969235,150.9224326,10z], and am intersted in getting involved in this project. I have a pretty good background with [Confluence Wiki|https://www.atlassian.com/software/confluence].
 
 Not quite sure how I can help just yet, or how much time I can devote, but I am looking forward to see how I can volunteer to make this project better.
 
-I've just managed to get the source code to compile, put it in eclispe, deployed it to Tomcat, and built the TreePlugin.
+I've managed to get the source code, to compile it, edit it in both [Eclipse|https://www.eclipse.org/] and [Android Studio|https://developer.android.com/sdk/installing/studio.html], deployed it to [Tomcat|http://tomcat.apache.org/], and built a few plugins.
 
-!!Testing the RPCSamplePlugin
-[{RPCSamplePlugin}]
-
-Whoohoo now I have my own JSPWiki running on localhost!
-
-To set this up on __OpenShift__ See [https://jspwiki-wiki.apache.org/Wiki.jsp?page=JSPWikiPublications]. Now I just need to migrate my current mediawiki to jspwiki.
+!Hosting
+* I have launched my JSPWiki here - [http://digitalspider.com.au/JSPWiki]
+* Although I plan to create another one on __OpenShift__ See [https://jspwiki-wiki.apache.org/Wiki.jsp?page=JSPWikiPublications] and migrate my current mediawiki to jspwiki.
 
 !Plugins
-Plugin links:
-* Old Plugins = [http://www.ecyrd.com/JSPWiki/wiki/JSPWikiPlugins] (need converting/upgrading)
-* Core Plugins = [https://jspwiki-wiki.apache.org/Wiki.jsp?page=JSPWikiCorePlugins]
-* Contributed Plugins = [https://jspwiki-wiki.apache.org/Wiki.jsp?page=ContributedPlugins]
-* DigitalSpider Plugins = [http://digitalspider.com.au/JSPWiki/Wiki.jsp?page=Plugins]
+Check out my list of plugins here:
+* [http://digitalspider.com.au/JSPWiki/Wiki.jsp?page=Plugins]
 
-See [Plugins]
+Some of these are available here:
+* [HitCountPlugin]
+* [GoComicsPlugin]
+* [ImageGalleryPlugin]
+* [VideoPlugin]
+* [JiraPlugin]
+* [JDBCPlugin]
+* [PluginListPlugin]
+* [PanelPlugin]
+* [AutoLinkHtmlFilter]
+* [EncryptedPageFilter]
+* FileSystemProvider - persist page attributes as page properties. Completed in [https://issues.apache.org/jira/browse/JSPWIKI-856]
 
-See [Filters]
-
-See [PageProviders]
-
+!Roadmap
+On my "to do soon" roadmap is:
+* AttachmentsPlugin - lists attachments on the page even in readonly mode (so you dont have to use the tab).
+* PasswordPlugin - a way to encrypt passwords and place them in the wiki
+* VideoEmbedFilter - automatically embed [https://www.youtube.com/watch?v=_ndfyn0y9B0] or [http://vimeo.com/30998268]
+* JDBCProvider - persist content to a database - Hibernate ORM
+* OrientDBPageProvider - graph database [http://www.orientechnologies.com/orientdb/] or [http://www.neo4j.org/]
 
 !Advanced
-Some of the more advanced things I would love to see in this wiki are:
+Some of the other things I would love to see in this wiki are:
 * UI for Administration pages - a way to edit the jspwiki.properties through a form
 * OSGi for plugins - [Apache Felix iPOJO|http://felix.apache.org/documentation/subprojects/apache-felix-ipojo.html]
 * UI for ACL controls - Edit/View controls for users / groups
 * CKEditor as a WYSIWIG editor
+* Hibernate / Jackrabbit / Database storage
 * Spaces
 * Macro/Plugin browser
-* Theme/Skin management - [https://jspwiki-wiki.apache.org/Wiki.jsp?page=CleanBlue] or the haddock template [https://jspwiki-wiki.apache.org/Wiki.jsp?page=HADDOCK%20Template]
-* Mobile UI - [https://issues.apache.org/jira/browse/JSPWIKI-835]
+* Theme/Skin management
+* Mobile UI
 
 !Other JIRA issues
 * logo and favicon - [https://issues.apache.org/jira/browse/JSPWIKI-363]
@@ -48,3 +57,14 @@ Some of the more advanced things I would love to see in this wiki are:
 * support for niceedit - [https://issues.apache.org/jira/browse/JSPWIKI-362]
 * jQuery - [https://issues.apache.org/jira/browse/JSPWIKI-811]
 * Wiki on a Stick - [https://issues.apache.org/jira/browse/JSPWIKI-828]
+
+!Apache Committer
+I've been selected to become an apache committer, on the JSP project. Very exciting!
+To do this I need to do follow the following sites:
+#: [http://www.apache.org/licenses/#clas]
+#: [http://www.apache.org/dev/new-committers-guide.html]
+#: [http://www.apache.org/dev/committers.html]
+
+Also here is a list of available committers:
+* [http://people.apache.org/committer-index.html#unlistedclas]
+* [https://id.apache.org/info/MailAlias.txt]

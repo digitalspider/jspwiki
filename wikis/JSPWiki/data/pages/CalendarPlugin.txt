@@ -1,0 +1,7 @@
+[http://code.google.com/p/jquery-events-calendar/downloads/list]
+
+[https://developers.google.com/google-apps/calendar/v1/developers_guide_javascript]
+
+[http://codecanyon.net/item/jquery-flat-event-calendar-responsive-timeline/6039142]
+
+[http://jquery-plugins.net/kalendar-jquery-event-calendar-plugin]

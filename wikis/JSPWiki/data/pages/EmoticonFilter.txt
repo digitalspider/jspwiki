@@ -10,6 +10,8 @@ Work in progess
 This filter automatically converts Emoticon expressions into icons, based on:
 * [https://www.gnu.org/software/hurd/smileys.html]
 * [http://www.webappers.com/2012/11/09/72-free-emoticons-simlies-icons-for-chat-applications/]
+Envato:
+* [http://graphicriver.net/item/mini-emoticons/1194357?WT.ac=search_thumb&WT.oss_phrase=emoticons&WT.oss_rank=27&WT.z_author=isaacgrant]
 
 || Written by | [David Vittor]
 || Date | 09-Sep-2014

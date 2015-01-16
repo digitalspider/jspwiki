@@ -3,6 +3,19 @@ This is a series of pages where I experiment with things.
 !!Test SampleAjaxPlugin
 [{SampleAjaxPlugin}]
 
+!!PanelPlugin
+[{Panel id=123 class=abc header='Header' footer='Footer' showedit=true
+
+Content can go in here\\
+Isn't this fantastic!
+}]
+
+!!EncryptMe
+[{EncryptPlugin
+
+This content is under lock and key!
+}]
+
 !!JDBCPlugin
 
 [{DB sql='select * from jiraissue limit 5' src=jira header=0 debug=true

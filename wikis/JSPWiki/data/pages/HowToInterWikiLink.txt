@@ -1,2 +1,38 @@
-See: [https://jspwiki-wiki.apache.org/Wiki.jsp?page=InterWiki]
+* See: [https://jspwiki-wiki.apache.org/Wiki.jsp?page=InterWiki]
+* See: [JSPWiki:InterWiki]
 
+InterWikiLink is a way to link to other Wikis.  On this Wiki, the syntax is simply:
+
+{{[[name of the wiki:page on that wiki]}}
+
+So, for example, if you want to link to the original Wiki on Portland Pattern Repository, just say: [WikiWikiWeb:WelcomeVisitors], or to TWiki, say [TWiki:Main].
+
+A list of available InterWiki links can also be seen on the [SystemInfo] page.
+
+{{{
+To get the below list use:
+[{$interwikilinks}]
+}}}
+|| __Available InterWiki links__
+| [{$interwikilinks}]
+
+
+!!Adding a new InterWikiLink
+To add a new InterWiki link, add to your __jspwiki.properties__ configuration file the following syntax
+{{{
+jspwiki.interWikiRef.WIKINAME = WIKIURL?page=%s
+}}}
+For example:
+{{{
+#  Wikipedia, a Wiki encyclopedia!
+jspwiki.interWikiRef.Wikipedia = [http://www.wikipedia.com/wiki/%s]
+
+#  Google, the ubiquitous search engine.
+jspwiki.interWikiRef.Google = [http://www.google.com/search?q=%s]
+
+# DSWiki documentation
+jspwiki.interWikiRef.DSWiki = [http://digitalspider.com.au/JSPWiki/Wiki.jsp?page=%s]
+}}}
+
+----
+[HowToPage]

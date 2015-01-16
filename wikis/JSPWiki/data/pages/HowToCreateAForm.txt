@@ -1,11 +1,14 @@
-See [https://jspwiki-wiki.apache.org/Wiki.jsp?page=WikiFormsPlugin]
+See [JSPWiki:WikiFormsPlugin]
 
 %%error
 In version 2.10.1 there are some errors on this page.
 
-Fixed in [https://issues.apache.org/jira/browse/JSPWIKI-855]
+Fixed in [JIRA:855]
 
-See this on v2.10.2-svn-6 here: [http://digitalspider.com.au/testwiki/Wiki.jsp?page=Page%203]
+See this on v2.10.2-svn-6 here: [testwiki:Page%203]
 
 However there still seems to be an issue with the __InputTextArea__
 %%
+
+----
+[HowToPage]

@@ -13,3 +13,6 @@ Create a marketplace at [http://plugins.digitalspider.com.au]
 Create a demo space at [http://jspwiki-demo.digitalspider.com.au]
 
 Can include JSPWiki, TWiki, Mediawiki, WordPress, Confluence, Jira, Bugzilla, Firefox, Chrome, Salesforce, Android App?, iPhone app?, other... 
+
+----
+[HowToPage]

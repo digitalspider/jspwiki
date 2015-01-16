@@ -1,0 +1,58 @@
+This is a demo of [PanelPlugin]
+
+[{Panel id='1' header='Header' footer='Footer' width='100%' border='0' margin='0'
+
+This is has width=100% border=0 and margin=0
+}]
+\\
+
+[{Panel id='2' header='Header 2'
+
+This is my content
+}]
+[{Panel id='3' header='Header 3' padding='10px'
+
+This has padding=10px
+}]
+[{Panel id='4' header='Header 4' corners='10px'
+
+This has corners=10px
+}]
+[{Panel id='5' classid='default' header='Header 5' margin='10px' corners='20px'
+
+This has margin=10px \\
+and corners=20px
+}]
+[{Panel id='6' classid='blue' header='Header 6'
+
+This has classid='blue'
+}]
+[{Panel id='7' classid='undefined' header='Header 7' margin='10px'
+
+This has margin=10px
+with classid='undefined'
+}]
+
+[{Panel id='10' header='Header' footer='Footer' colorpanelbg='lightgreen' colorheadertext='white' width='100%' border='0' margin='0'
+
+This is the content
+
+[{Panel id='11' header='Header' colorheaderbg='pink' colorpanelbg='pink' width='50%' border='0' margin='0'
+
+Develop a panel like this:
+{{{
+[{Panel id='abc' classid='123' header='Header Text' footer='Footer Text'
+
+...other wiki content...
+}]
+}}}
+
+}]
+[{Panel id='12' header='Header' colorheaderbg='lightyellow' colorpanelbg='lightyellow' width='50%' border='0' margin='0'
+
+Deep content 2
+}]
+
+}]
+\\
+

@@ -19,6 +19,7 @@ Here is a list of custom plugins we have developed:
 * [PluginListPlugin] - [PluginListPluginDemo]
 * [JDBCPlugin] - [JDBCPluginDemo]
 * [SampleAjaxPlugin] - [SampleAjaxPluginDemo]
+* [PanelPlugin] - [PanelPluginDemo]
 
 !!In Progress Plugins
 
@@ -26,10 +27,11 @@ Here is a list of custom plugins we have developed:
 * [LikePlugin] - [LikePluginDemo]
 * [VotePlugin] - [VotePluginDemo]
 * [AttachmentPlugin] - [AttachmentPluginDemo]
-* [PanelPlugin] - [PanelPluginDemo]
 * [AddPagePlugin] - [AddPagePluginDemo]
 * [espeakPlugin] - [espeakPluginDemo]
-* [PasswordPlugin] - [PasswordPluginDemo] 
+* [PasswordPlugin] - [PasswordPluginDemo]
+* [CalendarPlugin] - [CalendarPluginDemo]
+* [DatePickerPlugin] - [DatePickerPluginDemo]
 * [EmbedPagePlugin]
 * [WikiStatsPlugin]
 * [RemoteExecPlugin]

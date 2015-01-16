@@ -5,6 +5,15 @@
 Here is a list of custom templates we have developed:
 * None
 
+Sky mega menu - [http://codecanyon.net/item/sky-mega-menu/full_screen_preview/5136673]
+
+[http://voky.com.ua/showcase/sky-mega-menu/]
+
+[http://www.berriart.com/sidr]
+
+[http://demos.jquerymobile.com/1.3.0-beta.1/docs/demos/panels/panel-nav-form.html]
+
+
 !!Others Templates
 Templates developed by others that are available through our site:
 * Haddock - [https://jspwiki-wiki.apache.org/Wiki.jsp?page=HADDOCK%20Template]
