@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<groups>
+  <group name="TestGroup1422024827304" creator="SecurityVerifier" created="2015.01.24 at 01:53:47:305 EST" modifier="SecurityVerifier" lastModified="2015.01.24 at 01:53:47:305 EST">
+    <member principal="TestUser" />
+  </group>
+</groups>

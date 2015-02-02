@@ -1,3 +1,6 @@
-JSPWiki
+fixmysamsung
+paytofree
+bitcoin
 mywiki
 testwiki
+JSPWiki

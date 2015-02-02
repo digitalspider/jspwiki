@@ -25,5 +25,7 @@ jspwiki.basicAttachmentProvider.storageDir=C:/digitalspider/jspwiki/testwiki/dat
 #jspwiki.templateDir=haddock
 }}}
 
+Once you have installed multiple wikis, configure [HowToInterWikiLink]
+
 ----
 [HowToPage]

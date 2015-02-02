@@ -48,5 +48,7 @@ cp $PLUGINSDIR/PluginListPlugin/dist/*.jar $WEBLIBDIR/
 cp -rf $PLUGINSDIR/JDBCPlugin/etc/*.jar -d $WEBLIBDIR/
 cp $PLUGINSDIR/JDBCPlugin/dist/*.jar $WEBLIBDIR/
 cp $PLUGINSDIR/AutoLinkHtmlFilter/dist/*.jar $WEBLIBDIR/
+cp $PLUGINSDIR/PanelPlugin/dist/*.jar $WEBLIBDIR/
+unzip -q -o $PLUGINSDIR/PanelPlugin/dist/*.zip -d $WIKIDEST/
 
 echo "Plugins Deployed to $WIKINAME"

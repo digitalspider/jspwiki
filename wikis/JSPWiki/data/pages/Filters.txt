@@ -1,6 +1,6 @@
 !!Processes
-* [https://jspwiki-wiki.apache.org/Wiki.jsp?page=WikiFilters]
-* [HowToWriteAFilter] - [https://jspwiki-wiki.apache.org/Wiki.jsp?page=HowToWriteAFilter]
+* [JSPWiki:WikiFilters]
+* [HowToWriteAFilter] - [JSPWiki:HowToWriteAFilter]
 
 !!Our Filters
 Here is a list of custom filters we have developed:

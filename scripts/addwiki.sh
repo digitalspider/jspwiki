@@ -50,7 +50,7 @@ mkdir -p $WIKIHOME
 cp -r $WIKISDIR/wikitemplate/* $WIKIHOME
 cat $WIKISDIR/wikitemplate/conf/jspwiki-custom-linux.properties | sed s/@WIKINAME@/$WIKINAME/g | sed s/@TOMCATURL@/$TOMCATURL/g > $WIKIHOME/conf/jspwiki-custom-linux.properties
 cat $WIKISDIR/wikitemplate/conf/jspwiki-custom-windows.properties | sed s/@WIKINAME@/$WIKINAME/g | sed s/@TOMCATURL@/$TOMCATURL/g > $WIKIHOME/conf/jspwiki-custom-windows.properties
-ln -s $DSDIR/dscore/downloads/jspwiki/2.10.1/JSPWiki.war $WIKIDEST.war
+ln -s $DSDIR/dscore/downloads/jspwiki/2.10.2-svn12/JSPWiki.war $WIKIDEST.war
 
 echo "$WIKINAME wiki configured"
 sleep 10;

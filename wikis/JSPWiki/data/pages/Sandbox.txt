@@ -1,5 +1,11 @@
 This is a series of pages where I experiment with things.
 
+!!Wiki Version
+{{{
+[{$jspwikiversion}]
+}}}
+[{$jspwikiversion}]
+
 !!Test SampleAjaxPlugin
 [{SampleAjaxPlugin}]
 

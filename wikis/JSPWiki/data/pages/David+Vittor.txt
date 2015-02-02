@@ -12,11 +12,11 @@ I've managed to get the source code, to compile it, edit it in both [Eclipse|htt
 
 !Hosting
 * I have launched my JSPWiki here - [http://digitalspider.com.au/JSPWiki]
-* Although I plan to create another one on __OpenShift__ See [https://jspwiki-wiki.apache.org/Wiki.jsp?page=JSPWikiPublications] and migrate my current mediawiki to jspwiki.
+* Although I plan to create another one on __OpenShift__ See [JSPWiki:JSPWikiPublications] and migrate my current mediawiki to jspwiki.
 
 !Plugins
 Check out my list of plugins here:
-* [http://digitalspider.com.au/JSPWiki/Wiki.jsp?page=Plugins]
+* [DSWiki:Plugins]
 
 Some of these are available here:
 * [HitCountPlugin]
@@ -29,7 +29,7 @@ Some of these are available here:
 * [PanelPlugin]
 * [AutoLinkHtmlFilter]
 * [EncryptedPageFilter]
-* FileSystemProvider - persist page attributes as page properties. Completed in [https://issues.apache.org/jira/browse/JSPWIKI-856]
+* FileSystemProvider - persist page attributes as page properties. Completed in [JIRA:856]
 
 !Roadmap
 On my "to do soon" roadmap is:
@@ -52,11 +52,11 @@ Some of the other things I would love to see in this wiki are:
 * Mobile UI
 
 !Other JIRA issues
-* logo and favicon - [https://issues.apache.org/jira/browse/JSPWIKI-363]
-* login improve - [https://issues.apache.org/jira/browse/JSPWIKI-257]
-* support for niceedit - [https://issues.apache.org/jira/browse/JSPWIKI-362]
-* jQuery - [https://issues.apache.org/jira/browse/JSPWIKI-811]
-* Wiki on a Stick - [https://issues.apache.org/jira/browse/JSPWIKI-828]
+* logo and favicon - [JIRA:363]
+* login improve - [JIRA:257]
+* support for niceedit - [JIRA:362]
+* jQuery - [JIRA:811]
+* Wiki on a Stick - [JIRA:828]
 
 !Apache Committer
 I've been selected to become an apache committer, on the JSP project. Very exciting!
