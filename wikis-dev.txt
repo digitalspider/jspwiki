@@ -1,6 +1,6 @@
 fixmysamsung
 paytofree
 bitcoin
+JSPWiki
 mywiki
 testwiki
-JSPWiki

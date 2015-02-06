@@ -35,19 +35,30 @@ if [ ! -d $WIKIDEST ] ; then
 fi
 
 # Deploy all plugins
+rm -rf $WEBLIBDIR/MyPlugin-*.jar
 cp $PLUGINSDIR/MyPlugin/dist/*.jar $WEBLIBDIR/
+rm -rf $WEBLIBDIR/TreePlugin-*.jar
 cp $PLUGINSDIR/TreePlugin/dist/*.jar $WEBLIBDIR/
+rm -rf $WEBLIBDIR/HitCountPlugin-*.jar
 cp $PLUGINSDIR/HitCountPlugin/dist/*.jar $WEBLIBDIR/
+rm -rf $WEBLIBDIR/GoComicsPlugin-*.jar
 cp $PLUGINSDIR/GoComicsPlugin/dist/*.jar $WEBLIBDIR/
-unzip -q -o $PLUGINSDIR/ImageGalleryPlugin/dist/*.zip -d $WIKIDEST/
+rm -rf $WEBLIBDIR/ImageGalleryPlugin-*.jar
 cp $PLUGINSDIR/ImageGalleryPlugin/dist/*.jar $WEBLIBDIR/
+unzip -q -o $PLUGINSDIR/ImageGalleryPlugin/dist/*.zip -d $WIKIDEST/
+rm -rf $WEBLIBDIR/VideoPlugin-*.jar
 cp $PLUGINSDIR/VideoPlugin/dist/*.jar $WEBLIBDIR/
+rm -rf $WEBLIBDIR/JiraPlugin-*.jar
 cp $PLUGINSDIR/JiraPlugin/dist/*.jar $WEBLIBDIR/
 unzip -q -o $PLUGINSDIR/JiraPlugin/dist/*.zip -d $WEBLIBDIR/
+rm -rf $WEBLIBDIR/PluginListPlugin-*.jar
 cp $PLUGINSDIR/PluginListPlugin/dist/*.jar $WEBLIBDIR/
-cp -rf $PLUGINSDIR/JDBCPlugin/etc/*.jar -d $WEBLIBDIR/
+rm -rf $WEBLIBDIR/JDBCPlugin-*.jar
 cp $PLUGINSDIR/JDBCPlugin/dist/*.jar $WEBLIBDIR/
+cp -rf $PLUGINSDIR/JDBCPlugin/etc/*.jar -d $WEBLIBDIR/
+rm -rf $WEBLIBDIR/AutoLinkHtmlFilter-*.jar
 cp $PLUGINSDIR/AutoLinkHtmlFilter/dist/*.jar $WEBLIBDIR/
+rm -rf $WEBLIBDIR/PanelPlugin-*.jar
 cp $PLUGINSDIR/PanelPlugin/dist/*.jar $WEBLIBDIR/
 unzip -q -o $PLUGINSDIR/PanelPlugin/dist/*.zip -d $WIKIDEST/
 
