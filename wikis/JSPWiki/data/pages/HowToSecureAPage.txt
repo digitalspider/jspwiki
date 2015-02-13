@@ -1,5 +1,5 @@
 To properly understand this, you need to read:
-* [https://jspwiki-wiki.apache.org/Wiki.jsp?page=Wiki.Admin.Security]
+* [JSPWiki:Wiki.Admin.Security]
 
 If you have an open wiki, ie anyone can edit page, you can restrict access to single page by adding the following code:
 {{{

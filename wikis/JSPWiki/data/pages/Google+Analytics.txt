@@ -1,3 +1,5 @@
+[{ALLOW view Authenticated}]
+
 Add [Google Analytics|http://www.google.com/analytics/] header:
 {{{
 <!-- Google Analytics -->
@@ -13,3 +15,6 @@ Add [Google Analytics|http://www.google.com/analytics/] header:
 }}}
 
 To your JSPWiki at __JSPWiki/templates/default/localheader.jsp__. This file is included by __commonheader.jsp__
+
+----
+[TechDocs]

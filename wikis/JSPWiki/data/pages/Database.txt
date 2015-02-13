@@ -1,3 +1,5 @@
+[{ALLOW view Authenticated}]
+
 !! MySQL
 ! URL Connection
 {{{
@@ -20,3 +22,6 @@ and w.id in (
 )
 order by w.datemodified desc
 }}}
+
+----
+[TechDocs]

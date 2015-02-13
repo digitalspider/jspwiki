@@ -1,3 +1,5 @@
+[{ALLOW view Authenticated}]
+
 !!Overview
 
 TokuDB is a retlational database that can be used with MySQL. As a result we can use this to merge the data with our existing Lasoo Database. Potentially this will be a separate schema, with it's own tables, and using the TokuDB database engine, as oppose to the InnoDB used by Lasoo.
@@ -322,3 +324,5 @@ A query to retrieve objects from both databases elite and lasooanalytics:
 select o.id, a.objectid from elite.offer o, lasooanalytics.track_activity a where a.objectid = o.id;
 }}}
 
+----
+[TechDocs]

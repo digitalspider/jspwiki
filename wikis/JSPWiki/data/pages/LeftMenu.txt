@@ -13,6 +13,7 @@ Other
 [{If var='loginstatus' is='authenticated'
 
 Admin
+* [TechDocs]
 * [Page Index]
 * [Recent Changes]
 * [SystemInfo]

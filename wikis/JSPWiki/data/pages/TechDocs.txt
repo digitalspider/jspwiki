@@ -1,3 +1,4 @@
+[{ALLOW view Authenticated}]
 * [Network]
 * [Google Analytics]
 * [Maven]

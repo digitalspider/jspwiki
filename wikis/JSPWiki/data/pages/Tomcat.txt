@@ -1,3 +1,5 @@
+[{ALLOW view Authenticated}]
+
 !!Memory
 __setenv.sh__
 {{{
@@ -43,3 +45,6 @@ org.apache.wiki.InternalWikiException: No wiki engine, check logs.
 	at org.apache.wiki.ui.WikiServletFilter.init(WikiServletFilter.java:82)
 }}}
 This is because an expected class is not available on the class path - could be a dependency JAR file.
+
+----
+[TechDocs]

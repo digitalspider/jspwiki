@@ -1,3 +1,4 @@
+[{ALLOW view Authenticated}]
 !Link
 * [http://grails.org/doc/2.2.2/guide/]
 
@@ -46,3 +47,6 @@ set AGENT_STRING=-javaagent:"%GRAILS_HOME:\=/%/lib/org.springsource.springloaded
 set DISABLE_RELOADING=
 if "%GRAILS_OPTS%" == "" set GRAILS_OPTS=-server -Xmx1536M -Xms1536M -XX:PermSize=512m -XX:MaxPermSize=512m -XX:+DisableExplicitGC -XX:+CMSClassUnloadingEnabled -Dfile.encoding=UTF-8
 }}}
+
+----
+[TechDocs]

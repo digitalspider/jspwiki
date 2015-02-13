@@ -1,3 +1,4 @@
+[{ALLOW view Authenticated}]
 The network is set up using the following providers:
 * Only Domains - [http://onlydomains.com/] - register DNS dynamicspider.com.au
 * Optus ISP - [http://optus.com.au]
@@ -7,3 +8,6 @@ The network is set up using the following providers:
 * Apache Http Server 2.4 - [http://httpd.apache.org/docs/2.4/]
 
 For tracking we are using [Google Analytics]
+----
+[TechDocs]
+

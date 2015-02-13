@@ -1,4 +1,4 @@
-
+[{ALLOW view Authenticated}]
 [http://www.rabbitmq.com/]
 [http://www.rabbitmq.com/tutorials/amqp-concepts.html]
 
@@ -215,3 +215,6 @@ vi /var/lib/rabbitmq/mnesia/rabbit\@prev01-ultimo/cluster_nodes.config
 [{rabbit,
   [{cluster_nodes, {['rabbit@rabbit1', 'rabbit@rabbit2', 'rabbit@rabbit3'], disc}}]}]
 }}}
+
+----
+[TechDocs]

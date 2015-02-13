@@ -1,3 +1,5 @@
+[{ALLOW view Authenticated}]
+
 !!Run_master_deploy.sh
 
 {{{
@@ -359,3 +361,7 @@ sudo ln -s /opt/tools/tomcat/service/tomcat /etc/init.d/tomcat
 sudo rm /etc/logrotate.d/tomcat
 sudo ln -s /opt/tools/tomcat/logrotate/tomcat /etc/logrotate.d/tomcat
 }}}
+
+
+----
+[TechDocs]

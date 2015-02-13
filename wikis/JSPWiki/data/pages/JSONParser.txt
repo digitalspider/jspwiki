@@ -1,3 +1,4 @@
+[{ALLOW view Authenticated}]
 !!JSON Standard
 * [http://json-schema.org/example1.html]
 
@@ -73,3 +74,6 @@ public static class JSONParser {
 	}
 }
 }}}
+
+----
+[TechDocs]
