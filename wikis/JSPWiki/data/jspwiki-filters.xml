@@ -7,5 +7,16 @@
     <filter>
       <class>com.digitalspider.jspwiki.filter.AutoLinkHtmlFilter</class>
     </filter>
+    <filter>
+      <class>com.digitalspider.jspwiki.filter.EmojiFilter</class>
+      <param>
+         <name>iconsize</name>
+	 <value>20</value>
+      </param>
+      <param>
+         <name>cssclass</name>
+	 <value>emoji</value>
+      </param>
+    </filter>
 
   </pagefilters>

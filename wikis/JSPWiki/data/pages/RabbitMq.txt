@@ -1,3 +1,4 @@
+
 [http://www.rabbitmq.com/]
 [http://www.rabbitmq.com/tutorials/amqp-concepts.html]
 
@@ -56,7 +57,7 @@ Go to the Centos server and follow the instructions here:
 
 Start by installing erlang:
 {{{
-wget -O /etc/yum.repos.d/erlang.repo http://binaries.erlang-solutions.com/rpm/centos/erlang_solutions.repo
+wget -O /etc/yum.repos.d/erlang.repo [http://binaries.erlang-solutions.com/rpm/centos/erlang_solutions.repo]
 yum install esl-erlang
 yum list esl-erlang
 }}}
@@ -70,7 +71,7 @@ esl-erlang.x86_64        R15B03-2            @erlang-solutions
 Use the following lines to install the RabbitMQ package rabbitmq-server-3.1.1-1.noarch.rpm
 {{{
 cd Downloads
-rpm --import http://www.rabbitmq.com/rabbitmq-signing-key-public.asc
+rpm --import [http://www.rabbitmq.com/rabbitmq-signing-key-public.asc]
 yum install rabbitmq-server-3.1.1-1.noarch.rpm
 // This complains about a dependency so you can use the below line
 rpm --nodeps -Uvh rabbitmq-server-3.1.1-1.noarch.rpm

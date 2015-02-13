@@ -1,0 +1,85 @@
+[{TableOfContents}]
+\\
+See [Filters] [JSPWiki:EmojiFilter]
+
+!!Overview
+This plugin uses: [http://www.emoji-cheat-sheet.com] to create Emoticon icons on the page, using __postTranslate__
+
+|| Written by | [David Vittor]
+|| Date | 07-Feb-2015
+|| Plugin Version | 0.1
+|| Wiki Versions | 2.10.1+
+|| Demo | N/A
+|| Source | [https://github.com/digitalspider/jspwiki-plugins/tree/master/EmojiFilter]
+|| Issues | [https://github.com/digitalspider/jspwiki-plugins/issues]
+|| Plugin | [EmojiFilter-0.1.jar]
+|| Dependencies | None
+
+!!Setup
+* Place the __jar__ file into your <tomcatDir>/webapps/JSPWiki/WEB-INF/lib/ directory
+* Add the following to your <tomcatDir>/webapps/JSPWiki/WEB-INF/classes/__filter.xml__ file:
+{{{
+<?xml version="1.0"?>
+<pagefilters>
+  ... Any other filters ...
+  <filter>
+    <class>com.digitalspider.jspwiki.filter.EmojiFilter</class>
+    <param>
+      <name>iconsize</name>
+      <value>20</value>
+    </param>
+    <param>
+      <name>cssclass</name>
+      <value>emoji</value>
+    </param>
+  </filter>
+</pagefilters>
+}}}
+* Restart your tomcat
+
+!!Usage
+* Add the following to your page:
+{{{
+:::smiley::: - :::train::: - :::heart::: - :::musical_note::: - :::bowtie:::
+}}}
+* This generates:
+{{{
+<span class="emoji">
+<img height="20" weigth="20" src="[[http://www.emoji-cheat-sheet.com]/graphics/emojis/smiley.png]">
+</span>
+-
+<span class="emoji">
+<img height="20" weigth="20" src="[[http://www.emoji-cheat-sheet.com]/graphics/emojis/train.png]">
+</span>
+...
+}}}
+* Ouputs: :::smiley::: - :::train::: - :::heart::: - :::musical_note::: - :::bowtie:::
+
+%%information
+You can also use the [JSPWiki:Image] Plugin as such:
+{{{
+[{Image src='http://www.emoji-cheat-sheet.com/graphics/emojis/bowtie.png' height=32 weigth=32}]
+}}}
+[{Image src='http://www.emoji-cheat-sheet.com/graphics/emojis/bowtie.png' height=32 weigth=32}]
+%%
+
+!!Notes
+Some other links:
+* [http://www.emoji-cheat-sheet.com]
+* [http://os.alfajango.com/css-emoticons/]
+* [http://michaelaaronsonmd.com:8080/dr-michael-aaronson-open-source-emoji-offerings.html]
+* [https://www.gnu.org/software/hurd/smileys.html]
+* [http://www.webappers.com/2012/11/09/72-free-emoticons-simlies-icons-for-chat-applications/]
+* [http://graphicriver.net/item/mini-emoticons/1194357?WT.ac=search_thumb&WT.oss_phrase=emoticons&WT.oss_rank=27&WT.z_author=isaacgrant]
+
+!!Properties
+|| Property || Description || Default
+|| baseurl | The base url from which the jpegs should be linked from | [[http://www.emoji-cheat-sheet.com]/graphics/emojis/]
+|| prefix | The prefix for the images | 
+|| suffix | The suffix for the images | .png
+|| iconsize | set the width and height of the icons | 20
+|| cssclass | set the css class of the icons | emoji
+
+!!Release History
+v0.1
+* initial Release

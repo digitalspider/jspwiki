@@ -1,6 +1,6 @@
 [{TableOfContents}]
 \\
-See [Filters]
+See [Filters] [JSPWiki:AutoLinkHtmlFilter]
 
 !!Overview
 This filter automatically converts url strings into links, on __preSave()__ by adding square brackets to them.
@@ -12,13 +12,13 @@ becomes
 }}}
 
 || Written by | [David Vittor]
-|| Date | 06-Feb-2015
-|| Plugin Version | 0.2
+|| Date | 07-Feb-2015
+|| Plugin Version | 0.3
 || Wiki Versions | 2.10.1+
 || Demo | N/A
 || Source | [https://github.com/digitalspider/jspwiki-plugins/tree/master/AutoLinkHtmlFilter]
 || Issues | [https://github.com/digitalspider/jspwiki-plugins/issues]
-|| Plugin | [AutoLinkHtmlFilter-0.2.jar]
+|| Plugin | [AutoLinkHtmlFilter-0.3.jar]
 || Dependencies | None
 
 !!Usage
@@ -44,6 +44,8 @@ becomes
 || | |
 
 !!Release History
+v0.3
+* This plugin now ignores content inside { { { the no fomrat tags } } }
 v0.2
 * Fixed problem with URLs inside the parameters/body of plugins. This content is now ignored by the plugin.
 v0.1

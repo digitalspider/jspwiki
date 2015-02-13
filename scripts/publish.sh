@@ -27,10 +27,6 @@ if [ ! -d $WIKIHOME ] ; then
   echo "The folder $WIKIHOME does not exist";
   exit 1;
 fi
-if [ ! -d $WIKIDEST ] ; then
-  echo "The folder $WIKIDEST does not exist";
-  exit 1;
-fi
 
 # Create classes directories
 mkdir -p $WIKIHOME/webapp/WEB-INF/classes
@@ -45,6 +41,10 @@ cp -f $WIKIHOME/data/jspwiki-custom.policy $WIKIHOME/webapp/WEB-INF/jspwiki-cust
 #cp -f $WIKIHOME/data/jspwiki-filters.xml $WIKIHOME/webapp/WEB-INF/classes/filters.xml
 
 # Deploy to live
+if [ ! -d "$WIKIDEST" ] ; then
+    unzip $WIKIDEST.war -d $WIKIDEST
+fi
+
 cp -rf $WIKIHOME/webapp/* $WIKIDEST/
 
 # Output

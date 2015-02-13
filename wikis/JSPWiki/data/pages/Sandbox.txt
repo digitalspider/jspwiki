@@ -9,22 +9,32 @@ This is a series of pages where I experiment with things.
 !!Test SampleAjaxPlugin
 [{SampleAjaxPlugin}]
 
+!! IFramePlugin
+[{IFrame url='https://www.google.com/calendar/embed?src=dvittor%40gmail.com&ctz=Australia/Sydney' border=1 width=800 height=600}]
+
 !!PanelPlugin
 [{Panel id=123 class=abc header='Header' footer='Footer' showedit=true
 
 Content can go in here\\
 Isn't this fantastic!
 }]
+\\
 
-!!EncryptMe
-[{EncryptPlugin
-
-This content is under lock and key!
-}]
+!!EmojiFilter
+:::white_check_mark::: - :::white_circle:::
 
 !!JDBCPlugin
-
+{{{
 [{DB sql='select * from jiraissue limit 5' src=jira header=0 debug=true
 
 This is my body
 }]
+}}}
+
+!!EncryptMe
+{{{
+[{EncryptPlugin
+
+This content is under lock and key!
+}]
+}}}

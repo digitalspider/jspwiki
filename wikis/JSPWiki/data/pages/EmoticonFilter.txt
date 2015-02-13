@@ -7,7 +7,17 @@ See [Filters]
 Work in progess
 %%
 
+[http://www.emoji-cheat-sheet.com/]
+
+:::smiley::: - david - :::train:::
+:::musical_note:::
+
+[{Image src='[http://www.emoji-cheat-sheet.com]/graphics/emojis/bowtie.png' height=32 weigth=32}]
+
 This filter automatically converts Emoticon expressions into icons, based on:
+* [[http://www.emoji-cheat-sheet.com]/]
+* [http://os.alfajango.com/css-emoticons/]
+* [http://michaelaaronsonmd.com:8080/dr-michael-aaronson-open-source-emoji-offerings.html]
 * [https://www.gnu.org/software/hurd/smileys.html]
 * [http://www.webappers.com/2012/11/09/72-free-emoticons-simlies-icons-for-chat-applications/]
 Envato:
