@@ -1,0 +1,68 @@
+[{TableOfContents}]
+\\
+|| Written by | [David Vittor]
+|| Date | 14-Feb-2015
+|| Plugin Version | 0.1
+|| Wiki Versions | 2.10.1+
+|| Demo | [CronPluginDemo]
+|| Source | [https://github.com/digitalspider/jspwiki-plugins/tree/master/CronPlugin]
+|| Issues | [https://github.com/digitalspider/jspwiki-plugins/issues]
+|| Plugin | [CronPlugin-0.1.jar]
+|| Dependencies | 
+
+!!Overview
+This plugin at the preset cron expressing executes the shell exec command on the server, with the given parameters, presenting the output.
+
+!!Setup
+* Place the __jar__ file into your <tomcatDir>/webapps/JSPWiki/WEB-INF/lib/ directory
+* Restart your tomcat
+
+!!Usage
+{{{
+[{Cron alias='runFile.sh' cron='* * * * 0/15' exec='/home/user/runFile.sh' params='param1 param2' datetimeformat='yyyy-MM-dd hh:mm' resultAppend='true'
+
+Ran {name} at {datetime}, with result: {result}
+}]
+}}}
+
+This would output the following:
+{{{
+<div class="cron" id="cron-123">
+  <span>Ran runFile.sh at 2015-02-15, with result: Success</span>
+</div>
+}}}
+
+!!Parameters
+|| Param || Description || Default
+|| id | the unique id for this panel, used for controlling the javascript element id | 
+|| classid | the class id for this panel | 'default'
+|| width | set the width for this panel | 
+|| minwidth | set the min width for this panel | 
+|| height | set the height for this panel | 
+|| minheight | set the min height for this panel | 
+|| colorpanelbg | set the background color for the whole panel | 
+|| colorheaderbg | set the background color for the header of the panel | #D2D2D2
+|| colorcontentbg | set the background color for the content of the panel | 
+|| colorfooterbg | set the background color for the footer of the panel | #D2D2D2
+|| colorpaneltext | set the text color for the whole panel | 
+|| colorheadertext | set the text color for the header of the panel | 
+|| colorcontenttext | set the text color for the content of the panel | 
+|| colorfootertext | set the text color for the footer of the panel | 
+|| colorborder | set the border color of the panel | 
+|| border | set the border css of the panel | solid thin
+|| padding | set the padding css of the panel | 5px
+|| margin | set the margin css of the panel | 2px
+|| corners | set the border radius css of the panel |  
+|| debug | boolean, if true set log level info | false
+
+!!Properties
+|| Property || Description || Default
+||  |  | 
+
+
+!!Release History
+v0.1
+* initial Release
+
+----
+[Plugins]

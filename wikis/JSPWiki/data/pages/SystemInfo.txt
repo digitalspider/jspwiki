@@ -41,6 +41,10 @@ Here is what I know about you currently:
 [{ListLocksPlugin}]
 
 ----
+!InterWiki
+[{$interwikilinks}]
+
+----
 !List of plugins installed:
 
 [{PluginList}]

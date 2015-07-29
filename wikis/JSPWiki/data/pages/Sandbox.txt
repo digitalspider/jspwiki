@@ -1,5 +1,8 @@
 This is a series of pages where I experiment with things.
 
+:Header:;Content 
+
+
 !!Wiki Version
 {{{
 [{$jspwikiversion}]
@@ -8,9 +11,6 @@ This is a series of pages where I experiment with things.
 
 !!Test SampleAjaxPlugin
 [{SampleAjaxPlugin}]
-
-!! IFramePlugin
-[{IFrame url='https://www.google.com/calendar/embed?src=dvittor%40gmail.com&ctz=Australia/Sydney' border=1 width=800 height=600}]
 
 !!PanelPlugin
 [{Panel id=123 class=abc header='Header' footer='Footer' showedit=true

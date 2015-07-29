@@ -2,28 +2,30 @@
 \\
 See [Plugins]
 
-%%error
-This work is still in progress
+%%info
+This plugin only works in the latest version (2.10.2+) of JSPWiki
 %%
 
 !!Overview
-A simple AJAX Plugin
-__TODO__ Document...
+A simple AJAX Plugin, renders a "Press Me" link, waits 5 seconds, and then prints "You called" with the actionName and parameters.
+
+The code uses javascript __Wiki.ajaxHtmlCall()__ with the parameters:
+* URL e.g. "/SERVLET_MAPPING/actionName". SERVLET_MAPPING should be the name of the plugin, e.g. SampleAjaxPlugin
+* Parameters, an array of Strings e.g. {{{ [12,45] }}}
+* Element id where result will be inserted e.g. "result<id>". <id> needs to be unique to each plugin instance on the page.
+* Execution Text e.g. "Loading..."
 
 
 || Written by | [David Vittor]
 || Date | 15-Sep-2014
 || Plugin Version | 0.1
-|| Wiki Versions | 2.10.1+
-|| Demo | [SampleAjaxPluginDemo]
-|| Source |
-|| Issues |
-|| Plugin |
-|| Dependencies | None
+|| Wiki Versions | 2.10.2+
+|| Demo | [{SampleAjaxPlugin}]
+|| Source | [http://svn.apache.org/viewvc/jspwiki/trunk/jspwiki-war/src/main/java/org/apache/wiki/plugin/SampleAjaxPlugin.java?view=markup]
+|| Issues | [https://issues.apache.org/jira/browse/JSPWIKI] 
+|| Dependencies | Javascript
 
 !!Usage
-* Place the __jar__ file into your <tomcatDir>/webapps/JSPWiki/WEB-INF/lib/ directory
-* Restart your tomcat
 * Add the following to your page:
 {{{
 [{SampleAjaxPlugin}]

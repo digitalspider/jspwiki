@@ -43,14 +43,29 @@ if [ $EXISTSWIKI -ge 1 ] ; then
   exit 1;
 fi
 
+USEHADDOCK='#'
+if [ "$WIKINAME" == "testwiki" ] ; then
+  unset USEHADDOCK;
+fi
+
 # Add new wiki
 echo "$WIKINAME" >> $BASEDIR/$WIKIFILE
 
-mkdir -p $WIKIHOME
-cp -r $WIKISDIR/wikitemplate/* $WIKIHOME
-cat $WIKISDIR/wikitemplate/conf/jspwiki-custom-linux.properties | sed s/@WIKINAME@/$WIKINAME/g | sed s/@TOMCATURL@/$TOMCATURL/g > $WIKIHOME/conf/jspwiki-custom-linux.properties
-cat $WIKISDIR/wikitemplate/conf/jspwiki-custom-windows.properties | sed s/@WIKINAME@/$WIKINAME/g | sed s/@TOMCATURL@/$TOMCATURL/g > $WIKIHOME/conf/jspwiki-custom-windows.properties
-ln -s $DSDIR/dscore/downloads/jspwiki/2.10.2-svn12/JSPWiki.war $WIKIDEST.war
+mkdir -p $WIKIHOME/data
+mkdir -p $WIKIHOME/webapp
+cp -r $WIKISDIR/wikitemplate/data/* $WIKIHOME/data/
+cp -r $WIKISDIR/wikitemplate/webapp/* $WIKIHOME/webapp/
+cat $WIKISDIR/wikitemplate/conf/jspwiki-custom-linux.properties | sed s/@WIKINAME@/$WIKINAME/g | sed s/@TOMCATURL@/$TOMCATURL/g | sed s/@USEHADDOCK@/$USEHADDOCK/g > $WIKIHOME/conf/jspwiki-custom-linux.properties
+cat $WIKISDIR/wikitemplate/conf/jspwiki-custom-windows.properties | sed s/@WIKINAME@/$WIKINAME/g | sed s/@TOMCATURL@/$TOMCATURL/g | sed s/@USEHADDOCK@/$USEHADDOCK/g > $WIKIHOME/conf/jspwiki-custom-windows.properties
+if [ "$WIKINAME" == "testwiki" ] ; then
+  cp -f $WIKISDIR/wikitemplate/conf/jspwiki-custom-free.policy $WIKIHOME/conf/jspwiki-custom.policy
+elif [ "$WIKINAME" == "mywiki" ] ; then
+  cp -f $WIKISDIR/wikitemplate/conf/jspwiki-custom-locked.policy $WIKIHOME/conf/jspwiki-custom.policy
+else
+  cp -f $WIKISDIR/wikitemplate/conf/jspwiki-custom-default.policy $WIKIHOME/conf/jspwiki-custom.policy
+fi
+
+ln -s $DSDIR/dscore/downloads/jspwiki/2.10.2-svn28/JSPWiki.war $WIKIDEST.war
 
 echo "$WIKINAME wiki configured"
 sleep 10;

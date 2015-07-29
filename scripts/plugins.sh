@@ -43,9 +43,13 @@ rm -rf $WEBLIBDIR/HitCountPlugin-*.jar
 cp $PLUGINSDIR/HitCountPlugin/dist/*.jar $WEBLIBDIR/
 rm -rf $WEBLIBDIR/GoComicsPlugin-*.jar
 cp $PLUGINSDIR/GoComicsPlugin/dist/*.jar $WEBLIBDIR/
+rm -rf $WEBLIBDIR/GoogleMapsPlugin-*.jar
+cp $PLUGINSDIR/GoogleMapsPlugin/dist/*.jar $WEBLIBDIR/
 rm -rf $WEBLIBDIR/ImageGalleryPlugin-*.jar
 cp $PLUGINSDIR/ImageGalleryPlugin/dist/*.jar $WEBLIBDIR/
 unzip -q -o $PLUGINSDIR/ImageGalleryPlugin/dist/*.zip -d $WIKIDEST/
+rm -rf $WEBLIBDIR/IFramePlugin-*.jar
+cp $PLUGINSDIR/IFramePlugin/dist/*.jar $WEBLIBDIR/
 rm -rf $WEBLIBDIR/VideoPlugin-*.jar
 cp $PLUGINSDIR/VideoPlugin/dist/*.jar $WEBLIBDIR/
 rm -rf $WEBLIBDIR/JiraPlugin-*.jar
@@ -58,6 +62,8 @@ cp $PLUGINSDIR/JDBCPlugin/dist/*.jar $WEBLIBDIR/
 cp -rf $PLUGINSDIR/JDBCPlugin/etc/*.jar -d $WEBLIBDIR/
 rm -rf $WEBLIBDIR/AutoLinkHtmlFilter-*.jar
 cp $PLUGINSDIR/AutoLinkHtmlFilter/dist/*.jar $WEBLIBDIR/
+rm -rf $WEBLIBDIR/EmojiFilter-*.jar
+cp $PLUGINSDIR/EmojiFilter/dist/*.jar $WEBLIBDIR/
 rm -rf $WEBLIBDIR/PanelPlugin-*.jar
 cp $PLUGINSDIR/PanelPlugin/dist/*.jar $WEBLIBDIR/
 unzip -q -o $PLUGINSDIR/PanelPlugin/dist/*.zip -d $WIKIDEST/

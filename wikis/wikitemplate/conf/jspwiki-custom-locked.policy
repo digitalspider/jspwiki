@@ -1,0 +1,27 @@
+grant principal org.apache.wiki.auth.authorize.Role "All" {
+    permission org.apache.wiki.auth.permissions.WikiPermission "*", "login";
+};
+
+grant principal org.apache.wiki.auth.authorize.Role "Anonymous" {
+    permission org.apache.wiki.auth.permissions.GroupPermission "*:*", "view";
+};
+
+grant principal org.apache.wiki.auth.authorize.Role "Asserted" {
+    permission org.apache.wiki.auth.permissions.GroupPermission "*:*", "view";
+};
+
+grant principal org.apache.wiki.auth.authorize.Role "Authenticated" {
+    permission org.apache.wiki.auth.permissions.PagePermission "*:*", "modify,rename";
+    permission org.apache.wiki.auth.permissions.GroupPermission "*:*", "view";
+    permission org.apache.wiki.auth.permissions.GroupPermission "*:<groupmember>", "edit";
+    permission org.apache.wiki.auth.permissions.WikiPermission "*", "createPages,createGroups";
+    permission org.apache.wiki.auth.permissions.WikiPermission "*", "editPreferences";
+    permission org.apache.wiki.auth.permissions.WikiPermission "*", "editProfile";
+};
+
+grant principal org.apache.wiki.auth.GroupPrincipal "Admin" {
+    permission org.apache.wiki.auth.permissions.AllPermission "*";
+};
+grant principal org.apache.wiki.auth.authorize.Role "Admin" {
+    permission org.apache.wiki.auth.permissions.AllPermission "*";
+};

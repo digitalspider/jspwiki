@@ -1,0 +1,42 @@
+RestAPI using Spring Boot:
+
+* [https://objectpartners.com/2011/06/16/implementing-rest-authentication/]
+
+Spring Boot:
+* [http://projects.spring.io/spring-boot/]
+* [http://spring.io/guides]  (All guides)
+* [http://spring.io/guides/gs/batch-processing/]  - Creating a Batch Service
+* [http://spring.io/guides/gs/serving-web-content/] - Creating a WebMVC application
+* [http://spring.io/guides/gs/scheduling-tasks/] - Scheduling tasks
+* [http://spring.io/guides/gs/rest-service/] - Building a REST service
+
+API Design:
+* http://localhost:8080/login/
+* http://localhost:8080/logout/
+* http://localhost:8080/api/v1/table/list
+* http://localhost:8080/api/v1/table/<name>
+* http://localhost:8080/api/v1/table/create/<name>
+* http://localhost:8080/api/v1/table/update/<name>
+* http://localhost:8080/api/v1/table/delete/<name>
+* http://localhost:8080/api/v1/view/list
+* http://localhost:8080/api/v1/view/<name>
+* http://localhost:8080/api/v1/view/create/<name>
+* http://localhost:8080/api/v1/view/update/<name>
+* http://localhost:8080/api/v1/view/delete/<name>
+* http://localhost:8080/api/v1/data/list/<tableName>
+* http://localhost:8080/api/v1/data/<tableName>/<rowId>
+* http://localhost:8080/api/v1/data/create/<tableName>/<rowId>
+* http://localhost:8080/api/v1/data/update/<tableName>/<rowId>
+* http://localhost:8080/api/v1/data/delete/<tableName>/<rowId>
+
+Auth Design:
+* Login is handled by the __AuthController__
+** http://localhost:8080/login?apikey=<apikey>&key=<key>
+** http://localhost:8080/login?apikey=123&key=123
+** This returns a token which can be used for the same hour, e.g. 14:00. Once the hour clocks over (expires) the token is no longer valid.
+** e.g. +6n1YZpIO6AEN6BXI8uTSTfbKy4=
+* The above API calls need to be made using the apikey and token
+** These should be in the HttpHeader parameters, but for demo purposes are in request params. i.e. url?apikey=<apikey>&token=<token>
+** These are checked at the __RestAuthFilter__ for each request
+** The __SignatureHelper__ md5s the apikey and timestamp, and compares this to the token presented.
+** http://localhost:8080/api/v1/data?tableName=sales.customers&id=1&signature.apikey=123&token=+6n1YZpIO6AEN6BXI8uTSTfbKy4=

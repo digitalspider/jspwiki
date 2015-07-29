@@ -22,10 +22,13 @@ Here is a list of custom plugins we have developed:
 * [PanelPlugin] - [PanelPluginDemo]
 
 !!In Progress Plugins
+* [IFramePlugin] - [IFramePluginDemo]
+* [GoogleMapsPlugin] - [GoogleMapsPluginDemo]
 
 !!Plugin Ideas
 * [LikePlugin] - [LikePluginDemo]
 * [VotePlugin] - [VotePluginDemo]
+* [CronPlugin] - [CronPluginDemo]
 * [AttachmentPlugin] - [AttachmentPluginDemo]
 * [AddPagePlugin] - [AddPagePluginDemo]
 * [espeakPlugin] - [espeakPluginDemo]
@@ -38,14 +41,14 @@ Here is a list of custom plugins we have developed:
 * [AddPanelStylePlugin]
 * [RatePagePlugin]
 * [LikePagePlugin]
-* [HibernatePlugin] - data store plugin
+* [CSVPlugin] - CSV Data Store plugin
 * [PageIndexPlusPlugin]
 * [ExportWikiPlugin]
 * [ImportWikiPlugin]
 * [ExportPageToPdfPlugin]
 * [ExportWikiToPdfPlugin]
 * [StripePagePlugin] - [https://stripe.com/au/pricing]
-* [VLCMeditPlayerPlugin]
+* [VLCMediaPlayerPlugin]
 * [PrintPlugin]
 * [JFreeChartPlugin] - [http://www.jfree.org/jfreechart/]
 * [RSSFeedPlugin]
@@ -55,7 +58,7 @@ Here is a list of custom plugins we have developed:
 * [IFramePlugin]
 * [DocViewerPlugin] - ViewerJS [http://viewerjs.org/]
 * [MailBlastPlugin] - provide html source, and list of data (email,field1,field2)
-* [JIRAPlugin] - [https://developer.atlassian.com/display/JIRADEV/JIRA+REST+APIs]
+* [JiraPlugin] - [https://developer.atlassian.com/display/JIRADEV/JIRA+REST+APIs]
 * [TwitterPlugin] - [https://dev.twitter.com/docs]
 * [BitcoinWidgetPlugin] - [http://www.coindesk.com/price/bitcoin-price-ticker-widget/]
 * [QueryPlugin] - [https://issues.apache.org/jira/browse/JSPWIKI-624]

@@ -1,0 +1,8 @@
+This plugin would allow CSV attachments to become a datastore for a page.
+
+This could use something like:
+
+* [http://www.uselesscode.org/javascript/csv/demo/example-importing-exporting-csv.htm]
+* [http://www.uselesscode.org/blog/21/introducing-ucsv]
+* [http://www.uselesscode.org/javascript/csv/]
+* [https://github.com/uselesscode/ucsv]

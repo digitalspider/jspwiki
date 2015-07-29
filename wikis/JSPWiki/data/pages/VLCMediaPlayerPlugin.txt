@@ -1,0 +1,18 @@
+Actually this should be merged into [VideoPlugin]
+
+This plugin wont work so easy in a web browser as VLC is mostly an application Java Swing based technlogy.
+
+* [https://github.com/caprica/vlcj]
+* [https://www.youtube.com/watch?v=orMgNh0o38A]
+* [http://caprica.github.io/vlcj/]
+* [http://capricasoftware.co.uk/#/projects/vlcj]
+
+However with HTML5 there is a Video, see also video.js:
+* [http://www.w3schools.com/html/html5_video.asp]
+* [http://www.videojs.com/]
+
+
+I'm also looking at screen recording technologies here:
+* [http://www.hongkiat.com/blog/win-screen-recording-softwares/]
+* [http://camstudio.org/]
+* [http://www.ezvid.com/]

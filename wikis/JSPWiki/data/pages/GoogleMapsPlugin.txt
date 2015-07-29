@@ -1,0 +1,57 @@
+[{TableOfContents}]
+\\
+|| Written by | [David Vittor]
+|| Date | 14-Feb-2015
+|| Plugin Version | 0.1
+|| Wiki Versions | 2.10.1+
+|| Demo | [GoogleMapsPluginDemo]
+|| Source | [https://github.com/digitalspider/jspwiki-plugins/tree/master/GoogleMapsPlugin]
+|| Issues | [https://github.com/digitalspider/jspwiki-plugins/issues]
+|| Plugin | [GoogleMapsPlugin-0.1.jar]
+|| Dependencies | 
+
+!!Overview
+Places the Google Maps onto the wiki.
+
+See: 
+* [http://www.ecyrd.com/JSPWiki/wiki/GoogleMapsPlugin]
+* [https://developers.google.com/maps/documentation/javascript/tutorial#api_key]
+
+!!Setup
+* Place the __jar__ file into your <tomcatDir>/webapps/JSPWiki/WEB-INF/lib/ directory
+* Restart your tomcat
+
+!!Usage
+{{{
+[{Cron alias='runFile.sh' cron='* * * * 0/15' exec='/home/user/runFile.sh' params='param1 param2' datetimeformat='yyyy-MM-dd hh:mm' resultAppend='true'
+
+Ran {name} at {datetime}, with result: {result}
+}]
+}}}
+
+This would output the following:
+{{{
+<div class="cron" id="cron-123">
+  <span>Ran runFile.sh at 2015-02-15, with result: Success</span>
+</div>
+}}}
+
+!!Parameters
+|| Param || Description || Default
+|| id | the unique id for this panel, used for controlling the javascript element id | 
+|| classid | the class id for this panel | 'default'
+|| width | set the width for this panel | 
+|| minwidth | set the min width for this panel | 
+
+
+!!Properties
+|| Property || Description || Default
+||  |  | 
+
+
+!!Release History
+v0.1
+* initial Release
+
+----
+[Plugins]

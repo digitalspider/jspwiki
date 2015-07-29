@@ -1,0 +1,9 @@
+This plugin would allow previews of PDF, Word, Excel and other Microsoft based programs.
+
+Current plan is to use:
+* [http://viewerjs.org/]
+
+Which internally uses
+* [http://mozilla.github.io/pdf.js/]
+* [http://webodf.org/]
+

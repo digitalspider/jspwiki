@@ -56,3 +56,5 @@ Deep content 2
 }]
 \\
 
+----
+[Plugins]

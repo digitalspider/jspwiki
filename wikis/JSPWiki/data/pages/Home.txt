@@ -13,6 +13,9 @@ See the following:
 * [Links]
 * [Plugins]
 * [Filters]
+* [PageProviders]
+* [JSPWiki3APIDesignProposal]
 
+See [RestAPI]
 
 

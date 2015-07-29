@@ -6,6 +6,7 @@
 * [Filters]
 * [PageProviders]
 * [Templates]
+* [JSPWiki3APIDesignProposal]
 Other
 * [Documentation]
 * [Sandbox]

@@ -1,0 +1,11 @@
+This is a demo of [IFramePlugin]
+
+!! IFramePlugin
+{{{
+[{IFrame url='https://www.google.com/calendar/embed?src=dvittor%40gmail.com&ctz=Australia/Sydney' border=1 width=800 height=600}]
+}}}
+
+[{IFrame url='https://www.google.com/calendar/embed?src=dvittor%40gmail.com&ctz=Australia/Sydney' border=1 width=800 height=600}]
+
+----
+[Plugins]
